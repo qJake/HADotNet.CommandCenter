@@ -1,3 +1,3 @@
-# HADotNet.Panel
+# HADotNet / Command Center
 
-A web-based, wall-mountable interface for Home Assistant.
+A web-based, wall-mountable command center for Home Assistant.
