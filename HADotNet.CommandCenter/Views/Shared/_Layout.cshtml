@@ -4,17 +4,26 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - HA Panel</title>
+
+    <environment include="Development">
+        <link type="text/css" rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+    </environment>
+    <environment include="Staging,Production">
+        <link type="text/css" rel="stylesheet" href="~/css/app.min.css" asp-append-version="true" />
+    </environment>
 </head>
 <body>
     @RenderBody()
 
     <environment include="Development">
-        <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+        <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
+        <script src="~/js/app.js" asp-append-version="true"></script>
     </environment>
     <environment include="Staging,Production">
-        <script src="https://unpkg.com/packery@2/dist/packery.pkgd.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/packery@2/dist/packery.pkgd.min.js"></script>
+        <script src="~/js/app.min.js" asp-append-version="true"></script>
     </environment>
     @RenderSection("Scripts", required: false)
 </body>
