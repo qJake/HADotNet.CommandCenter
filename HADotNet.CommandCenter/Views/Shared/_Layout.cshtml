@@ -8,6 +8,14 @@
 <body>
     @RenderBody()
 
+    <environment include="Development">
+        <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    </environment>
+    <environment include="Staging,Production">
+        <script src="https://unpkg.com/packery@2/dist/packery.pkgd.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </environment>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
