@@ -1,0 +1,25 @@
+﻿<a class="ui header item" href="#">
+    <i class="big icons">
+        <i class="th blue icon"></i>
+    </i>
+    <span class="valign-middle">HACC Admin</span>
+</a>
+<a class="item @(Context.Request.Path.ToString().ToLower().StartsWith("/admin/tiles") ? "active" : "")" href="/admin/tiles">
+    <i class="expand icon"></i> Tiles
+</a>
+<a class="item @(Context.Request.Path.ToString().ToLower().StartsWith("/admin/layout") ? "active" : "")" href="/admin/layout">
+    <i class="th large icon"></i> Layout
+</a>
+<a class="item @(Context.Request.Path.ToString().ToLower().StartsWith("/admin/settings") ? "active" : "")" href="/admin/settings">
+    <i class="cog icon"></i> Settings
+</a>
+<div class="item">
+    <a class="title">
+        <i class="dropdown icon"></i>
+        Support
+    </a>
+    <div class="content">
+        <a class="item" href="https://github.com/qJake/HADotNet.CommandCenter" rel="nofollow" target="_blank">Project on GitHub <i class="github icon"></i></a>
+        <a class="item" href="https://github.com/qJake/HADotNet.CommandCenter/issues/new" rel="nofollow" target="_blank">Open an Issue <i class="hashtag icon"></i></a>
+    </div>
+</div>

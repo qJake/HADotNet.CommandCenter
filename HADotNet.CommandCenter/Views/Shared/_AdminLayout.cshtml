@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HA Command Center Admin</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css" integrity="sha256-QVBN0oT74UhpCtEo4Ko+k3sNo+ykJFBBtGduw13V9vw=" crossorigin="anonymous" />
+        <link type="text/css" rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+    </environment>
+    <environment include="Staging,Production">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
+        <link type="text/css" rel="stylesheet" href="~/css/app.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body>
+    <div class="pushable">
+        <div class="ui visible inverted left vertical sidebar accordion menu">
+            <partial name="AdminNavigation" />
+        </div>
+        <div class="admin-contents pusher">
+            <div class="ui basic segment fluid container">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <environment include="Development">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.js" integrity="sha256-qs5p0BFSqSvrstBxPvex+zdyrzcyGdHNeNmAirO2zc0=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
+        <script src="~/js/app.js" asp-append-version="true"></script>
+    </environment>
+    <environment include="Staging,Production">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/packery@2/dist/packery.pkgd.min.js"></script>
+        <script src="~/js/app.min.js" asp-append-version="true"></script>
+    </environment>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
