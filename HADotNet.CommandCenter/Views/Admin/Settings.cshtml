@@ -1,9 +1,51 @@
-﻿@{
+﻿@model SystemSettings
+@{
     ViewData["Title"] = "Admin Area";
 }
 
 <h1><i class="cog icon"></i> Settings</h1>
 
-<p>
-    <em>TODO: This page!</em>
-</p>
+<partial name="Alerts" />
+
+@if(Context.Request.Query["setup"] == "1")
+{
+    <div class="ui icon labeled info message">
+        <i class="info circle icon"></i>
+        <div class="content">
+            <div class="ui header">Welcome to Home Assistant Control Center (HACC)!</div>
+            <p>Before you begin, please set up your instance information below, and then you can configure your dashboard!</p>
+            <p>If you need help with setup, please refer to <a href="https://github.com/qJake/HADotNet.CommandCenter/wiki" target="_blank" rel="nofollow">the wiki</a>, or expand the <b>Support</b> menu to open an issue.</p>
+        </div>
+    </div>
+}
+
+<form class="ui form" asp-action="Settings" method="post">
+    <div class="ui grid">
+        <div class="row">
+            <div class="six wide computer twelve wide tablet sixteen wide mobile column">
+                <div class="ui segment">
+                    <div class="field">
+                        <label asp-for="BaseUri"></label>
+                        <div class="ui left icon input">
+                            <i class="globe icon"></i>
+                            <input asp-for="BaseUri" />
+                        </div>
+                        <small>Enter just your base URL, including the protocol and port (e.g. http://192.168.0.42:8123 or https://my-home.net)</small>
+                        <span class="ui up pointing small red label" asp-validation-for="BaseUri"></span>
+                    </div>
+                    <div class="field">
+                        <label asp-for="AccessToken"></label>
+                        <textarea asp-for="AccessToken" rows="3" class="no-resize"></textarea>
+                        <span class="ui up pointing small red label" asp-validation-for="AccessToken"></span>
+                    </div>
+                    <div class="field">
+                        <button type="submit" class="ui green icon labeled button">
+                            <i class="check icon"></i>
+                            Save Settings
+                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

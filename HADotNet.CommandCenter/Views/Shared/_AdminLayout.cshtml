@@ -15,16 +15,16 @@
     </environment>
 </head>
 <body>
-    <div class="pushable">
-        <div class="ui visible inverted left vertical sidebar accordion menu">
-            <partial name="AdminNavigation" />
-        </div>
-        <div class="admin-contents pusher">
-            <div class="ui basic segment fluid container">
-                @RenderBody()
-            </div>
+    
+    <div class="ui fixed visible inverted left vertical sidebar accordion menu">
+        <partial name="AdminNavigation" />
+    </div>
+    <div class="admin-contents">
+        <div class="ui basic segment fluid container">
+            @RenderBody()
         </div>
     </div>
+    
     <environment include="Development">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.js" integrity="sha256-qs5p0BFSqSvrstBxPvex+zdyrzcyGdHNeNmAirO2zc0=" crossorigin="anonymous"></script>

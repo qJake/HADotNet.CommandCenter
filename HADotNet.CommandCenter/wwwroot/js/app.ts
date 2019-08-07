@@ -8,7 +8,7 @@
     private init(): void
     {
         $('.ui.accordion').accordion();
-        $('.ui.sidebar').sidebar();
+        $('.ui.dropdown').dropdown({fullTextSearch: true});
     }
 } 
 var __app = new CommandCenter();

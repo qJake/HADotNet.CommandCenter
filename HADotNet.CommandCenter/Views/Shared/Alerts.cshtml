@@ -1,0 +1,60 @@
+﻿@if (TempData.Peek(AlertManager.GRP_INFO) is string[])
+{
+    var info = (string[])TempData[AlertManager.GRP_INFO];
+    foreach (var msg in info)
+    {
+        <div class="ui icon labeled visible info message">
+            <i class="circle info icon"></i>
+            <div class="content">
+                <div class="header">Information</div>
+                <div class="description">@Html.Raw(msg)</div>
+            </div>
+        </div>
+    }
+    TempData.Remove(AlertManager.GRP_INFO);
+}
+@if (TempData.Peek(AlertManager.GRP_SUCCESS) is string[])
+{
+    var success = (string[])TempData[AlertManager.GRP_SUCCESS];
+    foreach (var msg in success)
+    {
+        <div class="ui icon labeled visible success message">
+            <i class="check icon"></i>
+            <div class="content">
+                <div class="header">Success!</div>
+                <div class="description">@Html.Raw(msg)</div>
+            </div>
+        </div>
+    }
+    TempData.Remove(AlertManager.GRP_SUCCESS);
+}
+@if (TempData.Peek(AlertManager.GRP_WARNING) is string[])
+{
+    var warning = (string[])TempData[AlertManager.GRP_WARNING];
+    foreach (var msg in warning)
+    {
+        <div class="ui icon labeled visible warning message">
+            <i class="triangle exclamation icon"></i>
+            <div class="content">
+                <div class="header">Warning</div>
+                <div class="description">@Html.Raw(msg)</div>
+            </div>
+        </div>
+    }
+    TempData.Remove(AlertManager.GRP_WARNING);
+}
+@if (TempData.Peek(AlertManager.GRP_ERROR) is string[])
+{
+    var error = (string[])TempData[AlertManager.GRP_ERROR];
+    foreach (var msg in error)
+    {
+        <div class="ui icon labeled visible error message">
+            <i class="remove icon"></i>
+            <div class="content">
+                <div class="header">Error</div>
+                <div class="description">@Html.Raw(msg)</div>
+            </div>
+        </div>
+    }
+    TempData.Remove(AlertManager.GRP_ERROR);
+}
