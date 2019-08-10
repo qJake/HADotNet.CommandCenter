@@ -26,3 +26,23 @@ textarea.no-resize
 {
     resize: none !important;
 }
+
+/* Preview Grid */
+.preview-layout-grid
+{
+    background: #DDD;
+    overflow: auto; // disables collapsing margins
+
+    .preview-layout-item
+    {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: center;
+        flex: 1 0 auto;
+
+        background: #b9c8cf;
+        border: 2px solid #999;
+        padding: 2px 5px;
+    }
+}

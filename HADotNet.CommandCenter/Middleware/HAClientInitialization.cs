@@ -22,21 +22,19 @@ namespace HADotNet.CommandCenter.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
+            var config = await ConfigStore.GetConfigAsync();
+
+            if (!string.IsNullOrWhiteSpace(config?.Settings?.BaseUri) && !string.IsNullOrWhiteSpace(config?.Settings?.AccessToken))
+            {
+                ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
+            }
+
             if (!ClientFactory.IsInitialized)
             {
                 if (context.Request.Path.ToString().ToLower() != "/admin/settings")
                 {
                     context.Response.Redirect("/admin/settings?setup=1");
                     return;
-                }
-                else
-                {
-                    var config = await ConfigStore.GetConfigAsync();
-
-                    if (!string.IsNullOrWhiteSpace(config?.Settings?.BaseUri) && !string.IsNullOrWhiteSpace(config?.Settings?.AccessToken))
-                    {
-                        ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
-                    }
                 }
             }
 

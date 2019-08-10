@@ -13,6 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="wwwroot\js\draggabilly.d.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\packery.d.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\packery.jquery.d.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\window-options.d.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="bundleconfig.json" />
     <None Include="compilerconfig.json" />
   </ItemGroup>
@@ -35,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
-    <TypeScriptModuleKind>None</TypeScriptModuleKind>
+    <TypeScriptModuleKind>System</TypeScriptModuleKind>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>

@@ -1,9 +1,12 @@
 ﻿using HADotNet.CommandCenter.Models;
 using HADotNet.CommandCenter.Models.Config;
+using HADotNet.CommandCenter.Models.Config.Tiles;
 using HADotNet.CommandCenter.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -12,6 +15,13 @@ namespace HADotNet.CommandCenter.Services
     public class JsonConfigStore : IConfigStore
     {
         private const string CONFIG_FILE = "config.json";
+
+        private static JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            Formatting = Formatting.Indented
+    };
+
         private bool IsValid { get; set; }
         private string ConfigDirectory { get; set; }
         private string ConfigPath => Path.Combine(ConfigDirectory, CONFIG_FILE);
@@ -21,6 +31,18 @@ namespace HADotNet.CommandCenter.Services
         {
             Options = haccOptions.Value;
             ConfigDirectory = Environment.ExpandEnvironmentVariables(Options.ConfigLocation);
+        }
+
+        public async Task ManipulateConfig(params Action<ConfigRoot>[] changes)
+        {
+            var config = await GetConfigAsync();
+
+            foreach (var change in changes)
+            {
+                change(config);
+            }
+
+            await SaveConfigAsync(config);
         }
 
         public async Task<ConfigRoot> GetConfigAsync()
@@ -38,7 +60,12 @@ namespace HADotNet.CommandCenter.Services
                     return new ConfigRoot();
                 }
 
-                return JsonConvert.DeserializeObject<ConfigRoot>(contents);
+                var cfg = JsonConvert.DeserializeObject<ConfigRoot>(contents, SerializerSettings);
+
+                // Perform some cleanup - if lists are null, for example
+                cfg.Tiles = cfg.Tiles ?? new List<BaseTile>();
+
+                return cfg;
             }
             else
             {
@@ -50,7 +77,7 @@ namespace HADotNet.CommandCenter.Services
         {
             if (CheckPermissions())
             {
-                await File.WriteAllTextAsync(ConfigPath, JsonConvert.SerializeObject(config, Formatting.Indented));
+                await File.WriteAllTextAsync(ConfigPath, JsonConvert.SerializeObject(config, SerializerSettings));
             }
             else
             {

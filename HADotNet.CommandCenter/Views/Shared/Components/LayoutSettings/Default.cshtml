@@ -1,0 +1,44 @@
+﻿@model LayoutSettings
+
+<form class="ui form" asp-action="UpdateLayoutSettings" method="post">
+    <div class="ui segment">
+        <div class="field">
+            <label asp-for="DeviceWidthPx"></label>
+            <div class="ui left icon input">
+                <i class="arrows alternate horizontal icon"></i>
+                <input asp-for="DeviceWidthPx" />
+            </div>
+            <span class="ui up pointing small red label" asp-validation-for="DeviceWidthPx"></span>
+        </div>
+        <div class="field">
+            <label asp-for="DeviceHeightPx"></label>
+            <div class="ui left icon input">
+                <i class="arrows alternate vertical icon"></i>
+                <input asp-for="DeviceHeightPx" />
+            </div>
+            <span class="ui up pointing small red label" asp-validation-for="DeviceHeightPx"></span>
+        </div>
+        <div class="field">
+            <label asp-for="BaseTileSizePx"></label>
+            <div class="ui left icon input">
+                <i class="expand arrows alternate icon"></i>
+                <input asp-for="BaseTileSizePx" />
+            </div>
+            <span class="ui up pointing small red label" asp-validation-for="BaseTileSizePx"></span>
+        </div>
+        <div class="field">
+            <label asp-for="TileSpacingPx"></label>
+            <div class="ui left icon input">
+                <i class="compress icon"></i>
+                <input asp-for="TileSpacingPx" />
+            </div>
+            <span class="ui up pointing small red label" asp-validation-for="TileSpacingPx"></span>
+        </div>
+    </div>
+    <div class="field">
+        <button type="submit" class="ui green icon labeled button">
+            <i class="check icon"></i>
+            Save Layout Settings
+        </button>
+    </div>
+</form>

@@ -3,8 +3,6 @@ using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.CommandCenter.Utils;
 using HADotNet.Core.Clients;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace HADotNet.CommandCenter.Controllers
@@ -25,20 +23,32 @@ namespace HADotNet.CommandCenter.Controllers
             return View();
         }
 
-        public IActionResult Tiles()
+        public async Task<IActionResult> Layout()
         {
-            return View();
+            var config = await ConfigStore.GetConfigAsync();
+
+            ViewBag.PreviewWidth = config.LayoutSettings?.DeviceWidthPx / 2;
+            ViewBag.PreviewHeight = config.LayoutSettings?.DeviceHeightPx / 2;
+            ViewBag.PreviewSize = config.LayoutSettings?.BaseTileSizePx / 2;
+            ViewBag.Padding = config.LayoutSettings?.TileSpacingPx;
+            ViewBag.PreviewPadding = config.LayoutSettings?.TileSpacingPx / 2;
+
+            return View(config.Tiles);
         }
 
-        public async Task<IActionResult> AddTileState()
+        [HttpPost]
+        public async Task<IActionResult> UpdateLayoutSettings(LayoutSettings settings)
         {
-            ViewBag.Entities = (await EntityClient.GetEntities()).OrderBy(e => e).Select(e => new SelectListItem(e, e));
-            return View();
-        }
-
-        public IActionResult Layout()
-        {
-            return View();
+            if (ModelState.IsValid)
+            {
+                TempData.AddSuccess("Saved layout settings successfully!");
+                await ConfigStore.ManipulateConfig(c => c.LayoutSettings = settings);
+            }
+            else
+            {
+                TempData.AddError("Unable to save layout settings.");
+            }
+            return RedirectToAction("Layout");
         }
         
         [HttpGet]
@@ -54,10 +64,8 @@ namespace HADotNet.CommandCenter.Controllers
         {
             if (ModelState.IsValid)
             {
-                var config = await ConfigStore.GetConfigAsync();
-                config.Settings = newSettings;
-                await ConfigStore.SaveConfigAsync(config);
-
+                await ConfigStore.ManipulateConfig(c => c.Settings = newSettings);
+                
                 TempData.AddSuccess("Saved settings successfully!");
 
                 return RedirectToAction("Settings");

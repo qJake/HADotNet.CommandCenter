@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -13,35 +14,41 @@ namespace HADotNet.CommandCenter.Utils
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var token = JToken.Load(reader);
-            if (token.Type == JTokenType.Object && (token["type"]?.HasValues ?? false))
+            var arrayToken = JToken.Load(reader);
+            var tileList = new List<BaseTile>();
+
+            if (arrayToken.Type == JTokenType.Array)
             {
-                var typeName = token["type"].Value<string>();
-
-                var tileType = Assembly.GetAssembly(typeof(TileTypeJsonConverter)).DefinedTypes.FirstOrDefault(t => t.IsClass && t.GetCustomAttribute<TileTypeAttribute>() != null && t.GetCustomAttribute<TileTypeAttribute>().Name.ToUpper() == typeName.ToUpper());
-
-                if (tileType == null)
+                foreach (var token in (JArray)arrayToken)
                 {
-                    return null;
-                }
+                    if (token.Type == JTokenType.Object && token["type"]?.Value<string>() != null)
+                    {
+                        var typeName = token["type"].Value<string>();
 
-                return token.ToObject(tileType);
+                        var tileType = Assembly.GetAssembly(typeof(TileTypeJsonConverter)).DefinedTypes.FirstOrDefault(t => t.IsClass && t.GetCustomAttribute<TileTypeAttribute>() != null && t.GetCustomAttribute<TileTypeAttribute>().Name.ToUpper() == typeName.ToUpper());
+
+                        if (tileType == null)
+                        {
+                            return null;
+                        }
+
+                        tileList.Add(token.ToObject(tileType) as BaseTile);
+                    }
+                }
             }
-            return null;
+            return tileList;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (!typeof(BaseTile).IsAssignableFrom(value.GetType()))
+            writer.WriteStartArray();
+
+            foreach (var tile in (List<BaseTile>)value)
             {
-                return;
+                serializer.Serialize(writer, tile);
             }
 
-            var token = JToken.FromObject(value);
-
-            token["type"] = value.GetType().GetCustomAttribute<TileTypeAttribute>().Name;
-
-            serializer.Serialize(writer, value);
+            writer.WriteEndArray();
         }
     }
 }

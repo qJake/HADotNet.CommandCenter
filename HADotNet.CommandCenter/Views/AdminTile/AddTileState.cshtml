@@ -1,11 +1,11 @@
 ﻿@model StateTile
 @{
-    ViewData["Title"] = "Admin Area";
+    ViewData["Title"] = "Add Tile: State";
 }
 
 <h1><i class="expand icon"></i> Add Tile: State</h1>
 
-<form class="ui form" method="post">
+<form class="ui form" method="post" asp-action="AddTileState">
     <div class="ui grid">
         <div class="row">
             <div class="six wide computer twelve wide tablet sixteen wide mobile column">
@@ -16,8 +16,8 @@
                             <i class="tag icon"></i>
                             <input asp-for="Name" />
                         </div>
-                        <small>An internal name to identify this tile, not shown on the dashboard.</small>
                         <span class="ui up pointing small red label" asp-validation-for="Name"></span>
+                        <p><small>An internal name to identify this tile, not shown on the dashboard.</small></p>
                     </div>
                     <div class="field">
                         <label asp-for="EntityId"></label>

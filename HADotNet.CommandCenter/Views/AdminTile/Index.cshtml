@@ -1,0 +1,44 @@
+﻿@model List<BaseTile>
+@{
+    ViewData["Title"] = "Edit Tiles";
+}
+
+<h1><i class="expand icon"></i> Edit Tiles</h1>
+
+<partial name="Alerts" />
+
+<a asp-action="AddTile" class="ui green icon labeled button">
+    <i class="add icon"></i>    
+    Add Tile
+</a>
+
+<table class="ui compact striped celled collapsing definition table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Card Name</th>
+            <th>Card Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model == null || !Model.Any())
+        {
+            <tr class="info"><td colspan="3"><em>No tiles. Go ahead and add your first one!</em></td></tr>
+        }
+        else
+        {
+            @foreach (var tile in Model)
+            {   
+                <tr>
+                    <td>
+                        <a class="ui mini red basic circular icon button" asp-action="DeleteTile" asp-route-name="@tile.Name" title="Delete this tile">
+                            <i class="trash icon"></i>
+                        </a>
+                    </td>
+                    <td>@tile.Name</td>
+                    <td>@tile.Type</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

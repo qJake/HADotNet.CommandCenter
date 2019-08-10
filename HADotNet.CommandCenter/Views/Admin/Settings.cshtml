@@ -1,13 +1,13 @@
 ﻿@model SystemSettings
 @{
-    ViewData["Title"] = "Admin Area";
+    ViewData["Title"] = "Settings";
 }
 
 <h1><i class="cog icon"></i> Settings</h1>
 
 <partial name="Alerts" />
 
-@if(Context.Request.Query["setup"] == "1")
+@if (Context.Request.Query["setup"] == "1")
 {
     <div class="ui icon labeled info message">
         <i class="info circle icon"></i>
@@ -38,12 +38,12 @@
                         <textarea asp-for="AccessToken" rows="3" class="no-resize"></textarea>
                         <span class="ui up pointing small red label" asp-validation-for="AccessToken"></span>
                     </div>
-                    <div class="field">
-                        <button type="submit" class="ui green icon labeled button">
-                            <i class="check icon"></i>
-                            Save Settings
-                         </button>
-                    </div>
+                </div>
+                <div class="field">
+                    <button type="submit" class="ui green icon labeled button">
+                        <i class="check icon"></i>
+                        Save Settings
+                    </button>
                 </div>
             </div>
         </div>

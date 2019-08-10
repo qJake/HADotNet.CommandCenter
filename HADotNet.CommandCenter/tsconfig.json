@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "none",
+    "target": "es5",
+    "outFile": "wwwroot/js/app.js",
+    "sourceMap": false,
+    "noImplicitAny": true
+  },
+  "include": [
+    "wwwroot/**/*.ts"
+  ],
+  "compileOnSave": true
+}

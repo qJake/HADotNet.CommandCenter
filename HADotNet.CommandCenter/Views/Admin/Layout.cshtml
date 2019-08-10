@@ -1,9 +1,53 @@
-﻿@{
-    ViewData["Title"] = "Admin Area";
+﻿@model List<BaseTile>
+@{
+    ViewData["Title"] = "Customize Layout";
+}
+
+@section Header
+{
+    <style type="text/css">
+        .preview-layout-grid
+        {
+            padding: @(ViewBag.PreviewPadding)px;
+        }
+        .preview-layout-grid > .preview-layout-item
+        {
+            width: @(ViewBag.PreviewSize)px;
+            height: @(ViewBag.PreviewSize)px;
+        }
+    </style>
+}
+
+@section Scripts
+{
+    <script>
+        window.ccOptions = window.ccOptions || {};
+        window.ccOptions.tilePadding = @ViewBag.Padding;
+        window.ccOptions.tilePreviewPadding = @ViewBag.PreviewPadding;
+    </script>
 }
 
 <h1><i class="th large icon"></i> Customize Layout</h1>
 
-<p>
-    <em>TODO: This page!</em>
-</p>
+<partial name="Alerts" />
+
+<p>Drag and drop your tiles below, then press <b>Save</b> when finished.</p>
+
+<div class="ui doubling grid">
+    <div class="row">
+        <div class="four wide column">
+            <h2>Layout Settings</h2>
+            <vc:layout-settings />
+        </div>
+        <div class="twelve wide column">
+            <h2>Tile Layout and Preview</h2>
+            <div class="preview-layout-grid" style="min-width: @(ViewBag.PreviewWidth)px; max-width: @(ViewBag.PreviewWidth)px; min-height: @(ViewBag.PreviewHeight)px; max-height: @(ViewBag.PreviewHeight)px">
+                @foreach (var tile in Model)
+                {
+                    <div class="preview-layout-item">@tile.Name</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
