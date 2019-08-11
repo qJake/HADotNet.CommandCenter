@@ -4,5 +4,17 @@
     "inputFiles": [
       "wwwroot/js/app.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/css/admin.min.css",
+    "inputFiles": [
+      "wwwroot/css/admin.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/dashboard.min.css",
+    "inputFiles": [
+      "wwwroot/css/dashboard.css"
+    ]
   }
 ]

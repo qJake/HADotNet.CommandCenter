@@ -1,6 +1,10 @@
 ﻿[
   {
-    "outputFile": "wwwroot/css/app.css",
-    "inputFile": "wwwroot/css/app.less"
+    "outputFile": "wwwroot/css/admin.css",
+    "inputFile": "wwwroot/css/admin.less"
+  },
+  {
+    "outputFile": "wwwroot/css/dashboard.css",
+    "inputFile": "wwwroot/css/dashboard.less"
   }
 ]

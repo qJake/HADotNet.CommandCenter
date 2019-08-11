@@ -14,16 +14,23 @@
 
   <ItemGroup>
     <TypeScriptCompile Remove="wwwroot\js\draggabilly.d.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\entityState.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\models.ts" />
     <TypeScriptCompile Remove="wwwroot\js\packery.d.ts" />
     <TypeScriptCompile Remove="wwwroot\js\packery.jquery.d.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\tile.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\tileType.ts" />
     <TypeScriptCompile Remove="wwwroot\js\window-options.d.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\dashboard.css" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="bundleconfig.json" />
     <None Include="compilerconfig.json" />
   </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.9.406" />
@@ -36,8 +43,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Quartz" Version="3.0.7" />
   </ItemGroup>
-
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>

@@ -1,4 +1,4 @@
-﻿@model List<BaseTile>
+﻿@model IEnumerable<TileWithLayoutViewModel>
 @{
     ViewData["Title"] = "Customize Layout";
 }
@@ -40,13 +40,22 @@
             <vc:layout-settings />
         </div>
         <div class="twelve wide column">
-            <h2>Tile Layout and Preview</h2>
-            <div class="preview-layout-grid" style="min-width: @(ViewBag.PreviewWidth)px; max-width: @(ViewBag.PreviewWidth)px; min-height: @(ViewBag.PreviewHeight)px; max-height: @(ViewBag.PreviewHeight)px">
-                @foreach (var tile in Model)
-                {
-                    <div class="preview-layout-item">@tile.Name</div>
-                }
-            </div>
+            <form asp-action="UpdateLayout" method="post">
+                <h2>Tile Layout and Preview (50% Scale)</h2>
+                <p>
+                    <button type="submit" class="ui small icon labeled green button">
+                        <i class="check icon"></i>
+                        Save Layout
+                    </button>
+                </p>
+                <div class="preview-layout-grid" style="min-width: @(ViewBag.PreviewWidth)px; max-width: @(ViewBag.PreviewWidth)px; min-height: @(ViewBag.PreviewHeight)px; max-height: @(ViewBag.PreviewHeight)px">
+                    @foreach (var item in Model.OrderBy(m => m.Layout?.Index ?? 9999))
+                    {
+                        <div class="preview-layout-item tile-type-@(item.Tile.Type)" style="position: absolute; top: @(item.Layout?.YPos / 2)px; left: @(item.Layout?.XPos / 2)px;" data-tile-name="@item.Tile.Name">@item.Tile.Name</div>
+                    }
+                </div>
+                <input id="layout-serialized" name="tilelayout" type="hidden" />
+            </form>
         </div>
     </div>
 </div>

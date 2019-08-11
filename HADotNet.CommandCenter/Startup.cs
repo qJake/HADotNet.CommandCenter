@@ -1,4 +1,5 @@
-﻿using HADotNet.CommandCenter.Middleware;
+﻿using HADotNet.CommandCenter.Hubs;
+using HADotNet.CommandCenter.Middleware;
 using HADotNet.CommandCenter.Models;
 using HADotNet.CommandCenter.Services;
 using HADotNet.CommandCenter.Services.Interfaces;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HADotNet.Panel
+namespace HADotNet.CommandCenter
 {
     public class Startup
     {
@@ -28,6 +29,9 @@ namespace HADotNet.Panel
 
             services.AddSingleton<IConfigStore, JsonConfigStore>();
             services.AddSingleton(_ => ClientFactory.GetClient<EntityClient>());
+            services.AddSingleton(_ => ClientFactory.GetClient<StatesClient>());
+
+            services.AddSignalR();
 
             services.AddMvc();
         }
@@ -46,6 +50,11 @@ namespace HADotNet.Panel
             app.UseStaticFiles();
 
             app.UseHAClientInitialization();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<TileHub>("/hubs/tile");
+            });
 
             app.UseMvcWithDefaultRoute();
         }

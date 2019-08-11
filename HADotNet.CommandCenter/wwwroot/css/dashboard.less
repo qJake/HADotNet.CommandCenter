@@ -1,0 +1,56 @@
+﻿.base()
+{
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    user-select: none;
+}
+
+html { .base(); }
+
+body.dashboard
+{
+    .base();
+
+    .tiles
+    {
+        position: relative;
+        height: 100vh;
+        max-height: 100vh;
+        min-height: 100vh;
+        width: 100vw;
+        max-width: 100vw;
+        min-width: 100vw;
+
+        .tile
+        {
+            position: absolute;
+            display: flex;
+            flex-flow: column nowrap;
+            align-items: center;
+            justify-content: center;
+            flex: 1 0 auto;
+            font-size: 2rem;
+            text-align: center;
+            overflow: hidden;
+
+            &.tile-type--blank
+            {
+                // Blank tiles should render blank!
+                display: none !important;
+            }
+        }
+    }
+}
+
+// Base styling, for the utmost basic visibility of tiles
+// All themes should be overriding this information as these definitions have extremely low CSS specificity.
+.tiles
+{
+    background-color: #AAA;
+}
+.tile
+{
+    font-family: Arial, sans-serif;
+    background-color: #e2e2e2;
+}

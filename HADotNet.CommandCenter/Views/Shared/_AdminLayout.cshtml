@@ -7,11 +7,11 @@
 
     <environment include="Development">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css" integrity="sha256-QVBN0oT74UhpCtEo4Ko+k3sNo+ykJFBBtGduw13V9vw=" crossorigin="anonymous" />
-        <link type="text/css" rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+        <link type="text/css" rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
     </environment>
     <environment include="Staging,Production">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
-        <link type="text/css" rel="stylesheet" href="~/css/app.min.css" asp-append-version="true" />
+        <link type="text/css" rel="stylesheet" href="~/css/admin.min.css" asp-append-version="true" />
     </environment>
 
     @RenderSection("Header", false)
@@ -41,6 +41,11 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/packery/2.1.2/packery.pkgd.min.js" integrity="sha256-qgHmqWpw9DcQLJgcK+YvMiLjEHTVuWQQ1eexLdiOzzU=" crossorigin="anonymous"></script>
         <script src="~/js/app.min.js" asp-append-version="true"></script>
     </environment>
+
+    <script>
+        window.ccOptions = window.ccOptions || {};
+        window.ccOptions.mode = 1;
+    </script>
 
     @RenderSection("Scripts", required: false)
 </body>

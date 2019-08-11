@@ -6,29 +6,33 @@
     <title>@ViewData["Title"] - HA Command Center</title>
 
     <environment include="Development">
-        <link type="text/css" rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+        <link type="text/css" rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
     </environment>
     <environment include="Staging,Production">
-        <link type="text/css" rel="stylesheet" href="~/css/app.min.css" asp-append-version="true" />
+        <link type="text/css" rel="stylesheet" href="~/css/dashboard.min.css" asp-append-version="true" />
     </environment>
-
-    <script>
-        require('app', function (app) { define('domReady!', ['app'], function (cc) { var __app = new cc(); }); });
-    </script>
 </head>
-<body>
+<body class="dashboard">
     @RenderBody()
 
     <environment include="Development">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/packery/2.1.2/packery.pkgd.js" integrity="sha256-62nn/5By0QIIvNFYlVHeF1CqfrMWTVzYp4MwoMFQRaQ=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aspnet-signalr/1.1.4/signalr.js" integrity="sha256-+82uy4inf/iMVOSgp7oOVfQrgRK9rUlMnW7gwD8mgOw=" crossorigin="anonymous"></script>
         <script src="~/js/app.js" asp-append-version="true"></script>
     </environment>
     <environment include="Staging,Production">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/packery/2.1.2/packery.pkgd.min.js" integrity="sha256-qgHmqWpw9DcQLJgcK+YvMiLjEHTVuWQQ1eexLdiOzzU=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aspnet-signalr/1.1.4/signalr.min.js" integrity="sha256-LeAW7V38b1z8nHHlrckbnAfx5W4Ge57nDlsDz6GzJjc=" crossorigin="anonymous"></script>
         <script src="~/js/app.min.js" asp-append-version="true"></script>
     </environment>
+
+    <script>
+        window.ccOptions = window.ccOptions || {};
+        window.ccOptions.mode = 0;
+    </script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

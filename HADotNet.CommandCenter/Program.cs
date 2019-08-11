@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace HADotNet.Panel
+namespace HADotNet.CommandCenter
 {
     public class Program
     {

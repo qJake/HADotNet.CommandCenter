@@ -26,6 +26,11 @@ namespace HADotNet.CommandCenter.Models.Config
         [JsonConverter(typeof(TileTypeJsonConverter))]
         public List<BaseTile> Tiles { get; set; }
 
+        /// <summary>
+        /// Gets or sets the main tile layout.
+        /// </summary>
+        public List<TileLayout> TileLayout { get; set; }
+
         public ConfigRoot()
         {
             // Populate some sensible defaults, so lists aren't null for example

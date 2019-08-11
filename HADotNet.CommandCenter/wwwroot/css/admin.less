@@ -32,6 +32,12 @@ textarea.no-resize
 {
     background: #DDD;
     overflow: auto; // disables collapsing margins
+    user-select: none;
+
+    &:active
+    {
+        cursor: grabbing;
+    }
 
     .preview-layout-item
     {
@@ -40,9 +46,24 @@ textarea.no-resize
         align-items: center;
         justify-content: center;
         flex: 1 0 auto;
-
         background: #b9c8cf;
         border: 2px solid #999;
         padding: 2px 5px;
+        cursor: grab;
+
+        &:active
+        {
+            cursor: grabbing;
+        }
+
+        &.tile-type-blank
+        {
+            opacity: 0.4;
+            background: #BBB;
+        }
     }
+}
+.packery-drop-placeholder
+{
+    border: 2px dashed #666;
 }
