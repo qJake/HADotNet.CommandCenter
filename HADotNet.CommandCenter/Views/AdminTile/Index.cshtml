@@ -16,8 +16,9 @@
     <thead>
         <tr>
             <th></th>
-            <th>Card Name</th>
-            <th>Card Type</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Entity ID</th>
         </tr>
     </thead>
     <tbody>
@@ -28,7 +29,8 @@
         else
         {
             @foreach (var tile in Model)
-            {   
+            {
+                var entityTile = tile as BaseEntityTile;
                 <tr>
                     <td>
                         <a class="ui mini red basic circular icon button" asp-action="DeleteTile" asp-route-name="@tile.Name" title="Delete this tile">
@@ -39,7 +41,8 @@
                         </a>
                     </td>
                     <td>@tile.Name</td>
-                    <td>@tile.Type</td>
+                    <td><span class="va-top @tile.IconClassName"></span> @tile.Type</td>
+                    <td><code>@entityTile?.EntityId</code></td>
                 </tr>
             }
         }

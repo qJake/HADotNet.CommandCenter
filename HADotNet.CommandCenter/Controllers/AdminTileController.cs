@@ -51,7 +51,14 @@ namespace HADotNet.CommandCenter.Controllers
             return View();
         }
 
-        [Route("edit/state")]
+        [Route("add/light")]
+        public async Task<IActionResult> AddTileLight()
+        {
+            ViewBag.Entities = (await EntityClient.GetEntities()).OrderBy(e => e).Select(e => new SelectListItem(e, e));
+            return View();
+        }
+
+        [Route("edit")]
         public async Task<IActionResult> EditTile([FromQuery] string name)
         {
             ViewBag.Entities = (await EntityClient.GetEntities()).OrderBy(e => e).Select(e => new SelectListItem(e, e));
@@ -110,6 +117,17 @@ namespace HADotNet.CommandCenter.Controllers
             }
 
             return View("AddTileState", tile);
+        }
+
+        [HttpPost("add/light")]
+        public async Task<IActionResult> SaveTileLight(LightTile tile)
+        {
+            if (ModelState.IsValid)
+            {
+                return await SaveBaseTile(tile);
+            }
+
+            return View("AddTileLight", tile);
         }
 
         private async Task<IActionResult> SaveBaseTile(BaseTile tile)

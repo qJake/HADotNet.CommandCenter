@@ -9,14 +9,20 @@
 <div class="ui cards">
     <a asp-action="AddTileBlank" class="card">
         <div class="content">
-            <div class="header">Blank Tile</div>
+            <div class="header"><span class="va-bottom @(new BlankTile().IconClassName)"></span> Blank Tile</div>
             <div class="description">A blank tile, useful for taking up space in the layout but not actually rendering anything.</div>
         </div>
     </a>
     <a asp-action="AddTileState" class="card">
         <div class="content">
-            <div class="header">State Tile</div>
+            <div class="header"><span class="va-bottom @(new StateTile().IconClassName)"></span> State Tile</div>
             <div class="description">A simple tile that displays state information for an entity.</div>
+        </div>
+    </a>
+    <a asp-action="AddTileLight" class="card">
+        <div class="content">
+            <div class="header"><span class="va-bottom @(new LightTile().IconClassName)"></span> Light Tile</div>
+            <div class="description">A tile to represent the state of a light, and to turn the light on and off when clicked.</div>
         </div>
     </a>
 </div>

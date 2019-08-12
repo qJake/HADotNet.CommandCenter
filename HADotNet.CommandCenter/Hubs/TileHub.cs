@@ -25,11 +25,11 @@ namespace HADotNet.CommandCenter.Hubs
 
             var tile = config.Tiles.FirstOrDefault(t => t.Name == tileName);
 
-            if (tile != null && tile is StateTile st)
+            if (tile != null && tile is BaseEntityTile et)
             {
-                var state = await StatesClient.GetState(st.EntityId);
+                var state = await StatesClient.GetState(et.EntityId);
 
-                await Clients.All.SendTileState(st, state);
+                await Clients.All.SendTileState(et, state);
             }
         }
     }

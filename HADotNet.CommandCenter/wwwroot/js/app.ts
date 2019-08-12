@@ -4,6 +4,7 @@
 /// <reference path="typings/packery.d.ts" />
 /// <reference path="typings/packery.jquery.d.ts" />
 /// <reference path="../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
+/// <reference path="tilemap.ts" />
 
 type TilePos = {
     x: number,
@@ -45,13 +46,16 @@ class CommandCenter
         $('.ui.accordion').accordion();
         $('.ui.dropdown').dropdown({ fullTextSearch: true });
 
+        // For some reason Draggabilly takes the first element as the grid size, so inject a temporary invisible "fake" one
+        $('.preview-layout-grid').prepend(`<div class="preview-layout-item" style="opacity: 0; position: absolute; top: ${window.ccOptions.tilePreviewPadding}px; left: ${window.ccOptions.tilePreviewPadding}px; width: ${window.ccOptions.tilePreviewSize}px; height: ${window.ccOptions.tilePreviewSize}px;" id="grid__tmp"></div>`);
+
         this.pk = new Packery('.preview-layout-grid', {
             itemSelector: '.preview-layout-item',
             columnWidth: '.preview-layout-item',
             rowHeight: '.preview-layout-item',
-            gutter: window.ccOptions.tilePreviewPadding
+            gutter: window.ccOptions.tilePreviewPadding,
+            initLayout: false
         });
-        this.pk.layout();
 
         this.pk.on('layoutComplete', () => this.writeItemLayout());
         this.pk.on('dragItemPositioned', () =>
@@ -59,7 +63,6 @@ class CommandCenter
             // Things get kinda glitchy if we don't add a slight pause
             setTimeout(() =>
             {
-                this.pk.layout();
                 this.writeItemLayout();
                 this.pageIsDirty = true;
             }, 25);
@@ -68,12 +71,16 @@ class CommandCenter
 
         if (typeof Draggabilly === 'function')
         {
-            $('.preview-layout-item').each((_, e) => this.pk.bindDraggabillyEvents(new Draggabilly(e)));
+            $('.preview-layout-item').each((_, e) => this.pk.bindDraggabillyEvents(new Draggabilly(e, { containment: '.preview-layout-grid' })));
         }
         else
         {
             console.warn("Draggabilly is not available - drag and drop interface will not work.");
         }
+
+        $('#grid__tmp').remove();
+
+        this.pk.initShiftLayout(Array.from(document.querySelectorAll('.preview-layout-grid > .preview-layout-item')));
     }
 
     private initUser(): void
@@ -83,7 +90,15 @@ class CommandCenter
         {
             $('.tiles .tile').each((_, e) =>
             {
-                this.tiles.push(new Tile($(e).data('tile-name'), this.tileConn));
+                try
+                {
+                    let tile: Tile = new TileMap.ClassMap[$(e).data('tile-type').toString()]($(e).data('tile-name'), this.tileConn);
+                    this.tiles.push(tile);
+                }
+                catch (ex)
+                {
+                    console.error('Error instantiating class "' + ($(e).data('tile-type') || '__MISSING__') + 'Tile".', ex, e);
+                }
             });
         });
     }

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "none",
-    "target": "es5",
+    "target": "es6",
     "outFile": "wwwroot/js/app.js",
     "sourceMap": false,
     "noImplicitAny": true

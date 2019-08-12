@@ -1,13 +1,12 @@
 ﻿@model TileDisplayViewModel
 @{
     ViewData["Title"] = "Home";
+    ViewBag.BaseTileSizePx = Model.PageLayout.BaseTileSizePx;
+    ViewBag.TilePadding = Model.PageLayout.TileSpacingPx;
 }
 <div class="tiles">
-        @foreach (var item in Model.Tiles.Where(m => m.Layout != null))
-        {
-            <div id="tile-@item.Tile.Name" data-tile-name="@item.Tile.Name" class="tile tile-type--@item.Tile.Type" style="left: @(item.Layout.XPos)px; top: @(item.Layout.YPos)px; width: @(Model.PageLayout.BaseTileSizePx)px; height: @(Model.PageLayout.BaseTileSizePx)px;">
-                <span value-name></span>
-                <span value-state></span>
-            </div>
-        }
+    @foreach (var item in Model.Tiles.Where(m => m.Layout != null))
+    {
+        <partial name="Tiles/TileView@(item.Tile.TypeProper)" model="@item" />
+    }
 </div>

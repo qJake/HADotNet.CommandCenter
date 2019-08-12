@@ -1,11 +1,11 @@
-﻿@model StateTile
+﻿@model LightTile
 @{
-    ViewData["Title"] = "Add Tile: State";
+    ViewData["Title"] = "Add Tile: Light";
 }
 
-<h1><span class="va-top @(new StateTile().IconClassName)"></span> Add Tile: State</h1>
+<h1><span class="va-top @(new LightTile().IconClassName)"></span> Add Tile: Light</h1>
 
-<form class="ui form" method="post" asp-action="AddTileState">
+<form class="ui form" method="post" asp-action="AddTileLight">
     <input type="hidden" name="originalName" value="@Model?.Name" />
     <div class="ui grid">
         <div class="row">
@@ -48,7 +48,7 @@
                         <span class="ui up pointing small red label" asp-validation-for="SizeY"></span>
                     </div>
                 </div>
-                <h3>State Tile Details</h3>
+                <h3>Light Tile Details</h3>
                 <div class="ui segment">
                     <div class="field">
                         <label asp-for="EntityId"></label>
@@ -56,22 +56,29 @@
                         <span class="ui up pointing small red label" asp-validation-for="EntityId"></span>
                     </div>
                     <div class="field">
-                        <label asp-for="RefreshRate"></label>
+                        <label asp-for="DisplayIcon"></label>
                         <div class="ui left icon input">
-                            <i class="refresh icon"></i>
-                            <input asp-for="RefreshRate" />
+                            <span class="dynamic-icon-placeholder"></span>
+                            <input asp-for="DisplayIcon" />
                         </div>
-                        <span class="ui up pointing small red label" asp-validation-for="RefreshRate"></span>
-                        <p><small>The rate, in seconds, to automatically refresh this tile.</small></p>
+                        <span class="ui up pointing small red label" asp-validation-for="DisplayIcon"></span>
+                        <p><small>Enter a Material Design icon name. Do not include "mdi" or the "mdi-" prefix (e.g. for "mdi-home", just enter "home").</small></p>
                     </div>
                     <div class="field">
-                        <label asp-for="OverrideLabel"></label>
+                        <label asp-for="OnColor"></label>
                         <div class="ui left icon input">
-                            <i class="font icon"></i>
-                            <input asp-for="OverrideLabel" />
+                            <i class="tint icon"></i>
+                            <input asp-for="OnColor" />
                         </div>
-                        <span class="ui up pointing small red label" asp-validation-for="OverrideLabel"></span>
-                        <p><small>By default, the entity's <em>friendly name</em> will be used. Enter an override if desired.</small></p>
+                        <span class="ui up pointing small red label" asp-validation-for="OnColor"></span>
+                    </div>
+                    <div class="field">
+                        <label asp-for="OffColor"></label>
+                        <div class="ui left icon input">
+                            <i class="tint icon"></i>
+                            <input asp-for="OffColor" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="OffColor"></span>
                     </div>
                     <div class="field">
                         <button type="submit" class="ui green icon labeled button">

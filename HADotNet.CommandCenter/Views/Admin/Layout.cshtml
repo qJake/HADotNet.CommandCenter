@@ -15,6 +15,30 @@
             width: @(ViewBag.PreviewSize)px;
             height: @(ViewBag.PreviewSize)px;
         }
+        .preview-layout-grid > .tile-2w
+        {
+            width: @(ViewBag.PreviewSize * 2 + ViewBag.PreviewPadding)px;
+        }
+        .preview-layout-grid > .tile-3w
+        {
+            width: @(ViewBag.PreviewSize * 3 + (ViewBag.PreviewPadding * 2))px;
+        }
+        .preview-layout-grid > .tile-4w
+        {
+            width: @(ViewBag.PreviewSize * 4 + (ViewBag.PreviewPadding * 3))px;
+        }
+        .preview-layout-grid > .tile-2h
+        {
+            height: @(ViewBag.PreviewSize * 2 + ViewBag.PreviewPadding)px;
+        }
+        .preview-layout-grid > .tile-3h
+        {
+            height: @(ViewBag.PreviewSize * 3 + (ViewBag.PreviewPadding * 2))px;
+        }
+        .preview-layout-grid > .tile-4h
+        {
+            height: @(ViewBag.PreviewSize * 4 + (ViewBag.PreviewPadding * 3))px;
+        }
     </style>
 }
 
@@ -24,6 +48,7 @@
         window.ccOptions = window.ccOptions || {};
         window.ccOptions.tilePadding = @ViewBag.Padding;
         window.ccOptions.tilePreviewPadding = @ViewBag.PreviewPadding;
+        window.ccOptions.tilePreviewSize = @ViewBag.PreviewSize;
     </script>
 }
 
@@ -51,7 +76,10 @@
                 <div class="preview-layout-grid" style="min-width: @(ViewBag.PreviewWidth)px; max-width: @(ViewBag.PreviewWidth)px; min-height: @(ViewBag.PreviewHeight)px; max-height: @(ViewBag.PreviewHeight)px">
                     @foreach (var item in Model.OrderBy(m => m.Layout?.Index ?? 9999))
                     {
-                        <div class="preview-layout-item tile-type-@(item.Tile.Type)" style="position: absolute; top: @(item.Layout?.YPos / 2)px; left: @(item.Layout?.XPos / 2)px;" data-tile-name="@item.Tile.Name">@item.Tile.Name</div>
+                        <div class="preview-layout-item tile-type-@(item.Tile.Type) tile-@(item.Tile.SizeX)w tile-@(item.Tile.SizeY)h" style="position: absolute; top: @(item.Layout?.YPos / 2)px; left: @(item.Layout?.XPos / 2)px;" data-tile-name="@item.Tile.Name">
+                            <span class="@item.Tile.IconClassName"></span>
+                            @item.Tile.Name
+                        </div>
                     }
                 </div>
                 <input id="layout-serialized" name="tilelayout" type="hidden" />

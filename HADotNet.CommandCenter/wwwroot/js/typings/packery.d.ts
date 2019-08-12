@@ -178,6 +178,11 @@ declare class Packery
     getItem(element: Element): any;
 
     /**
+     * Custom method to initialize Packery with a pre-existing layout.
+     */
+    initShiftLayout(elements: Array<Element>): void;
+
+    /**
      * [layout Lay out all item elements.]
      */
     layout(): void;
@@ -251,6 +256,11 @@ declare class Packery
      * @param {Array<Element>} elements [description]
      */
     remove(elements: Array<Element>): void;
+
+    /**
+     * [shiftLayout Shifts all item positions, maintaining their horizontal position.]
+     */
+    shiftLayout(): void;
 
     /**
      * [stamp Stamp the elements in the layout. Packery will lay out item elements around stamped element]

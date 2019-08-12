@@ -50,6 +50,7 @@ textarea.no-resize
         border: 2px solid #999;
         padding: 2px 5px;
         cursor: grab;
+        text-align: center;
 
         &:active
         {
@@ -63,7 +64,32 @@ textarea.no-resize
         }
     }
 }
+
 .packery-drop-placeholder
 {
     border: 2px dashed #666;
+}
+
+// Material fix
+.va-middle
+{
+    &,&:before
+    {
+        vertical-align: middle;
+    }
+}
+.va-bottom
+{
+    &, &:before
+    {
+        vertical-align: bottom;
+    }
+}
+.va-top
+{
+    &, &:before
+    {
+        vertical-align: top;
+        vertical-align: text-top;
+    }
 }

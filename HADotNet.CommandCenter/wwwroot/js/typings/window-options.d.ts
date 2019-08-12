@@ -4,6 +4,8 @@ declare interface ICcOptions
 {
     tilePadding: number;
     tilePreviewPadding: number;
+    tileSize: number;
+    tilePreviewSize: number;
     mode: PageMode;
 }
 

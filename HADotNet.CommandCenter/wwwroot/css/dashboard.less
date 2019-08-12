@@ -6,7 +6,10 @@
     user-select: none;
 }
 
-html { .base(); }
+html
+{
+    .base();
+}
 
 body.dashboard
 {
@@ -39,6 +42,34 @@ body.dashboard
                 // Blank tiles should render blank!
                 display: none !important;
             }
+
+            &.tile-loading
+            {
+                &:before
+                {
+                    content: ' ';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: #CCC;
+                }
+
+                &:after
+                {
+                    content: ' ';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-image: url(/images/load.gif);
+                    background-position: 50%;
+                    background-size: 50%;
+                    background-repeat: no-repeat;
+                }
+            }
         }
     }
 }
@@ -49,8 +80,25 @@ body.dashboard
 {
     background-color: #AAA;
 }
+
 .tile
 {
     font-family: Arial, sans-serif;
     background-color: #e2e2e2;
+}
+
+.tile.tile-type--state
+{
+    justify-content: space-between !important;
+
+    span.value
+    {
+        font-size: 3.5rem;
+    }
+
+    span.top-label,
+    span.bottom-label
+    {
+        margin: 1rem 0;
+    }
 }

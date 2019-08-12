@@ -1,9 +1,13 @@
 ﻿/// <reference path="../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
 
-class Tile
+abstract class Tile
 {
-    constructor(private name: string, private conn: signalR.HubConnection)
+    protected el: JQuery<HTMLElement>;
+
+    constructor(protected name: string, protected conn: signalR.HubConnection)
     {
+        this.el = $(`.tiles .tile[data-tile-name="${name}"]`);
+
         conn.on('SendTileState', (t, s) =>
         {
             if (name == (t as ITile).name)
@@ -14,31 +18,11 @@ class Tile
         this.requestState();
     }
 
-    private updateState(tile: ITile, state: IEntityState): void
+    abstract updateState(tile: ITile, state: IEntityState): void;
+
+    protected requestState(): void
     {
-        //console.log("State received for: " + tile.name, state);
-
-        $(`#tile-${tile.name}`).find('span[value-name]').text(state.attributes["friendly_name"].toString());
-
-        let value = state.state;
-        if (state.attributes["unit_of_measurement"])
-        {
-            value += state.attributes["unit_of_measurement"].toString();
-        }
-
-        $(`#tile-${tile.name}`).find('span[value-state]').text(value);
-
-        if (tile.refreshRate > 0)
-        {
-            setTimeout(() =>
-            {
-                this.requestState();
-            }, tile.refreshRate * 1000);
-        }
-    }
-
-    private requestState(): void
-    {
+        this.el.addClass("tile-loading");
         this.conn.invoke('RequestTileState', this.name);
     }
 }
