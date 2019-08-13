@@ -4,7 +4,7 @@
 /// <reference path="typings/packery.d.ts" />
 /// <reference path="typings/packery.jquery.d.ts" />
 /// <reference path="../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
-/// <reference path="tilemap.ts" />
+/// <reference path="tiles/tilemap.ts" />
 
 type TilePos = {
     x: number,
@@ -97,7 +97,7 @@ class CommandCenter
                 }
                 catch (ex)
                 {
-                    console.error('Error instantiating class "' + ($(e).data('tile-type') || '__MISSING__') + 'Tile".', ex, e);
+                    console.error('Error instantiating class "' + ($(e).data('tile-type') || '__MISSING__') + 'Tile". Was it added to the tile type map?', ex, e);
                 }
             });
         });

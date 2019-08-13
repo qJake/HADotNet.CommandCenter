@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Remove="wwwroot\js\blank.tile.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\date.tile.ts.ts" />
     <TypeScriptCompile Remove="wwwroot\js\draggabilly.d.ts" />
     <TypeScriptCompile Remove="wwwroot\js\entityState.ts" />
     <TypeScriptCompile Remove="wwwroot\js\light.tile.ts" />

@@ -1,4 +1,4 @@
-﻿/// <reference path="../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
+﻿/// <reference path="../../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
 
 abstract class Tile
 {
@@ -15,10 +15,26 @@ abstract class Tile
                 this.updateState(t, s);
             }
         });
+        conn.on('SendWarning', msg => console.warn(msg));
+        conn.on('SendDateTime', (tile, d, t) =>
+        {
+            if (name == (tile as ITile).name)
+            {
+                this.updateDateTime(tile, d, t);
+            }
+        });
         this.requestState();
     }
 
-    abstract updateState(tile: ITile, state: IEntityState): void;
+    protected updateState(tile: ITile, state: IEntityState): void
+    {
+
+    }
+
+    protected updateDateTime(tile: ITile, date: string, time: string): void
+    {
+
+    }
 
     protected requestState(): void
     {

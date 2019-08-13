@@ -44,6 +44,12 @@ namespace HADotNet.CommandCenter.Controllers
             return View();
         }
 
+        [Route("add/date")]
+        public IActionResult AddTileDate()
+        {
+            return View();
+        }
+
         [Route("add/state")]
         public async Task<IActionResult> AddTileState()
         {
@@ -106,6 +112,17 @@ namespace HADotNet.CommandCenter.Controllers
             }
 
             return View("AddTileBlank", tile);
+        }
+
+        [HttpPost("add/date")]
+        public async Task<IActionResult> SaveTileDate(DateTile tile)
+        {
+            if (ModelState.IsValid)
+            {
+                return await SaveBaseTile(tile);
+            }
+
+            return View("AddTileDate", tile);
         }
 
         [HttpPost("add/state")]

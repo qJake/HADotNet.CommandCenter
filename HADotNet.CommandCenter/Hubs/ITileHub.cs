@@ -8,6 +8,10 @@ namespace HADotNet.CommandCenter.Hubs
     {
         Task SendTileState(BaseTile tile, StateObject state);
 
+        Task SendDateTime(BaseTile tile, string date, string time);
+
+        Task SendWarning(string message);
+
         Task RequestTileState(string tileName);
     }
 }
