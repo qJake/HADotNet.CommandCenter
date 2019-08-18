@@ -72,6 +72,10 @@
                         <i class="check icon"></i>
                         Save Layout
                     </button>
+                    <button type="button" id="auto-layout" class="ui small icon labeled grey button">
+                        <i class="refresh icon"></i>
+                        Auto Layout
+                    </button>
                 </p>
                 <div class="preview-layout-grid" style="min-width: @(ViewBag.PreviewWidth)px; max-width: @(ViewBag.PreviewWidth)px; min-height: @(ViewBag.PreviewHeight)px; max-height: @(ViewBag.PreviewHeight)px">
                     @foreach (var item in Model.OrderBy(m => m.Layout?.Index ?? 9999))

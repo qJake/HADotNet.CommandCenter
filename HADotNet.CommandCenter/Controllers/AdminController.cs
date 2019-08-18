@@ -31,11 +31,11 @@ namespace HADotNet.CommandCenter.Controllers
         {
             var config = await ConfigStore.GetConfigAsync();
 
-            ViewBag.PreviewWidth = config.LayoutSettings?.DeviceWidthPx / 2;
-            ViewBag.PreviewHeight = config.LayoutSettings?.DeviceHeightPx / 2;
-            ViewBag.PreviewSize = config.LayoutSettings?.BaseTileSizePx / 2;
+            ViewBag.PreviewWidth = config.LayoutSettings?.DeviceWidthPx / 2.0;
+            ViewBag.PreviewHeight = config.LayoutSettings?.DeviceHeightPx / 2.0;
+            ViewBag.PreviewSize = config.LayoutSettings?.BaseTileSizePx / 2.0;
             ViewBag.Padding = config.LayoutSettings?.TileSpacingPx;
-            ViewBag.PreviewPadding = config.LayoutSettings?.TileSpacingPx / 2;
+            ViewBag.PreviewPadding = config.LayoutSettings?.TileSpacingPx / 2.0;
 
             return View(from t in config.Tiles
                         join layout in config.TileLayout on t.Name equals layout.Name into tileGroup
@@ -107,6 +107,14 @@ namespace HADotNet.CommandCenter.Controllers
             }
 
             return View(newSettings);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Themes()
+        {
+            var config = await ConfigStore.GetConfigAsync();
+
+            return View();
         }
     }
 }

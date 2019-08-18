@@ -30,6 +30,7 @@ namespace HADotNet.CommandCenter
             services.AddSingleton<IConfigStore, JsonConfigStore>();
             services.AddSingleton(_ => ClientFactory.GetClient<EntityClient>());
             services.AddSingleton(_ => ClientFactory.GetClient<StatesClient>());
+            services.AddSingleton(_ => ClientFactory.GetClient<ServiceClient>());
 
             services.AddSignalR();
 

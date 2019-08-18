@@ -1,11 +1,11 @@
-﻿@model LightTile
+﻿@model SwitchTile
 @{
-    ViewData["Title"] = "Add Tile: Light";
+    ViewData["Title"] = "Add Tile: Switch";
 }
 
-<h1><span class="va-top @(new LightTile().IconClassName)"></span> Add Tile: Light</h1>
+    <h1><span class="va-top @(new SwitchTile().IconClassName)"></span> Add Tile: Switch</h1>
 
-<form class="ui form" method="post" asp-action="AddTileLight">
+<form class="ui form" method="post" asp-action="Save">
     <input type="hidden" name="originalName" value="@Model?.Name" />
     <div class="ui grid">
         <div class="row">
@@ -21,34 +21,30 @@
                         <span class="ui up pointing small red label" asp-validation-for="Name"></span>
                         <p><small>An internal name to identify this tile, not shown on the dashboard.</small></p>
                     </div>
-                    <div class="field">
+                    <div class="inline field">
                         <label asp-for="SizeX"></label>
-                        <div class="ui left icon input">
-                            <i class="arrows alternate horizontal icon"></i>
-                            <select class="ui dropdown" asp-for="SizeX">
-                                <option value="1">1x</option>
-                                <option value="2">2x</option>
-                                <option value="3">3x</option>
-                                <option value="4">4x</option>
-                            </select>
-                        </div>
+                        <i class="arrows alternate horizontal icon"></i>
+                        <select class="ui dropdown" asp-for="SizeX">
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                        </select>
                         <span class="ui up pointing small red label" asp-validation-for="SizeX"></span>
                     </div>
-                    <div class="field">
+                    <div class="inline field">
                         <label asp-for="SizeY"></label>
-                        <div class="ui left icon input">
-                            <i class="arrows alternate horizontal icon"></i>
-                            <select class="ui dropdown" asp-for="SizeY">
-                                <option value="1">1x</option>
-                                <option value="2">2x</option>
-                                <option value="3">3x</option>
-                                <option value="4">4x</option>
-                            </select>
-                        </div>
+                        <i class="arrows alternate vertical icon"></i>
+                        <select class="ui dropdown" asp-for="SizeY">
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                        </select>
                         <span class="ui up pointing small red label" asp-validation-for="SizeY"></span>
                     </div>
                 </div>
-                <h3>Light Tile Details</h3>
+                <h3>Switch Tile Details</h3>
                 <div class="ui segment">
                     <div class="field">
                         <label asp-for="EntityId"></label>
@@ -56,18 +52,36 @@
                         <span class="ui up pointing small red label" asp-validation-for="EntityId"></span>
                     </div>
                     <div class="field">
+                        <label asp-for="OverrideLabel"></label>
+                        <div class="ui left icon input">
+                            <i class="font icon"></i>
+                            <input asp-for="OverrideLabel" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="OverrideLabel"></span>
+                        <p><small>By default, the entity's <em>friendly name</em> will be used. Enter an override if desired.</small></p>
+                    </div>
+                    <div class="field">
                         <label asp-for="DisplayIcon"></label>
                         <div class="ui left icon input">
-                            <span class="dynamic-icon-placeholder"></span>
+                            <i class="large icon mdi-icon-placeholder"></i>
                             <input asp-for="DisplayIcon" />
                         </div>
                         <span class="ui up pointing small red label" asp-validation-for="DisplayIcon"></span>
                         <p><small>Enter a Material Design icon name. Do not include "mdi" or the "mdi-" prefix (e.g. for "mdi-home", just enter "home").</small></p>
                     </div>
                     <div class="field">
+                        <label asp-for="DisplayOffIcon"></label>
+                        <div class="ui left icon input">
+                            <i class="large icon mdi-icon-placeholder"></i>
+                            <input asp-for="DisplayOffIcon" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="DisplayOffIcon"></span>
+                        <p><small>Enter a Material Design icon name. Do not include "mdi" or the "mdi-" prefix (e.g. for "mdi-home", just enter "home").</small></p>
+                    </div>
+                    <div class="field">
                         <label asp-for="OnColor"></label>
                         <div class="ui left icon input">
-                            <i class="tint icon"></i>
+                            <i class="color-preview tint icon"></i>
                             <input asp-for="OnColor" />
                         </div>
                         <span class="ui up pointing small red label" asp-validation-for="OnColor"></span>
@@ -75,17 +89,17 @@
                     <div class="field">
                         <label asp-for="OffColor"></label>
                         <div class="ui left icon input">
-                            <i class="tint icon"></i>
+                            <i class="color-preview tint icon"></i>
                             <input asp-for="OffColor" />
                         </div>
                         <span class="ui up pointing small red label" asp-validation-for="OffColor"></span>
                     </div>
-                    <div class="field">
-                        <button type="submit" class="ui green icon labeled button">
-                            <i class="check icon"></i>
-                            Add Tile
-                        </button>
-                    </div>
+                </div>
+                <div class="field">
+                    <button type="submit" class="ui green icon labeled button">
+                        <i class="check icon"></i>
+                        Add Tile
+                    </button>
                 </div>
             </div>
         </div>

@@ -31,6 +31,9 @@ class CommandCenter
         window.ccOptions.mode == PageMode.Admin
             ? this.initAdmin()
             : this.initUser();
+
+        this.initializeMdiPreview();
+        this.initializeColorPreview();
     }
 
     private initAdmin(): void
@@ -44,43 +47,50 @@ class CommandCenter
         });
 
         $('.ui.accordion').accordion();
+        $('.ui.checkbox').checkbox();
         $('.ui.dropdown').dropdown({ fullTextSearch: true });
 
-        // For some reason Draggabilly takes the first element as the grid size, so inject a temporary invisible "fake" one
-        $('.preview-layout-grid').prepend(`<div class="preview-layout-item" style="opacity: 0; position: absolute; top: ${window.ccOptions.tilePreviewPadding}px; left: ${window.ccOptions.tilePreviewPadding}px; width: ${window.ccOptions.tilePreviewSize}px; height: ${window.ccOptions.tilePreviewSize}px;" id="grid__tmp"></div>`);
-
-        this.pk = new Packery('.preview-layout-grid', {
-            itemSelector: '.preview-layout-item',
-            columnWidth: '.preview-layout-item',
-            rowHeight: '.preview-layout-item',
-            gutter: window.ccOptions.tilePreviewPadding,
-            initLayout: false
-        });
-
-        this.pk.on('layoutComplete', () => this.writeItemLayout());
-        this.pk.on('dragItemPositioned', () =>
+        // Only init Packery stuff if we detect we have the preview grid on the page
+        if ($('.preview-layout-grid').length)
         {
-            // Things get kinda glitchy if we don't add a slight pause
-            setTimeout(() =>
+            $('#auto-layout').click(() => this.pk.layout());
+
+            // For some reason Draggabilly takes the first element as the grid size, so inject a temporary invisible "fake" one
+            $('.preview-layout-grid').prepend(`<div class="preview-layout-item" style="opacity: 0; position: absolute; top: ${window.ccOptions.tilePreviewPadding}px; left: ${window.ccOptions.tilePreviewPadding}px; width: ${window.ccOptions.tilePreviewSize}px; height: ${window.ccOptions.tilePreviewSize}px;" id="grid__tmp"></div>`);
+
+            this.pk = new Packery('.preview-layout-grid', {
+                itemSelector: '.preview-layout-item',
+                columnWidth: '.preview-layout-item',
+                rowHeight: '.preview-layout-item',
+                gutter: window.ccOptions.tilePreviewPadding,
+                initLayout: false
+            });
+
+            this.pk.on('layoutComplete', () => this.writeItemLayout());
+            this.pk.on('dragItemPositioned', () =>
             {
-                this.writeItemLayout();
-                this.pageIsDirty = true;
-            }, 25);
-        });
-        this.writeItemLayout();
+                // Things get kinda glitchy if we don't add a slight pause
+                setTimeout(() =>
+                {
+                    this.writeItemLayout();
+                    this.pageIsDirty = true;
+                }, 25);
+            });
+            this.writeItemLayout();
 
-        if (typeof Draggabilly === 'function')
-        {
-            $('.preview-layout-item').each((_, e) => this.pk.bindDraggabillyEvents(new Draggabilly(e, { containment: '.preview-layout-grid' })));
+            if (typeof Draggabilly === 'function')
+            {
+                $('.preview-layout-item').each((_, e) => this.pk.bindDraggabillyEvents(new Draggabilly(e, { containment: '.preview-layout-grid' })));
+            }
+            else
+            {
+                console.warn("Draggabilly is not available - drag and drop interface will not work.");
+            }
+
+            $('#grid__tmp').remove();
+
+            this.pk.initShiftLayout(Array.from(document.querySelectorAll('.preview-layout-grid > .preview-layout-item')));
         }
-        else
-        {
-            console.warn("Draggabilly is not available - drag and drop interface will not work.");
-        }
-
-        $('#grid__tmp').remove();
-
-        this.pk.initShiftLayout(Array.from(document.querySelectorAll('.preview-layout-grid > .preview-layout-item')));
     }
 
     private initUser(): void
@@ -101,6 +111,40 @@ class CommandCenter
                 }
             });
         });
+    }
+
+    protected initializeMdiPreview(): void
+    {
+        $('.mdi-icon-placeholder + input').each((_, e) =>
+        {
+            $(e).keyup((el) =>
+            {
+                this.refreshDynamicIcon(el.currentTarget);
+            });
+            this.refreshDynamicIcon(e);
+        });
+    }
+
+    protected refreshDynamicIcon(target: HTMLElement): void
+    {
+        $(target).parent().children('.mdi-icon-placeholder').attr('class', 'large icon mdi-icon-placeholder').addClass(`mdi mdi-${$(target).val()}`);
+    }
+
+    protected initializeColorPreview(): void
+    {
+        $('.color-preview + input').each((_, e) =>
+        {
+            $(e).keyup((el) =>
+            {
+                this.refreshDynamicColor(el.currentTarget);
+            });
+            this.refreshDynamicColor(e);
+        });
+    }
+
+    protected refreshDynamicColor(target: HTMLElement): void
+    {
+        $(target).parent().children('.color-preview').css('color', `${$(target).val()}`);
     }
 
     private writeItemLayout(): void

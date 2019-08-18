@@ -33,11 +33,11 @@
                 var entityTile = tile as BaseEntityTile;
                 <tr>
                     <td>
-                        <a class="ui mini red basic circular icon button" asp-action="DeleteTile" asp-route-name="@tile.Name" title="Delete this tile">
-                            <i class="trash icon"></i>
-                        </a>
                         <a class="ui mini yellow basic circular icon button" asp-action="EditTile" asp-route-name="@tile.Name" title="Delete this tile">
                             <i class="pencil icon"></i>
+                        </a>
+                        <a class="ui mini red basic circular icon button" asp-action="DeleteTile" asp-route-name="@tile.Name" title="Delete this tile">
+                            <i class="trash icon"></i>
                         </a>
                     </td>
                     <td>@tile.Name</td>

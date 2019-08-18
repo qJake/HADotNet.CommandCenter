@@ -51,6 +51,14 @@ textarea.no-resize
         padding: 2px 5px;
         cursor: grab;
         text-align: center;
+        font-size: 0.73rem;
+        overflow: hidden;
+        white-space: nowrap;
+
+        span.mdi
+        {
+            font-size: 24px;
+        }
 
         &:active
         {
@@ -92,4 +100,22 @@ textarea.no-resize
         vertical-align: top;
         vertical-align: text-top;
     }
+}
+
+// Semantic and Material icons come together!
+.icon.large.mdi
+{
+    width: 1.67em !important;
+}
+
+.mdi-icon-placeholder
+{
+    &.icon.large
+    {
+        opacity: 1 !important;
+    }
+}
+.color-preview
+{
+    opacity: 1 !important;
 }

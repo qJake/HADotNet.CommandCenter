@@ -11,11 +11,13 @@ namespace HADotNet.CommandCenter.Hubs
     public class TileHub : Hub<ITileHub>
     {
         private StatesClient StatesClient { get; }
+        public ServiceClient ServiceClient { get; }
         public IConfigStore ConfigStore { get; }
 
-        public TileHub(StatesClient statesClient, IConfigStore configStore)
+        public TileHub(StatesClient statesClient, ServiceClient serviceClient, IConfigStore configStore)
         {
             StatesClient = statesClient;
+            ServiceClient = serviceClient;
             ConfigStore = configStore;
         }
 
@@ -29,12 +31,14 @@ namespace HADotNet.CommandCenter.Hubs
             {
                 case BaseEntityTile et:
                     var state = await StatesClient.GetState(et.EntityId);
+                    state = et.StateManipulator(state);
                     await Clients.All.SendTileState(et, state);
                     break;
                 case DateTile dt:
                     await Clients.All.SendDateTime(dt, DateTime.Now.ToString("dddd MMMM d"), DateTime.Now.ToString("h:mm tt"));
                     break;
                 case BlankTile _:
+                case LabelTile _:
                 case null:
                     break;
                 default:
@@ -42,6 +46,22 @@ namespace HADotNet.CommandCenter.Hubs
                     break;
             }
 
+        }
+
+        public async Task OnTileClicked(string tileName)
+        {
+            var config = await ConfigStore.GetConfigAsync();
+
+            var tile = config.Tiles.FirstOrDefault(t => t.Name == tileName);
+
+            switch (tile)
+            {
+                case BaseEntityTile et:
+                    await et.OnClick(ServiceClient);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

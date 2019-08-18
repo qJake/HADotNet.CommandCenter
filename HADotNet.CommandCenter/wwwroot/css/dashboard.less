@@ -14,16 +14,15 @@ html
 body.dashboard
 {
     .base();
+    background-color: #AAA;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
 
     .tiles
     {
         position: relative;
-        height: 100vh;
-        max-height: 100vh;
-        min-height: 100vh;
-        width: 100vw;
-        max-width: 100vw;
-        min-width: 100vw;
 
         .tile
         {
@@ -31,7 +30,7 @@ body.dashboard
             display: flex;
             flex-flow: column nowrap;
             align-items: center;
-            justify-content: center;
+            justify-content: space-around;
             flex: 1 0 auto;
             font-size: 2rem;
             text-align: center;
@@ -41,6 +40,11 @@ body.dashboard
             {
                 // Blank tiles should render blank!
                 display: none !important;
+            }
+
+            &.tile-clickable
+            {
+                cursor: pointer;
             }
 
             &.tile-loading
@@ -76,29 +80,52 @@ body.dashboard
 
 // Base styling, for the utmost basic visibility of tiles
 // All themes should be overriding this information as these definitions have extremely low CSS specificity.
-.tiles
-{
-    background-color: #AAA;
-}
-
 .tile
 {
     font-family: Arial, sans-serif;
     background-color: #e2e2e2;
-}
-
-.tile.tile-type--state
-{
-    justify-content: space-between !important;
 
     span.value
     {
-        font-size: 3.5rem;
+        font-size: 2.35em;
+    }
+
+    span[value-icon]
+    {
+        font-size: 4em;
+    }
+
+    span[value-picture]
+    {
+        min-width: 2em;
+        min-height: 2em;
+        max-width: 2em;
+        max-height: 2em;
+        border-radius: 2em;
+        border: 1.5px solid #EEE;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: 50%;
+
+        &.bw
+        {
+            filter: saturate(0);
+        }
     }
 
     span.top-label,
     span.bottom-label
     {
-        margin: 1rem 0;
+        margin: 0.25em 0;
+    }
+
+    span.date
+    {
+        font-size: 0.55em;
+    }
+
+    span.time
+    {
+        font-size: 1.2em;
     }
 }

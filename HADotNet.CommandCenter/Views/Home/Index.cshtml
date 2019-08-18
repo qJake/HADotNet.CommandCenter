@@ -4,6 +4,22 @@
     ViewBag.BaseTileSizePx = Model.PageLayout.BaseTileSizePx;
     ViewBag.TilePadding = Model.PageLayout.TileSpacingPx;
 }
+@section Header
+{
+    <style type="text/css">
+        body.dashboard > .tiles
+        {
+            height: @(Model.PageLayout.DeviceHeightPx)px;
+            width: @(Model.PageLayout.DeviceWidthPx)px;
+        }
+
+        body.dashboard > .tiles > .tile
+        {
+            font-size: @(ViewBag.BaseTileSizePx * 0.125)px;
+        }
+    </style>
+}
+
 <div class="tiles">
     @foreach (var item in Model.Tiles.Where(m => m.Layout != null))
     {

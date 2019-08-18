@@ -1,12 +1,30 @@
 ﻿/// <reference path="../../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
+/// <reference path="../utils.ts" />
 
 abstract class Tile
 {
     protected el: JQuery<HTMLElement>;
 
-    constructor(protected name: string, protected conn: signalR.HubConnection)
+    private loadingDebouncer: number;
+
+    /**
+     * Gets or sets the debounce time (in ms) for the loading animation on this tile.
+     */
+    protected debounceTimeMs: number;
+
+    constructor(protected name: string, protected conn: signalR.HubConnection, protected canLoad: boolean = true)
     {
         this.el = $(`.tiles .tile[data-tile-name="${name}"]`);
+
+        this.el.click(() =>
+        {
+            this.onClick()
+                .then(() => Utils.delayPromise(500))
+                .then(() =>
+                {
+                    this.requestState(1000);
+                });
+        });
 
         conn.on('SendTileState', (t, s) =>
         {
@@ -20,25 +38,52 @@ abstract class Tile
         {
             if (name == (tile as ITile).name)
             {
-                this.updateDateTime(tile, d, t);
+                this.updateState(tile, d, t);
             }
         });
-        this.requestState();
+        if (this.canLoad)
+        {
+            this.requestState();
+        }
     }
 
-    protected updateState(tile: ITile, state: IEntityState): void
+    protected onClick(): Promise<any>
     {
-
+        return this.conn.invoke("OnTileClicked", this.name);
     }
 
-    protected updateDateTime(tile: ITile, date: string, time: string): void
+    protected updateState(tile?: ITile, ...args: any): void
     {
-
+        this.disableLoading();
     }
 
-    protected requestState(): void
+    protected requestState(debounce?: number): void
     {
-        this.el.addClass("tile-loading");
+        this.enableLoading(debounce);
         this.conn.invoke('RequestTileState', this.name);
+    }
+
+    protected enableLoading(debounce?: number): void
+    {
+        if (!debounce && !this.debounceTimeMs)
+        {
+            this.el.addClass("tile-loading");
+        }
+        else
+        {
+            this.loadingDebouncer = window.setTimeout(() =>
+            {
+                this.el.addClass("tile-loading");
+            }, debounce || this.debounceTimeMs);
+        }
+    }
+
+    protected disableLoading(): void
+    {
+        if (this.loadingDebouncer)
+        {
+            window.clearTimeout(this.loadingDebouncer);
+        }
+        this.el.removeClass("tile-loading");
     }
 }

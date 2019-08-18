@@ -7,28 +7,67 @@
 <p>Select a tile type below.</p>
 
 <div class="ui cards">
-    <a asp-action="AddTileBlank" class="card">
+    <a asp-action="Add" asp-controller="BlankTile" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new BlankTile().IconClassName)"></span> Blank Tile</div>
             <div class="description">A blank tile, useful for taking up space in the layout but not actually rendering anything.</div>
         </div>
+        <div class="extra content">
+            <p>Entity types: <code>N/A</code></p>
+        </div>
     </a>
-    <a asp-action="AddTileDate" class="card">
+    <a asp-action="Add" asp-controller="LabelTile" class="card">
+        <div class="content">
+            <div class="header"><span class="va-bottom @(new LabelTile().IconClassName)"></span> Label Tile</div>
+            <div class="description">A label tile, useful for displaying some static text.</div>
+        </div>
+        <div class="extra content">
+            <p>Entity types: <code>N/A</code></p>
+        </div>
+    </a>
+    <a asp-action="Add" asp-controller="DateTile" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new DateTile().IconClassName)"></span> Date Tile</div>
             <div class="description">A tile used to render a date and/or time.</div>
         </div>
+        <div class="extra content">
+            <p>Entity types: <code>N/A</code></p>
+        </div>
     </a>
-    <a asp-action="AddTileState" class="card">
+    <a asp-action="Add" asp-controller="StateTile" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new StateTile().IconClassName)"></span> State Tile</div>
             <div class="description">A simple tile that displays state information for an entity.</div>
         </div>
+        <div class="extra content">
+            <p>Entity types: <code>All</code></p>
+        </div>
     </a>
-    <a asp-action="AddTileLight" class="card">
+    <a asp-action="Add" asp-controller="SwitchTile" class="card">
+        <div class="content">
+            <div class="header"><span class="va-bottom @(new SwitchTile().IconClassName)"></span> Switch  Tile</div>
+            <div class="description">A tile to represent the state of a switch, and to turn the switch on and off when clicked.</div>
+        </div>
+        <div class="extra content">
+            <p>Entity types: <code>switch, group</code></p>
+        </div>
+    </a>
+    <a asp-action="Add" asp-controller="LightTile" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new LightTile().IconClassName)"></span> Light Tile</div>
             <div class="description">A tile to represent the state of a light, and to turn the light on and off when clicked.</div>
+        </div>
+        <div class="extra content">
+            <p>Entity types: <code>light</code></p>
+        </div>
+    </a>
+    <a asp-action="Add" asp-controller="PersonTile" class="card">
+        <div class="content">
+            <div class="header"><span class="va-bottom @(new PersonTile().IconClassName)"></span> Person Tile</div>
+            <div class="description">A tile to represent the current location and picture of a person (device_tracker).</div>
+        </div>
+        <div class="extra content">
+            <p>Entity types: <code>device_tracker</code></p>
         </div>
     </a>
 </div>

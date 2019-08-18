@@ -13,6 +13,8 @@
         <link rel="stylesheet" href="https://cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css" crossorigin="anonymous" />
         <link type="text/css" rel="stylesheet" href="~/css/dashboard.min.css" asp-append-version="true" />
     </environment>
+
+    @RenderSection("Header", false)
 </head>
 <body class="dashboard">
     @RenderBody()

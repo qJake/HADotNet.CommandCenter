@@ -10,6 +10,9 @@
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
     <Content Remove="compilerconfig.json" />
+    <Content Remove="wwwroot\js\tiles\label.tile.ts" />
+    <Content Remove="wwwroot\js\tiles\person.tile.ts" />
+    <Content Remove="wwwroot\js\tiles\switch.tile.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +29,7 @@
     <TypeScriptCompile Remove="wwwroot\js\tile.ts" />
     <TypeScriptCompile Remove="wwwroot\js\tilemap.ts" />
     <TypeScriptCompile Remove="wwwroot\js\tileType.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\utils.ts" />
     <TypeScriptCompile Remove="wwwroot\js\window-options.d.ts" />
   </ItemGroup>
 
@@ -41,7 +45,7 @@
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.9.406" />
     <PackageReference Include="BuildWebCompiler" Version="1.12.405" />
-    <PackageReference Include="HADotNet.Core" Version="0.2.0" />
+    <PackageReference Include="HADotNet.Core" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.6.0">

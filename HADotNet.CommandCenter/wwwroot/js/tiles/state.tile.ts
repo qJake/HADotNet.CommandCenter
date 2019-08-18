@@ -19,13 +19,13 @@ class StateTile extends Tile
         }
         $(`#tile-${tile.name}`).find('span[value-state]').text(value);
 
-        this.el.removeClass("tile-loading");
+        super.updateState();
 
         if (tile.refreshRate > 0)
         {
             setTimeout(() =>
             {
-                this.requestState();
+                this.requestState(1000);
             }, tile.refreshRate * 1000);
         }
     }

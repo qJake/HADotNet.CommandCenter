@@ -1,6 +1,6 @@
 ﻿/// <reference path="tile.ts" />
 
-class BlankTile extends Tile
+class LabelTile extends Tile
 {
     constructor(name: string, conn: signalR.HubConnection)
     {

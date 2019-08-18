@@ -10,6 +10,9 @@
 <a class="item @(Context.Request.Path.ToString().ToLower().StartsWith("/admin/layout") ? "active" : "")" href="/admin/layout">
     <i class="th large icon"></i> Layout
 </a>
+<a class="item @(Context.Request.Path.ToString().ToLower().StartsWith("/admin/themes") ? "active" : "")" href="/admin/themes">
+    <i class="paint brush icon"></i> Themes
+</a>
 <a class="item @(Context.Request.Path.ToString().ToLower().StartsWith("/admin/settings") ? "active" : "")" href="/admin/settings">
     <i class="cog icon"></i> Settings
 </a>

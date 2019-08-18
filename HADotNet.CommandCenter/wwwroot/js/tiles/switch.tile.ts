@@ -1,10 +1,10 @@
 ﻿/// <reference path="tile.ts" />
 
-class LightTile extends Tile
+class SwitchTile extends Tile
 {
     public updateState(tile: ITile, state: IEntityState): void
     {
-        var lightTile = <ILightTile>tile;
+        var lightTile = <ISwitchTile>tile;
 
         //console.log("State received for: " + tile.name, state);
         let label = state.attributes["friendly_name"].toString();

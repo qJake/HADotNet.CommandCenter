@@ -1,11 +1,11 @@
-﻿@model StateTile
+﻿@model PersonTile
 @{
-    ViewData["Title"] = "Add Tile: State";
+    ViewData["Title"] = "Add Tile: Person";
 }
 
-<h1><span class="va-top @(new StateTile().IconClassName)"></span> Add Tile: State</h1>
+<h1><span class="va-top @(new PersonTile().IconClassName)"></span> Add Tile: Person</h1>
 
-<form class="ui form" method="post" asp-action="AddTileState">
+<form class="ui form" method="post" asp-action="Save">
     <input type="hidden" name="originalName" value="@Model?.Name" />
     <div class="ui grid">
         <div class="row">
@@ -21,48 +21,35 @@
                         <span class="ui up pointing small red label" asp-validation-for="Name"></span>
                         <p><small>An internal name to identify this tile, not shown on the dashboard.</small></p>
                     </div>
-                    <div class="field">
+                    <div class="inline field">
                         <label asp-for="SizeX"></label>
-                        <div class="ui left icon input">
-                            <i class="arrows alternate horizontal icon"></i>
-                            <select class="ui dropdown" asp-for="SizeX">
-                                <option value="1">1x</option>
-                                <option value="2">2x</option>
-                                <option value="3">3x</option>
-                                <option value="4">4x</option>
-                            </select>
-                        </div>
+                        <i class="arrows alternate horizontal icon"></i>
+                        <select class="ui dropdown" asp-for="SizeX">
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                        </select>
                         <span class="ui up pointing small red label" asp-validation-for="SizeX"></span>
                     </div>
-                    <div class="field">
+                    <div class="inline field">
                         <label asp-for="SizeY"></label>
-                        <div class="ui left icon input">
-                            <i class="arrows alternate horizontal icon"></i>
-                            <select class="ui dropdown" asp-for="SizeY">
-                                <option value="1">1x</option>
-                                <option value="2">2x</option>
-                                <option value="3">3x</option>
-                                <option value="4">4x</option>
-                            </select>
-                        </div>
+                        <i class="arrows alternate vertical icon"></i>
+                        <select class="ui dropdown" asp-for="SizeY">
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                        </select>
                         <span class="ui up pointing small red label" asp-validation-for="SizeY"></span>
                     </div>
                 </div>
-                <h3>State Tile Details</h3>
+                <h3>Person Tile Details</h3>
                 <div class="ui segment">
                     <div class="field">
                         <label asp-for="EntityId"></label>
                         <select class="ui search selection dropdown" asp-for="EntityId" asp-items="ViewBag.Entities"></select>
                         <span class="ui up pointing small red label" asp-validation-for="EntityId"></span>
-                    </div>
-                    <div class="field">
-                        <label asp-for="RefreshRate"></label>
-                        <div class="ui left icon input">
-                            <i class="refresh icon"></i>
-                            <input asp-for="RefreshRate" />
-                        </div>
-                        <span class="ui up pointing small red label" asp-validation-for="RefreshRate"></span>
-                        <p><small>The rate, in seconds, to automatically refresh this tile.</small></p>
                     </div>
                     <div class="field">
                         <label asp-for="OverrideLabel"></label>
@@ -73,12 +60,12 @@
                         <span class="ui up pointing small red label" asp-validation-for="OverrideLabel"></span>
                         <p><small>By default, the entity's <em>friendly name</em> will be used. Enter an override if desired.</small></p>
                     </div>
-                    <div class="field">
-                        <button type="submit" class="ui green icon labeled button">
-                            <i class="check icon"></i>
-                            Add Tile
-                        </button>
-                    </div>
+                </div>
+                <div class="field">
+                    <button type="submit" class="ui green icon labeled button">
+                        <i class="check icon"></i>
+                        Add Tile
+                    </button>
                 </div>
             </div>
         </div>

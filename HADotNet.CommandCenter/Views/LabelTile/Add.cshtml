@@ -1,0 +1,76 @@
+﻿@model LabelTile
+@{
+    ViewData["Title"] = "Add Tile: Label";
+}
+
+<h1><span class="va-top @(new LabelTile().IconClassName)"></span> Add Tile: Label</h1>
+
+<form class="ui form" method="post" asp-action="Save">
+    <input type="hidden" name="originalName" value="@Model?.Name" />
+    <div class="ui grid">
+        <div class="row">
+            <div class="six wide computer twelve wide tablet sixteen wide mobile column">
+                <h3>Basic Tile Info</h3>
+                <div class="ui segment">
+                    <div class="field">
+                        <label asp-for="Name"></label>
+                        <div class="ui left icon input">
+                            <i class="tag icon"></i>
+                            <input asp-for="Name" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="Name"></span>
+                        <p><small>An internal name to identify this tile, not shown on the dashboard.</small></p>
+                    </div>
+                    <div class="inline field">
+                        <label asp-for="SizeX"></label>
+                        <i class="arrows alternate horizontal icon"></i>
+                        <select class="ui dropdown" asp-for="SizeX">
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                        </select>
+                        <span class="ui up pointing small red label" asp-validation-for="SizeX"></span>
+                    </div>
+                    <div class="inline field">
+                        <label asp-for="SizeY"></label>
+                        <i class="arrows alternate vertical icon"></i>
+                        <select class="ui dropdown" asp-for="SizeY">
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                        </select>
+                        <span class="ui up pointing small red label" asp-validation-for="SizeY"></span>
+                    </div>
+                </div>
+                <h3>Label Tile Details</h3>
+                <div class="ui segment">
+                    <div class="field">
+                        <label asp-for="Text"></label>
+                        <div class="ui left icon input">
+                            <i class="font icon"></i>
+                            <input asp-for="Text" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="Text"></span>
+                    </div>
+                    <div class="field">
+                        <label asp-for="CssClass"></label>
+                        <div class="ui left icon input">
+                            <i class="large icon mdi mdi-language-css3"></i>
+                            <input asp-for="CssClass" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="CssClass"></span>
+                        <p><small>Enter one or more CSS class names to apply to the label, each separated by a space.</small></p>
+                    </div>
+                </div>
+                <div class="field">
+                    <button type="submit" class="ui green icon labeled button">
+                        <i class="plus icon"></i>
+                        Add Tile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

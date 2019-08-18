@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using HADotNet.Core.Models;
 
 namespace HADotNet.CommandCenter.Models.Config.Tiles
 {
@@ -18,5 +20,21 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
         /// </summary>
         [Display(Name = "Override Label")]
         public string OverrideLabel { get; set; }
+
+        /// <summary>
+        /// Gets or sets if the state should be displayed as a whole number, if appropriate.
+        /// </summary>
+        [Display(Name = "Round Decimals")]
+        public bool RoundDecimals { get; set; }
+
+        public override StateObject StateManipulator(StateObject state)
+        {
+            if (RoundDecimals && decimal.TryParse(state.State, out var newVal))
+            {
+                state.State = Math.Round(newVal).ToString("F0");
+            }
+
+            return state;
+        }
     }
 }

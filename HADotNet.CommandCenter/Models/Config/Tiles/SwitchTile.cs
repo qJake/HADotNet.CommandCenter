@@ -1,12 +1,10 @@
-﻿using HADotNet.Core.Clients;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace HADotNet.CommandCenter.Models.Config.Tiles
 {
-    [TileType("light")]
-    [TileIcon(TileIconType.Material, "lightbulb")]
-    public class LightTile : BaseEntityTile
+    [TileType("switch")]
+    [TileIcon(TileIconType.Material, "light-switch")]
+    public class SwitchTile : BaseEntityTile
     {
         /// <summary>
         /// Gets or sets the override label for this tile.
