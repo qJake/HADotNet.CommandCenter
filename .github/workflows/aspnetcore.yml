@@ -19,8 +19,14 @@ jobs:
     - name: Setup NPM
       uses: actions/npm@v2.0.0
       
+    - name: Step Into Project Dir
+      run: cd HADotNet.CommandCenter
+      
     - name: npm install
       run: npm install
+      
+    - name: Step Out Of Project Dir
+      run: cd ..
         
     - name: Build with dotnet
       run: dotnet build --configuration Release
