@@ -1,4 +1,5 @@
 ﻿using HADotNet.CommandCenter.Models.Config.Tiles;
+using HADotNet.CommandCenter.Models.Config.Themes;
 using HADotNet.CommandCenter.Utils;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -30,6 +31,11 @@ namespace HADotNet.CommandCenter.Models.Config
         /// Gets or sets the main tile layout.
         /// </summary>
         public List<TileLayout> TileLayout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current theme for the dashboard.
+        /// </summary>
+        public Theme CurrentTheme { get; set; }
 
         public ConfigRoot()
         {

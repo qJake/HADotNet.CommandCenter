@@ -1,8 +1,148 @@
-﻿@{
+﻿@model Theme
+
+@{
     ViewData["Title"] = "Themes";
+}
+
+@section Header
+{
+    <environment include="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.0.4/jscolor.js" integrity="sha256-y1h79SSb3icyBC/BrLCzoexQZAOGwlvoAr85biY4QGw=" crossorigin="anonymous"></script>
+    </environment>
+    <environment include="Staging,Production">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.0.4/jscolor.min.js" integrity="sha256-CJWfUCeP3jLdUMVNUll6yQx37gh9AKmXTRxvRf7jzro=" crossorigin="anonymous"></script>
+    </environment>
+    <link href="https://fonts.googleapis.com/css?family=Arimo|Crimson+Text|Dosis|Lato|Merriweather|Nunito|Open+Sans|PT+Sans+Narrow|Roboto|Ubuntu&display=swap" rel="stylesheet">
 }
 
 <h1><i class="paint brush icon"></i> Themes</h1>
 
 <partial name="Alerts" />
 
+<form method="post" asp-action="SaveTheme" class="ui form">
+    <div class="ui buttons">
+        <button type="submit" class="ui green small icon labeled button">
+            <i class="save icon"></i>
+            Save
+        </button>
+        <button type="button" class="ui small icon labeled button">
+            <i class="download icon"></i>
+            Import Theme...
+        </button>
+        <button type="button" class="ui small icon labeled button">
+            <i class="upload icon"></i>
+            Export Current Theme
+        </button>
+    </div>
+
+    <div class="ui padded grid">
+        <div class="row">
+            <div class="six wide computer ten wide tablet sixteen wide mobile column">
+                <h2>Page</h2>
+                <div class="ui segment">
+                    <h3>Colors</h3>
+                    <div class="field">
+                        <label asp-for="Page.BackgroundColor"></label>
+                        <div class="ui left icon input">
+                            <i class="mdi mdi-palette icon"></i>
+                            <input asp-for="Page.BackgroundColor" class="jscolor" data-jscolor="{refine:false, hash:true}" />
+                        </div>
+                        <small>Enter any CSS color, like #50C388, rgb(128, 0, 0), or aliceblue.</small>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Page.BackgroundGradient"></label>
+                        <div class="ui left icon input">
+                            <i class="mdi mdi-gradient icon"></i>
+                            <input asp-for="Page.BackgroundGradient" placeholder="linear-gradient(...)" />
+                        </div>
+                        <small>Enter a CSS color gradient function.</small>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Page.BackgroundImageUrl"></label>
+                        <div class="ui left icon input">
+                            <i class="globe icon"></i>
+                            <input asp-for="Page.BackgroundImageUrl" placeholder="https://..." />
+                        </div>
+                        <small>Enter a full, absolute path to an image.</small>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Page.BackgroundImageBlendMode"></label>
+                        <select asp-for="Page.BackgroundImageBlendMode" class="ui no-placeholder dropdown">
+                            <option value="">normal (default)</option>
+                            <option value="multiply">multiply</option>
+                            <option value="screen">screen</option>
+                            <option value="overlay">overlay</option>
+                            <option value="darken">darken</option>
+                            <option value="lighten">lighten</option>
+                            <option value="color-dodge">color-dodge</option>
+                            <option value="color-burn">color-burn</option>
+                            <option value="hard-light">hard-light</option>
+                            <option value="soft-light">soft-light</option>
+                            <option value="difference">difference</option>
+                            <option value="exclusion">exclusion</option>
+                            <option value="hue">hue</option>
+                            <option value="saturation">saturation</option>
+                            <option value="color">color</option>
+                            <option value="luminosity">luminosity</option>
+                        </select>
+                        <small>Select a CSS blend mode. If selected, be sure to also set the background image and background color options.</small>
+                    </div>
+
+                    <h3>Fonts</h3>
+                    <div class="field">
+                        <label asp-for="Page.PageFontFace"></label>
+                        <select asp-for="Page.PageFontFace" class="ui no-placeholder dropdown">
+                            <option value="">Arial (default)</option>
+                            <option>Arimo</option>
+                            <option>Crimson Text</option>
+                            <option>Dosis</option>
+                            <option>Lato</option>
+                            <option>Merriweather</option>
+                            <option>Nunito</option>
+                            <option>Open Sans</option>
+                            <option>PT Sans Narrow</option>
+                            <option>Roboto</option>
+                            <option>Ubuntu</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Page.PageFontWeight"></label>
+                        <select asp-for="Page.PageFontWeight" class="ui no-placeholder dropdown">
+                            <option value="100">100</option>
+                            <option value="200">200</option>
+                            <option value="300">300 (light)</option>
+                            <option value="400">400 (standard)</option>
+                            <option value="500">500</option>
+                            <option value="600">600 (semibold)</option>
+                            <option value="700">700 (bold)</option>
+                            <option value="800">800</option>
+                        </select>
+                        <small>Be sure to pick a font weight that your selected font supports!</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="six wide computer ten wide tablet sixteen wide mobile column">
+                <h2>Tiles</h2>
+                <div class="ui segment">
+                    <div class="field">
+                        <label asp-for="Tiles.TileBackgroundColor"></label>
+                        <div class="ui left icon input">
+                            <i class="mdi mdi-palette icon"></i>
+                            <input asp-for="Tiles.TileBackgroundColor" class="jscolor" data-jscolor="{refine:false, hash:true}" />
+                        </div>
+                        <small>Enter any CSS color, like #50C388, rgb(128, 0, 0), or aliceblue.</small>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Tiles.TileBorderRadius"></label>
+                        <div class="ui left icon input">
+                            <i class="mdi mdi-rounded-corner icon"></i>
+                            <input asp-for="Tiles.TileBorderRadius" type="number" step="1" min="0" max="100" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

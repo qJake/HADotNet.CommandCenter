@@ -48,8 +48,15 @@ class CommandCenter
 
         $('.ui.accordion').accordion();
         $('.ui.checkbox').checkbox();
-        $('.ui.dropdown').dropdown({ fullTextSearch: true });
+        $('.ui.dropdown').not('.no-placeholder').dropdown({ fullTextSearch: true });
+        $('.ui.no-placeholder.dropdown').dropdown({ placeholder: false });
 
+        // Font dropdown with real font previews.
+        $('#Page_PageFontFace option').each(function (_, e)
+        {
+            $(e).parent().siblings('.menu').find('.item[data-value="' + $(e).text() + '"]').css('font-family', $(e).text());
+        });
+        
         // Only init Packery stuff if we detect we have the preview grid on the page
         if ($('.preview-layout-grid').length)
         {

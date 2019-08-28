@@ -6,7 +6,49 @@
 }
 @section Header
 {
+    @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.PageFontFace))
+    {
+        if (!string.IsNullOrWhiteSpace(Model.Theme.Page.PageFontWeight))
+        {
+            <link href="https://fonts.googleapis.com/css?family=@(Model.Theme.Page.PageFontFace.Replace(" ", "+")):@(Model.Theme.Page.PageFontWeight)&display=swap" rel="stylesheet">
+        }
+        else
+        {
+            <link href="https://fonts.googleapis.com/css?family=@(Model.Theme.Page.PageFontFace.Replace(" ", "+"))&display=swap" rel="stylesheet">
+        }
+    }
+
     <style type="text/css">
+        body.dashboard
+        {
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.BackgroundColor))
+            {
+                @: background-color: @(Model.Theme.Page.BackgroundColor);
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.BackgroundGradient))
+            {
+                @: background-image: @(Model.Theme.Page.BackgroundGradient);
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.BackgroundImageUrl))
+            {
+                @: background-image: url('@(Model.Theme.Page.BackgroundImageUrl)');
+                @: background-size: cover;
+                @: background-position: 50%;
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.BackgroundImageBlendMode))
+            {
+                @: background-blend-mode: @(Model.Theme.Page.BackgroundImageBlendMode);
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.PageFontFace))
+            {
+                @: font-family: '@(Model.Theme.Page.PageFontFace)';
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.PageFontWeight))
+            {
+                @: font-weight: @(Model.Theme.Page.PageFontWeight);
+            }
+        }
+
         body.dashboard > .tiles
         {
             height: @(Model.PageLayout.DeviceHeightPx)px;
@@ -16,6 +58,12 @@
         body.dashboard > .tiles > .tile
         {
             font-size: @(ViewBag.BaseTileSizePx * 0.125)px;
+
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles.TileBackgroundColor))
+            {
+                @: background-color: @(Model.Theme.Tiles.TileBackgroundColor);
+            }
+            border-radius: @(Model.Theme.Tiles.TileBorderRadius)px;
         }
     </style>
 }

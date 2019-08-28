@@ -4,6 +4,7 @@
     padding: 0;
     font-size: 10px;
     user-select: none;
+    font-family: Arial, sans-serif;
 }
 
 html
@@ -17,8 +18,9 @@ body.dashboard
     background-color: #AAA;
     display: flex;
     flex-flow: row nowrap;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    min-height: 100vh;
 
     .tiles
     {
@@ -82,7 +84,6 @@ body.dashboard
 // All themes should be overriding this information as these definitions have extremely low CSS specificity.
 .tile
 {
-    font-family: Arial, sans-serif;
     background-color: #e2e2e2;
 
     span.value

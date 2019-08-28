@@ -1,4 +1,5 @@
 ﻿using HADotNet.CommandCenter.Models.Config;
+using HADotNet.CommandCenter.Models.Config.Themes;
 using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.CommandCenter.Utils;
 using HADotNet.CommandCenter.ViewModels;
@@ -114,7 +115,24 @@ namespace HADotNet.CommandCenter.Controllers
         {
             var config = await ConfigStore.GetConfigAsync();
 
-            return View();
+            return View(config.CurrentTheme);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveTheme([FromForm] Theme newTheme)
+        {
+            if (ModelState.IsValid)
+            {
+                var config = await ConfigStore.GetConfigAsync();
+
+                await ConfigStore.ManipulateConfig(c => c.CurrentTheme = newTheme);
+
+                TempData.AddSuccess("Saved theme settings successfully!");
+
+                return RedirectToAction("Themes");
+            }
+
+            return View("Themes", newTheme);
         }
     }
 }
