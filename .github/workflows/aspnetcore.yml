@@ -8,10 +8,19 @@ jobs:
     runs-on: windows-latest
     
     steps:
-    - uses: actions/checkout@v1
+    - name: Code Checkout
+      uses: actions/checkout@v1
+    
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 2.2.108
+        
+    - name: Setup NPM
+      uses: actions/npm@1.0.0
+      
+    - name: npm install
+      run: npm install
+        
     - name: Build with dotnet
       run: dotnet build --configuration Release
