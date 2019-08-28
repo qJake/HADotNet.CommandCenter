@@ -17,7 +17,7 @@ jobs:
         dotnet-version: 2.2.108
         
     - name: Setup NPM
-      uses: actions/npm@2.0.0
+      uses: actions/npm@v2.0.0
       
     - name: npm install
       run: npm install
