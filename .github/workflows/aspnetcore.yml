@@ -1,4 +1,4 @@
-name: ASP.NET Core CI
+name: CI Build
 
 on: [push]
 
