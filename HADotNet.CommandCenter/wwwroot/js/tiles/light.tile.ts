@@ -18,7 +18,19 @@ class LightTile extends Tile
             .addClass(`mdi mdi-${state.state.toLowerCase() === "on" ? Utils.resolveIcon(state.attributes["icon"], lightTile.displayIcon) : Utils.resolveIcon(state.attributes["icon"], lightTile.displayOffIcon || lightTile.displayIcon)}`);
 
         // TODO: Add custom on/off state keywords
-        $(`#tile-${tile.name}`).find('span[value-icon]').css('color', `${state.state.toLowerCase() === "on" ? lightTile.onColor : lightTile.offColor}`);
+        $(`#tile-${tile.name}`)
+            .find('span[value-icon]')
+            .removeClass("state-off state-on")
+            .addClass(state.state.toLowerCase() === "on" ? "state-on" : "state-off");
+
+        if (lightTile.onColor && state.state.toLowerCase() === "on")
+        {
+            $(`#tile-${tile.name} .value`).css('color', lightTile.onColor)
+        }
+        if (lightTile.offColor && state.state.toLowerCase() !== "on")
+        {
+            $(`#tile-${tile.name} .value`).css('color', lightTile.offColor)
+        }
             
         super.updateState();
 

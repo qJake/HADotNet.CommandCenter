@@ -32,6 +32,13 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
         public int SizeY { get; set; }
 
         /// <summary>
+        /// Gets or sets any additional CSS properties to add to this tile.
+        /// </summary>
+        [Display(Name = "Additional CSS")]
+        [RegularExpression(@"^[^\{\}]*$", ErrorMessage = "Only enter CSS properties (don't enclose them with {{ ... }}).")]
+        public string AdditionalCss { get; set; }
+
+        /// <summary>
         /// Gets the type of tile from the <see cref="TileTypeAttribute" />.
         /// </summary>
         public string Type => GetType().GetCustomAttribute<TileTypeAttribute>()?.Name ?? "Unknown";

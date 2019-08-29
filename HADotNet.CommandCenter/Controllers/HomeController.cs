@@ -29,7 +29,8 @@ namespace HADotNet.CommandCenter.Controllers
                         select new TileWithLayoutViewModel
                         {
                             Tile = t,
-                            Layout = l
+                            Layout = l,
+                            Settings = config.LayoutSettings
                         }
             });
         }

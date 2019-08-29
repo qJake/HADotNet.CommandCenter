@@ -12,5 +12,6 @@ namespace HADotNet.CommandCenter.ViewModels
     {
         public BaseTile Tile { get; set; }
         public TileLayout Layout { get; set; }
+        public LayoutSettings Settings { get; set; }
     }
 }

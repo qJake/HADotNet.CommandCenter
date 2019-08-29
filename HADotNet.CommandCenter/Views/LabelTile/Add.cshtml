@@ -3,7 +3,7 @@
     ViewData["Title"] = "Add Tile: Label";
 }
 
-<h1><span class="va-top @(new LabelTile().IconClassName)"></span> Add Tile: Label</h1>
+<h1><span class="va-top @(new LabelTile().IconClassName)"></span> @(Model == null ? "Add" : "Edit") Tile: Label</h1>
 
 <form class="ui form" method="post" asp-action="Save">
     <input type="hidden" name="originalName" value="@Model?.Name" />
@@ -63,11 +63,17 @@
                         <span class="ui up pointing small red label" asp-validation-for="CssClass"></span>
                         <p><small>Enter one or more CSS class names to apply to the label, each separated by a space.</small></p>
                     </div>
+                    <div class="field">
+                        <label asp-for="AdditionalCss"></label>
+                        <textarea asp-for="AdditionalCss"></textarea>
+                        <span class="ui up pointing small red label" asp-validation-for="AdditionalCss"></span>
+                        <p><small>Enter one or more CSS properties. Don't enclose them with <code>{ ... }</code>.</small></p>
+                    </div>
                 </div>
                 <div class="field">
                     <button type="submit" class="ui green icon labeled button">
-                        <i class="plus icon"></i>
-                        Add Tile
+                        <i class="@(Model == null ? "plus" : "save") icon"></i>
+                        @(Model == null ? "Add" : "Edit") Tile
                     </button>
                 </div>
             </div>

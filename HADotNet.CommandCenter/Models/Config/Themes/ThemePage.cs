@@ -21,5 +21,8 @@ namespace HADotNet.CommandCenter.Models.Config.Themes
 
         [Display(Name = "Font Weight")]
         public string PageFontWeight { get; set; }
+
+        [Display(Name = "Font Size")]
+        public string PageFontSize { get; set; }
     }
 }

@@ -34,6 +34,15 @@
             <p>Entity types: <code>N/A</code></p>
         </div>
     </a>
+    <a asp-action="Add" asp-controller="WeatherTile" class="card">
+        <div class="content">
+            <div class="header"><span class="va-bottom @(new WeatherTile().IconClassName)"></span> Weather Tile</div>
+            <div class="description">A tile used to display up-to-date weather information.</div>
+        </div>
+        <div class="extra content">
+            <p>Entity types: <code>sensor</code></p>
+        </div>
+    </a>
     <a asp-action="Add" asp-controller="StateTile" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new StateTile().IconClassName)"></span> State Tile</div>

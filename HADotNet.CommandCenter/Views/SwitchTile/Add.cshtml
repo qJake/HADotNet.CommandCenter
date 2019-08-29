@@ -3,7 +3,7 @@
     ViewData["Title"] = "Add Tile: Switch";
 }
 
-    <h1><span class="va-top @(new SwitchTile().IconClassName)"></span> Add Tile: Switch</h1>
+    <h1><span class="va-top @(new SwitchTile().IconClassName)"></span> @(Model == null ? "Add" : "Edit") Tile: Switch</h1>
 
 <form class="ui form" method="post" asp-action="Save">
     <input type="hidden" name="originalName" value="@Model?.Name" />
@@ -43,6 +43,12 @@
                         </select>
                         <span class="ui up pointing small red label" asp-validation-for="SizeY"></span>
                     </div>
+                    <div class="field">
+                        <label asp-for="AdditionalCss"></label>
+                        <textarea asp-for="AdditionalCss"></textarea>
+                        <span class="ui up pointing small red label" asp-validation-for="AdditionalCss"></span>
+                        <p><small>Enter one or more CSS properties. Don't enclose them with <code>{ ... }</code>.</small></p>
+                    </div>
                 </div>
                 <h3>Switch Tile Details</h3>
                 <div class="ui segment">
@@ -81,24 +87,24 @@
                     <div class="field">
                         <label asp-for="OnColor"></label>
                         <div class="ui left icon input">
-                            <i class="color-preview tint icon"></i>
-                            <input asp-for="OnColor" />
+                            <i class="tint icon"></i>
+                            <input asp-for="OnColor" class="jscolor" data-jscolor="{refine:false, hash:true}" />
                         </div>
                         <span class="ui up pointing small red label" asp-validation-for="OnColor"></span>
                     </div>
                     <div class="field">
                         <label asp-for="OffColor"></label>
                         <div class="ui left icon input">
-                            <i class="color-preview tint icon"></i>
-                            <input asp-for="OffColor" />
+                            <i class="tint icon"></i>
+                            <input asp-for="OffColor" class="jscolor" data-jscolor="{refine:false, hash:true}" />
                         </div>
                         <span class="ui up pointing small red label" asp-validation-for="OffColor"></span>
                     </div>
                 </div>
                 <div class="field">
                     <button type="submit" class="ui green icon labeled button">
-                        <i class="check icon"></i>
-                        Add Tile
+                        <i class="@(Model == null ? "plus" : "save") icon"></i>
+                        @(Model == null ? "Add" : "Edit") Tile
                     </button>
                 </div>
             </div>

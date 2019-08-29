@@ -13,6 +13,7 @@
     <Content Remove="wwwroot\js\tiles\label.tile.ts" />
     <Content Remove="wwwroot\js\tiles\person.tile.ts" />
     <Content Remove="wwwroot\js\tiles\switch.tile.ts" />
+    <Content Remove="wwwroot\js\tiles\weather.tile.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +23,7 @@
     <TypeScriptCompile Remove="wwwroot\js\entityState.ts" />
     <TypeScriptCompile Remove="wwwroot\js\light.tile.ts" />
     <TypeScriptCompile Remove="wwwroot\js\models.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\models\skycons.d.ts" />
     <TypeScriptCompile Remove="wwwroot\js\packery.d.ts" />
     <TypeScriptCompile Remove="wwwroot\js\packery.jquery.d.ts" />
     <TypeScriptCompile Remove="wwwroot\js\packeryEx.ts" />

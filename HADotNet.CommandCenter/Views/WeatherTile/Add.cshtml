@@ -1,9 +1,9 @@
-﻿@model StateTile
+﻿@model WeatherTile
 @{
-    ViewData["Title"] = "Add Tile: State";
+    ViewData["Title"] = "Add Tile: Weather";
 }
 
-<h1><span class="va-top @(new StateTile().IconClassName)"></span> @(Model == null ? "Add" : "Edit") Tile: State</h1>
+<h1><span class="va-top @(new WeatherTile().IconClassName)"></span> @(Model == null ? "Add" : "Edit") Tile: Weather</h1>
 
 <form class="ui form" method="post" asp-action="Save">
     <input type="hidden" name="originalName" value="@Model?.Name" />
@@ -50,38 +50,49 @@
                         <p><small>Enter one or more CSS properties. Don't enclose them with <code>{ ... }</code>.</small></p>
                     </div>
                 </div>
-                <h3>State Tile Details</h3>
+                <h3>Weather Details</h3>
                 <div class="ui segment">
                     <div class="field">
-                        <label asp-for="EntityId"></label>
+                        <label>Temperature Sensor</label>
                         <select class="ui search selection dropdown" asp-for="EntityId" asp-items="ViewBag.Entities"></select>
                         <span class="ui up pointing small red label" asp-validation-for="EntityId"></span>
+                        <div><small>Recommended: <code>sensor.dark_sky_apparent_temperature</code></small></div>
                     </div>
                     <div class="field">
-                        <label asp-for="RefreshRate"></label>
-                        <div class="ui left icon input">
-                            <i class="refresh icon"></i>
-                            <input asp-for="RefreshRate" />
-                        </div>
-                        <span class="ui up pointing small red label" asp-validation-for="RefreshRate"></span>
-                        <p><small>The rate, in seconds, to automatically refresh this tile.</small></p>
+                        <label asp-for="IconEntity"></label>
+                        <select class="ui search selection dropdown" asp-for="IconEntity" asp-items="ViewBag.Entities"></select>
+                        <span class="ui up pointing small red label" asp-validation-for="IconEntity"></span>
+                        <div><small>Recommended: <code>sensor.dark_sky_icon</code></small></div>
                     </div>
                     <div class="field">
-                        <label asp-for="OverrideLabel"></label>
-                        <div class="ui left icon input">
-                            <i class="font icon"></i>
-                            <input asp-for="OverrideLabel" />
-                        </div>
-                        <span class="ui up pointing small red label" asp-validation-for="OverrideLabel"></span>
-                        <p><small>By default, the entity's <em>friendly name</em> will be used. Enter an override if desired.</small></p>
+                        <label asp-for="SummaryEntity"></label>
+                        <select class="ui search selection dropdown" asp-for="SummaryEntity" asp-items="ViewBag.Entities"></select>
+                        <span class="ui up pointing small red label" asp-validation-for="SummaryEntity"></span>
+                        <div><small>Recommended: <code>sensor.dark_sky_summary</code></small></div>
                     </div>
                     <div class="field">
-                        <div class="ui checkbox">
-                            <input asp-for="RoundDecimals" />
-                            <label asp-for="RoundDecimals"></label>
-                        </div>
-                        <span class="ui up pointing small red label" asp-validation-for="RoundDecimals"></span>
-                        <p><small>If checked, and the state of this entity can be expressed as a decimal, the decimal is rounded to a whole number.</small></p>
+                        <label asp-for="PrecipChanceEntity"></label>
+                        <select class="ui search selection dropdown" asp-for="PrecipChanceEntity" asp-items="ViewBag.Entities"></select>
+                        <span class="ui up pointing small red label" asp-validation-for="PrecipChanceEntity"></span>
+                        <div><small>Recommended: <code>sensor.dark_sky_precip_probability</code></small></div>
+                    </div>
+                    <div class="field">
+                        <label asp-for="HighTempEntity"></label>
+                        <select class="ui search selection dropdown" asp-for="HighTempEntity" asp-items="ViewBag.Entities"></select>
+                        <span class="ui up pointing small red label" asp-validation-for="HighTempEntity"></span>
+                        <div><small>Recommended: <code>sensor.dark_sky_daytime_high_temperature_0d</code></small></div>
+                    </div>
+                    <div class="field">
+                        <label asp-for="LowTempEntity"></label>
+                        <select class="ui search selection dropdown" asp-for="LowTempEntity" asp-items="ViewBag.Entities"></select>
+                        <span class="ui up pointing small red label" asp-validation-for="LowTempEntity"></span>
+                        <div><small>Recommended: <code>sensor.dark_sky_overnight_low_temperature_0d</code></small></div>
+                    </div>
+                    <div class="field">
+                        <label asp-for="WindSpeedEntity"></label>
+                        <select class="ui search selection dropdown" asp-for="WindSpeedEntity" asp-items="ViewBag.Entities"></select>
+                        <span class="ui up pointing small red label" asp-validation-for="WindSpeedEntity"></span>
+                        <div><small>Recommended: <code>sensor.dark_sky_wind_speed</code></small></div>
                     </div>
                 </div>
                 <div class="field">

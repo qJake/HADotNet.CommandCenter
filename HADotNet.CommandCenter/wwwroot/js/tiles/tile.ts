@@ -16,21 +16,31 @@ abstract class Tile
     {
         this.el = $(`.tiles .tile[data-tile-name="${name}"]`);
 
-        this.el.click(() =>
+        if (canLoad)
         {
-            this.onClick()
-                .then(() => Utils.delayPromise(500))
-                .then(() =>
-                {
-                    this.requestState(1000);
-                });
-        });
+            this.el.click(() =>
+            {
+                this.onClick()
+                    .then(() => Utils.delayPromise(500))
+                    .then(() =>
+                    {
+                        this.requestState(1000);
+                    });
+            });
+        }
 
         conn.on('SendTileState', (t, s) =>
         {
             if (name == (t as ITile).name)
             {
                 this.updateState(t, s);
+            }
+        });
+        conn.on('SendTileStates', (t, s) =>
+        {
+            if (name == (t as ITile).name)
+            {
+                this.updateStates(t, s);
             }
         });
         conn.on('SendWarning', msg => console.warn(msg));
@@ -57,6 +67,11 @@ abstract class Tile
         this.disableLoading();
     }
 
+    protected updateStates(tile?: ITile, ...args: any): void
+    {
+        this.disableLoading();
+    }
+
     protected requestState(debounce?: number): void
     {
         this.enableLoading(debounce);
@@ -65,6 +80,10 @@ abstract class Tile
 
     protected enableLoading(debounce?: number): void
     {
+        if (this.el.hasClass("tile-loading") || this.loadingDebouncer)
+        {
+            return;
+        }
         if (!debounce && !this.debounceTimeMs)
         {
             this.el.addClass("tile-loading");
@@ -84,6 +103,7 @@ abstract class Tile
         {
             window.clearTimeout(this.loadingDebouncer);
         }
+        this.loadingDebouncer = null;
         this.el.removeClass("tile-loading");
     }
 }

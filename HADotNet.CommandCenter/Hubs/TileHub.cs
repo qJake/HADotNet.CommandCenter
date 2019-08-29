@@ -1,8 +1,10 @@
 ﻿using HADotNet.CommandCenter.Models.Config.Tiles;
 using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.Core.Clients;
+using HADotNet.Core.Models;
 using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,6 +31,18 @@ namespace HADotNet.CommandCenter.Hubs
 
             switch (tile)
             {
+                case WeatherTile wt:
+                    var states = new Dictionary<string, StateObject> {
+                        [nameof(wt.EntityId)] = wt.StateManipulator(await StatesClient.GetState(wt.EntityId)),
+                        [nameof(wt.IconEntity)] = string.IsNullOrWhiteSpace(wt.IconEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.IconEntity)),
+                        [nameof(wt.SummaryEntity)] = string.IsNullOrWhiteSpace(wt.SummaryEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.SummaryEntity)),
+                        [nameof(wt.PrecipChanceEntity)] = string.IsNullOrWhiteSpace(wt.PrecipChanceEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.PrecipChanceEntity)),
+                        [nameof(wt.HighTempEntity)] = string.IsNullOrWhiteSpace(wt.HighTempEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.HighTempEntity)),
+                        [nameof(wt.LowTempEntity)] = string.IsNullOrWhiteSpace(wt.LowTempEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.LowTempEntity)),
+                        [nameof(wt.WindSpeedEntity)] = string.IsNullOrWhiteSpace(wt.WindSpeedEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.WindSpeedEntity))
+                    };
+                    await Clients.All.SendTileStates(wt, states);
+                    break;
                 case BaseEntityTile et:
                     var state = await StatesClient.GetState(et.EntityId);
                     state = et.StateManipulator(state);

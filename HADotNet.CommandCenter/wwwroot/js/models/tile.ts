@@ -32,3 +32,36 @@ interface ILightTile extends ISwitchTile
 {
     // Reserved for possible future light-specific properties such as brightness %.
 }
+
+enum WeatherTileEntities
+{
+    entityId = 'entityId',
+    iconEntity = 'iconEntity',
+    summaryEntity = 'summaryEntity',
+    precipChanceEntity = 'precipChanceEntity',
+    highTempEntity = 'highTempEntity',
+    lowTempEntity = 'lowTempEntity',
+    windSpeedEntity = 'windSpeedEntity'
+}
+
+interface IWeatherTile extends ITile
+{
+
+    /** Gets or sets the entity name for the icon value. */
+    iconEntity: string;
+
+    /** Gets or sets the entity name for the summary value. */
+    summaryEntity: string;
+    
+    /** Gets or sets the entity name for the precipitation chance value. */
+    precipChanceEntity: string;
+    
+    /** Gets or sets the entity name for the high temp value. */
+    highTempEntity: string;
+    
+    /** Gets or sets the entity name for the low temp value. */
+    lowTempEntity: string;
+    
+    /** Gets or sets the entity name for the wind speed value. */
+    windSpeedEntity: string;
+}

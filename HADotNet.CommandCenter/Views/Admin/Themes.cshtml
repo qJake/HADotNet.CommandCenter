@@ -6,12 +6,6 @@
 
 @section Header
 {
-    <environment include="Development">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.0.4/jscolor.js" integrity="sha256-y1h79SSb3icyBC/BrLCzoexQZAOGwlvoAr85biY4QGw=" crossorigin="anonymous"></script>
-    </environment>
-    <environment include="Staging,Production">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.0.4/jscolor.min.js" integrity="sha256-CJWfUCeP3jLdUMVNUll6yQx37gh9AKmXTRxvRf7jzro=" crossorigin="anonymous"></script>
-    </environment>
     <link href="https://fonts.googleapis.com/css?family=Arimo|Crimson+Text|Dosis|Lato|Merriweather|Nunito|Open+Sans|PT+Sans+Narrow|Roboto|Ubuntu&display=swap" rel="stylesheet">
 }
 
@@ -29,15 +23,15 @@
             <i class="download icon"></i>
             Import Theme...
         </button>
-        <button type="button" class="ui small icon labeled button">
+        <a class="ui small icon labeled button" asp-action="ExportTheme">
             <i class="upload icon"></i>
             Export Current Theme
-        </button>
+        </a>
     </div>
 
     <div class="ui padded grid">
         <div class="row">
-            <div class="six wide computer ten wide tablet sixteen wide mobile column">
+            <div class="sixteen wide mobile ten wide tablet eight wide computer column">
                 <h2>Page</h2>
                 <div class="ui segment">
                     <h3>Colors</h3>
@@ -119,11 +113,18 @@
                         </select>
                         <small>Be sure to pick a font weight that your selected font supports!</small>
                     </div>
+                    <div class="field">
+                        <label asp-for="Page.PageFontSize"></label>
+                        <div class="ui left icon input">
+                            <i class="font icon"></i>
+                            <input asp-for="Page.PageFontSize" />
+                        </div>
+                        <small>Leave blank to use an automatic font size (12.5% of the configured tile size in pixels). Or, override the base font size with a value here.</small>
+                    </div>
+
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="six wide computer ten wide tablet sixteen wide mobile column">
+            <div class="sixteen wide mobile ten wide tablet eight wide computer column">
                 <h2>Tiles</h2>
                 <div class="ui segment">
                     <div class="field">
@@ -135,12 +136,52 @@
                         <small>Enter any CSS color, like #50C388, rgb(128, 0, 0), or aliceblue.</small>
                     </div>
                     <div class="field">
+                        <label asp-for="Tiles.TileFontColor"></label>
+                        <div class="ui left icon input">
+                            <i class="mdi mdi-palette icon"></i>
+                            <input asp-for="Tiles.TileFontColor" class="jscolor" data-jscolor="{refine:false, hash:true}" />
+                        </div>
+                        <small>Enter any CSS color, like #50C388, rgb(128, 0, 0), or aliceblue.</small>
+                    </div>
+                    <div class="field">
                         <label asp-for="Tiles.TileBorderRadius"></label>
                         <div class="ui left icon input">
                             <i class="mdi mdi-rounded-corner icon"></i>
                             <input asp-for="Tiles.TileBorderRadius" type="number" step="1" min="0" max="100" />
                         </div>
                     </div>
+                    <div class="field">
+                        <label asp-for="Tiles.TileBoxShadow"></label>
+                        <div class="ui left icon input">
+                            <i class="mdi mdi-box-shadow icon"></i>
+                            <input asp-for="Tiles.TileBoxShadow" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Tiles.TileDefaultOnColor"></label>
+                        <div class="ui left icon input">
+                            <i class="mdi mdi-palette icon"></i>
+                            <input asp-for="Tiles.TileDefaultOnColor" class="jscolor" data-jscolor="{refine:false, hash:true}" />
+                        </div>
+                        <small>Enter any CSS color, like #50C388, rgb(128, 0, 0), or aliceblue.</small>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Tiles.TileDefaultOffColor"></label>
+                        <div class="ui left icon input">
+                            <i class="mdi mdi-palette icon"></i>
+                            <input asp-for="Tiles.TileDefaultOffColor" class="jscolor" data-jscolor="{refine:false, hash:true}" />
+                        </div>
+                        <small>Enter any CSS color, like #50C388, rgb(128, 0, 0), or aliceblue.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="one column row">
+            <div class="column">
+                <h3>Additional CSS</h3>
+                <p>Include any other arbitrary CSS definitions here that aren't covered above in the theme editor. Go nuts!</p>
+                <div class="field">
+                    <textarea asp-for="AdditionalCss" class="code"></textarea>
                 </div>
             </div>
         </div>

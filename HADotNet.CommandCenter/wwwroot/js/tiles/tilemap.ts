@@ -6,6 +6,7 @@
 /// <reference path="light.tile.ts" />
 /// <reference path="switch.tile.ts" />
 /// <reference path="person.tile.ts" />
+/// <reference path="weather.tile.ts" />
 
 type TypeMap = {
     [name: string]: any;
@@ -20,6 +21,7 @@ class TileMap
         'State': StateTile,
         'Light': LightTile,
         'Switch': SwitchTile,
-        'Person': PersonTile
+        'Person': PersonTile,
+        'Weather': WeatherTile
     };
 }

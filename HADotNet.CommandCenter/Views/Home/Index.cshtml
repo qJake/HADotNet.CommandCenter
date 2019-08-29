@@ -57,13 +57,43 @@
 
         body.dashboard > .tiles > .tile
         {
-            font-size: @(ViewBag.BaseTileSizePx * 0.125)px;
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.PageFontSize))
+            {
+                @: font-size: @Model.Theme.Page.PageFontSize;
+            }
+            else
+            {
+                @: font-size: @(ViewBag.BaseTileSizePx * 0.125)px;
+            }
 
             @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles.TileBackgroundColor))
             {
                 @: background-color: @(Model.Theme.Tiles.TileBackgroundColor);
             }
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles.TileBoxShadow))
+            {
+                @: box-shadow: @(Model.Theme.Tiles.TileBoxShadow);
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles.TileFontColor))
+            {
+                @: color: @(Model.Theme.Tiles.TileFontColor);
+            }
             border-radius: @(Model.Theme.Tiles.TileBorderRadius)px;
+        }
+
+        body.dashboard > .tiles > .tile .value.state-on
+        {
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles.TileDefaultOnColor))
+            {
+                @: color: @(Model.Theme.Tiles.TileDefaultOnColor);
+            }
+        }
+        body.dashboard > .tiles > .tile .value.state-off
+        {
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles.TileDefaultOffColor))
+            {
+                @: color: @(Model.Theme.Tiles.TileDefaultOffColor);
+            }
         }
     </style>
 }

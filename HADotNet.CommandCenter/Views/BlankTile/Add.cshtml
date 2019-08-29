@@ -3,7 +3,7 @@
     ViewData["Title"] = "Add Tile: Blank";
 }
 
-<h1><span class="va-top @(new BlankTile().IconClassName)"></span> Add Tile: Blank</h1>
+<h1><span class="va-top @(new BlankTile().IconClassName)"></span> @(Model == null ? "Add" : "Edit") Tile: Blank</h1>
 
 <form class="ui form" method="post" asp-action="Save">
     <input type="hidden" name="originalName" value="@Model?.Name" />
@@ -46,8 +46,8 @@
                 </div>
                 <div class="field">
                     <button type="submit" class="ui green icon labeled button">
-                        <i class="plus icon"></i>
-                        Add Tile
+                        <i class="@(Model == null ? "plus" : "save") icon"></i>
+                        @(Model == null ? "Add" : "Edit") Tile
                     </button>
                 </div>
             </div>

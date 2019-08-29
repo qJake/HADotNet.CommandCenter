@@ -120,13 +120,50 @@ body.dashboard
         margin: 0.25em 0;
     }
 
-    span.date
+    &.tile-type--date
     {
-        font-size: 0.55em;
+        span.value
+        {
+            display: inline-flex;
+            flex-flow: column nowrap;
+            justify-content: center;
+            align-items: center;
+            flex: 1 0 auto;
+        }
+
+        span.date
+        {
+            font-size: 0.55em;
+        }
+
+        span.time
+        {
+            font-size: 1.2em;
+            line-height: 1.25;
+        }
     }
 
-    span.time
+    &.tile-type--weather
     {
-        font-size: 1.2em;
+        justify-content: center !important;
+
+        .temp
+        {
+            display: flex;
+            flex-flow: row wrap;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+        }
+
+        & > span.value.weather-value
+        {
+            font-size: 1.5em;
+        }
+
+        & > span.value[value-summary]
+        {
+            font-size: 1.8em;
+        }
     }
 }

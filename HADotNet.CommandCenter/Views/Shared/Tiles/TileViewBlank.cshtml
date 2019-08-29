@@ -1,3 +1,3 @@
 ﻿@model TileWithLayoutViewModel
 
-<div id="tile-@Model.Tile.Name" data-tile-name="@Model.Tile.Name" data-tile-type="@Model.Tile.TypeProper" class="tile tile-loading tile-type--@Model.Tile.Type" style="left: @(Model.Layout.XPos)px; top: @(Model.Layout.YPos)px; width: @(Model.Tile.GetTileSizeX(ViewBag.BaseTileSizePx, ViewBag.TilePadding))px; height: @(Model.Tile.GetTileSizeY(ViewBag.BaseTileSizePx, ViewBag.TilePadding))px;"></div>
+<div id="tile-@Model.Tile.Name" data-tile-name="@Model.Tile.Name" data-tile-type="@Model.Tile.TypeProper" class="tile tile-loading tile-type--@Model.Tile.Type" style="left: @(Model.Layout.XPos)px; top: @(Model.Layout.YPos)px; width: @(Model.Tile.GetTileSizeX(ViewBag.BaseTileSizePx, ViewBag.TilePadding))px; height: @(Model.Tile.GetTileSizeY(ViewBag.BaseTileSizePx, ViewBag.TilePadding))px; @Model.Tile.AdditionalCss"></div>

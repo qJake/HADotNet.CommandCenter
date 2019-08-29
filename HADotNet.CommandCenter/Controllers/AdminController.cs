@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace HADotNet.CommandCenter.Controllers
@@ -44,7 +45,8 @@ namespace HADotNet.CommandCenter.Controllers
                         select new TileWithLayoutViewModel
                         {
                             Tile = t,
-                            Layout = l
+                            Layout = l,
+                            Settings = config.LayoutSettings
                         });
         }
 
@@ -133,6 +135,22 @@ namespace HADotNet.CommandCenter.Controllers
             }
 
             return View("Themes", newTheme);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportTheme()
+        {
+            var config = await ConfigStore.GetConfigAsync();
+            var theme = JsonConvert.SerializeObject(config.CurrentTheme, Formatting.Indented);
+            var themeData = Encoding.UTF8.GetBytes(theme);
+
+            Response.ContentType = "application/octet-stream";
+            Response.Headers["Content-Disposition"] = "attachment; filename=hacc-export.theme.json";
+            Response.Headers["Content-Transfer-Encoding"] = "binary";
+            Response.Body.Write(themeData, 0, themeData.Length);
+            Response.Body.Flush();
+
+            return Ok();
         }
     }
 }
