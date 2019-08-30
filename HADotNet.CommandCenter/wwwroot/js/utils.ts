@@ -1,5 +1,13 @@
-﻿class Utils
+﻿/**
+ * A general utility class for miscellaneous helper functions.
+ */
+class Utils
 {
+    /**
+     * Introduces a delay in a promise chain.
+     * @param duration The duration, in ms, of the desired delay.
+     * @param args Any args to pass on through to the next promise in the chain.
+     */
     public static delayPromise(duration: number, ...args: any): Promise<any>
     {
         return new Promise(resolve => setTimeout(() => resolve(args), duration));
@@ -38,5 +46,40 @@
 
             img.src = src;
         });
+    }
+
+    /**
+     * Converts a degree number to a compass's cardinal direction.
+     * @param deg The degrees to convert.
+     */
+    public static convertDegreesToCardinal(deg: number): string
+    {
+        return ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"][(Math.floor((deg / 22.5) + 0.5) % 16)];
+    }
+
+    /**
+     * Converts a cardinal direction to an arrow icon.
+     * @param dir The direction to convert.
+     */
+    public static convertCardinalToIcon(dir: string): string
+    {
+        return (<StringDictionary>{
+            N: 'arrow-up-thick',
+            NNE: 'arrow-up-thick',
+            NE: 'arrow-top-right-thick',
+            ENE: 'arrow-right-thick',
+            E: 'arrow-right-thick',
+            ESE: 'arrow-right-thick',
+            SE: 'arrow-bottom-right-thick',
+            SSE: 'arrow-down-thick',
+            S: 'arrow-down-thick',
+            SSW: 'arrow-down-thick',
+            SW: 'arrow-bottom-left-thick',
+            WSW: 'arrow-left-thick',
+            W: 'arrow-left-thick',
+            WNW: 'arrow-left-thick',
+            NW: 'arrow-top-left-thick',
+            NNW: 'arrow-up-thick'
+        })[dir];
     }
 }

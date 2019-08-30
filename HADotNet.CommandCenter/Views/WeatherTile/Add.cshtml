@@ -94,6 +94,21 @@
                         <span class="ui up pointing small red label" asp-validation-for="WindSpeedEntity"></span>
                         <div><small>Recommended: <code>sensor.dark_sky_wind_speed</code></small></div>
                     </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input asp-for="RoundWindSpeed" />
+                            <label asp-for="RoundWindSpeed"></label>
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="RoundWindSpeed"></span>
+                        <div><small>Round wind speed, disabling decimal points.</small></div>
+                    </div>
+
+                    <div class="field">
+                        <label asp-for="WindDirectionEntity"></label>
+                        <select class="ui search selection dropdown" asp-for="WindDirectionEntity" asp-items="ViewBag.Entities"></select>
+                        <span class="ui up pointing small red label" asp-validation-for="WindDirectionEntity"></span>
+                        <div><small>Recommended: <code>sensor.dark_sky_wind_bearing</code></small></div>
+                    </div>
                 </div>
                 <div class="field">
                     <button type="submit" class="ui green icon labeled button">

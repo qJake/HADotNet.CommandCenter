@@ -20,7 +20,12 @@ class WeatherTile extends Tile
 
     public updateStates(tile: ITile, states: StateDictionary): void
     {
-        var weatherTile = <IWeatherTile>tile;
+        // Some are combination variables
+        let windSpeed = '';
+        let windDir = '';
+        let hi = '';
+        let lo = '';
+
         for (let state in states)
         {
             let value = states[state] == null ? null : states[state].state;
@@ -32,6 +37,22 @@ class WeatherTile extends Tile
                         value += states[state].attributes["unit_of_measurement"].toString();
                     }
                     $(`#tile-${tile.name}`).find('span[value-temp]').text(value);
+                    break;
+
+                case WeatherTileEntities.highTempEntity:
+                    if (states[state].attributes["unit_of_measurement"])
+                    {
+                        value += states[state].attributes["unit_of_measurement"].toString();
+                    }
+                    hi = `<i class="mdi mdi-arrow-up-thick"></i> ${value}`;
+                    break;
+
+                case WeatherTileEntities.lowTempEntity:
+                    if (states[state].attributes["unit_of_measurement"])
+                    {
+                        value += states[state].attributes["unit_of_measurement"].toString();
+                    }
+                    lo = `<i class="mdi mdi-arrow-down-thick"></i> ${value}`;
                     break;
 
                 case WeatherTileEntities.summaryEntity:
@@ -51,7 +72,12 @@ class WeatherTile extends Tile
                     {
                         value += states[state].attributes["unit_of_measurement"].toString();
                     }
-                    $(`#tile-${tile.name}`).find('span[value-wind]').text(`Wind Speed: ${value}`);
+                    windSpeed = value;
+                    break;
+
+                case WeatherTileEntities.windDirectionEntity:
+                    windDir = Utils.convertDegreesToCardinal(parseInt(value));
+                    windDir = `<i class="mdi mdi-${Utils.convertCardinalToIcon(windDir)}"></i> ${windDir}`
                     break;
 
                 case WeatherTileEntities.iconEntity:
@@ -68,6 +94,10 @@ class WeatherTile extends Tile
                     break;
             }
         }
+
+        // Update the compound values
+        $(`#tile-${tile.name}`).find('span[value-hi-lo]').html(`${(hi && lo ? hi + ' / ' + lo : hi + lo)}`);
+        $(`#tile-${tile.name}`).find('span[value-wind]').html(`Wind: ${(windSpeed + ' ' + windDir).trim()}`);
             
         super.updateState();
 

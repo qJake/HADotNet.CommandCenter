@@ -47,7 +47,8 @@ enum WeatherTileEntities
     precipChanceEntity = 'precipChanceEntity',
     highTempEntity = 'highTempEntity',
     lowTempEntity = 'lowTempEntity',
-    windSpeedEntity = 'windSpeedEntity'
+    windSpeedEntity = 'windSpeedEntity',
+    windDirectionEntity = 'windDirectionEntity'
 }
 
 interface IWeatherTile extends ITile
@@ -69,6 +70,9 @@ interface IWeatherTile extends ITile
     
     /** Gets or sets the entity name for the wind speed value. */
     windSpeedEntity: string;
+    
+    /** Gets or sets the entity name for the wind direction value. */
+    windDirectionEntity: string;
 }
 
 interface ICameraTile extends ITile

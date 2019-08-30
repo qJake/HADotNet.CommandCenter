@@ -7,3 +7,4 @@ enum PageMode
 }
 
 type StateDictionary = { [name: string]: IEntityState };
+type StringDictionary = { [name: string]: string };

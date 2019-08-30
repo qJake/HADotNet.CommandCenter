@@ -1,4 +1,6 @@
 ﻿using HADotNet.Core.Clients;
+using HADotNet.Core.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
@@ -25,5 +27,21 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
 
         [Display(Name = "Wind Speed Entity")]
         public string WindSpeedEntity { get; set; }
+
+        [Display(Name = "Round Wind Speed")]
+        public bool RoundWindSpeed { get; set; }
+
+        [Display(Name = "Wind Direction Entity")]
+        public string WindDirectionEntity { get; set; }
+
+        public override StateObject StateManipulator(StateObject state)
+        {
+            if (RoundWindSpeed && state.EntityId == WindSpeedEntity && decimal.TryParse(state.State, out var value))
+            {
+                state.State = Math.Round(value, 0).ToString();
+            }
+
+            return state;
+        }
     }
 }

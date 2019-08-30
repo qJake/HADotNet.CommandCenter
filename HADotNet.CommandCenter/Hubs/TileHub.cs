@@ -29,6 +29,7 @@ namespace HADotNet.CommandCenter.Hubs
 
             var tile = config.Tiles.FirstOrDefault(t => t.Name == tileName);
 
+            // TOOD: Refactor this into something more elegant.
             switch (tile)
             {
                 case WeatherTile wt:
@@ -39,7 +40,8 @@ namespace HADotNet.CommandCenter.Hubs
                         [nameof(wt.PrecipChanceEntity)] = string.IsNullOrWhiteSpace(wt.PrecipChanceEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.PrecipChanceEntity)),
                         [nameof(wt.HighTempEntity)] = string.IsNullOrWhiteSpace(wt.HighTempEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.HighTempEntity)),
                         [nameof(wt.LowTempEntity)] = string.IsNullOrWhiteSpace(wt.LowTempEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.LowTempEntity)),
-                        [nameof(wt.WindSpeedEntity)] = string.IsNullOrWhiteSpace(wt.WindSpeedEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.WindSpeedEntity))
+                        [nameof(wt.WindSpeedEntity)] = string.IsNullOrWhiteSpace(wt.WindSpeedEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.WindSpeedEntity)),
+                        [nameof(wt.WindDirectionEntity)] = string.IsNullOrWhiteSpace(wt.WindDirectionEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.WindDirectionEntity))
                     };
                     await Clients.All.SendTileStates(wt, states);
                     break;
