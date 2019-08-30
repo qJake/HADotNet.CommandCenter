@@ -2,36 +2,20 @@
     ViewData["Title"] = "New Tile";
 }
 
-<h1><i class="expand icon"></i> New Tile</h1>
+<h1><i class="expand icon"></i> Add a New Tile</h1>
 
 <p>Select a tile type below.</p>
 
+<h2>Home Assistant Tiles</h2>
+
 <div class="ui cards">
-    <a asp-action="Add" asp-controller="BlankTile" class="card">
+    <a asp-action="Add" asp-controller="StateTile" class="card">
         <div class="content">
-            <div class="header"><span class="va-bottom @(new BlankTile().IconClassName)"></span> Blank Tile</div>
-            <div class="description">A blank tile, useful for taking up space in the layout but not actually rendering anything.</div>
+            <div class="header"><span class="va-bottom @(new StateTile().IconClassName)"></span> State Tile</div>
+            <div class="description">A simple tile that displays state information for an entity.</div>
         </div>
         <div class="extra content">
-            <p>Entity types: <code>N/A</code></p>
-        </div>
-    </a>
-    <a asp-action="Add" asp-controller="LabelTile" class="card">
-        <div class="content">
-            <div class="header"><span class="va-bottom @(new LabelTile().IconClassName)"></span> Label Tile</div>
-            <div class="description">A label tile, useful for displaying some static text.</div>
-        </div>
-        <div class="extra content">
-            <p>Entity types: <code>N/A</code></p>
-        </div>
-    </a>
-    <a asp-action="Add" asp-controller="DateTile" class="card">
-        <div class="content">
-            <div class="header"><span class="va-bottom @(new DateTile().IconClassName)"></span> Date Tile</div>
-            <div class="description">A tile used to render a date and/or time.</div>
-        </div>
-        <div class="extra content">
-            <p>Entity types: <code>N/A</code></p>
+            <p>Entity types: <code>All</code></p>
         </div>
     </a>
     <a asp-action="Add" asp-controller="WeatherTile" class="card">
@@ -41,15 +25,6 @@
         </div>
         <div class="extra content">
             <p>Entity types: <code>sensor</code></p>
-        </div>
-    </a>
-    <a asp-action="Add" asp-controller="StateTile" class="card">
-        <div class="content">
-            <div class="header"><span class="va-bottom @(new StateTile().IconClassName)"></span> State Tile</div>
-            <div class="description">A simple tile that displays state information for an entity.</div>
-        </div>
-        <div class="extra content">
-            <p>Entity types: <code>All</code></p>
         </div>
     </a>
     <a asp-action="Add" asp-controller="SwitchTile" class="card">
@@ -77,6 +52,47 @@
         </div>
         <div class="extra content">
             <p>Entity types: <code>device_tracker</code></p>
+        </div>
+    </a>
+    <a asp-action="Add" asp-controller="CameraTile" class="card">
+        <div class="content">
+            <div class="header"><span class="va-bottom @(new CameraTile().IconClassName)"></span> Camera Tile</div>
+            <div class="description">A tile that displays a live view of a camera feed. Requires the <code>entity_picture</code> attribute to be present.</div>
+        </div>
+        <div class="extra content">
+            <p>Entity types: <code>camera</code></p>
+        </div>
+    </a>
+</div>
+
+<h2>Utility Tiles</h2>
+
+<div class="ui cards">
+    <a asp-action="Add" asp-controller="BlankTile" class="card">
+        <div class="content">
+            <div class="header"><span class="va-bottom @(new BlankTile().IconClassName)"></span> Blank Tile</div>
+            <div class="description">A blank tile, useful for taking up space in the layout but not actually rendering anything.</div>
+        </div>
+        <div class="extra content">
+            <p>Entity types: <code>N/A</code></p>
+        </div>
+    </a>
+    <a asp-action="Add" asp-controller="LabelTile" class="card">
+        <div class="content">
+            <div class="header"><span class="va-bottom @(new LabelTile().IconClassName)"></span> Label Tile</div>
+            <div class="description">A label tile, useful for displaying some static text.</div>
+        </div>
+        <div class="extra content">
+            <p>Entity types: <code>N/A</code></p>
+        </div>
+    </a>
+    <a asp-action="Add" asp-controller="DateTile" class="card">
+        <div class="content">
+            <div class="header"><span class="va-bottom @(new DateTile().IconClassName)"></span> Date Tile</div>
+            <div class="description">A tile used to render a date and/or time.</div>
+        </div>
+        <div class="extra content">
+            <p>Entity types: <code>N/A</code></p>
         </div>
     </a>
 </div>

@@ -22,4 +22,21 @@
         }
         return '';
     }
+
+    /**
+     * Preloads an image and notifies when done via a promise.
+     * @param src The image URL to load.
+     */
+    public static preloadImage(src: string): Promise<string>
+    {
+        return new Promise((resolve, reject) =>
+        {
+            let img = new Image();
+
+            img.onload = () => resolve(src);
+            img.onerror = e => reject(e);
+
+            img.src = src;
+        });
+    }
 }

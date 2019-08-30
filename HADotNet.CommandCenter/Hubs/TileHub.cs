@@ -62,6 +62,12 @@ namespace HADotNet.CommandCenter.Hubs
 
         }
 
+        public async Task RequestConfig(string tileName)
+        {
+            var config = await ConfigStore.GetConfigAsync();
+            await Clients.All.SendSystemConfig(tileName, new { BaseUrl = config.Settings.BaseUri });
+        }
+
         public async Task OnTileClicked(string tileName)
         {
             var config = await ConfigStore.GetConfigAsync();

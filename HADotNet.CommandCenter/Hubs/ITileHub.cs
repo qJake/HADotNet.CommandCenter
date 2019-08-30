@@ -16,5 +16,7 @@ namespace HADotNet.CommandCenter.Hubs
         Task SendWarning(string message);
 
         Task RequestTileState(string tileName);
+
+        Task SendSystemConfig(string tileName, object config);
     }
 }

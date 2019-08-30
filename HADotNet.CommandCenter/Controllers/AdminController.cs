@@ -102,6 +102,7 @@ namespace HADotNet.CommandCenter.Controllers
         {
             if (ModelState.IsValid)
             {
+                newSettings.BaseUri = newSettings.BaseUri.TrimEnd('/');
                 await ConfigStore.ManipulateConfig(c => c.Settings = newSettings);
                 
                 TempData.AddSuccess("Saved settings successfully!");

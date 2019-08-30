@@ -1,4 +1,10 @@
-﻿interface ITile
+﻿interface IHaccConfig
+{
+    /** Gets or sets the base URL for the system. */
+    baseUrl: string;
+}
+
+interface ITile
 {
     /** Gets or sets the name of the tile. */
     name: string;
@@ -46,7 +52,6 @@ enum WeatherTileEntities
 
 interface IWeatherTile extends ITile
 {
-
     /** Gets or sets the entity name for the icon value. */
     iconEntity: string;
 
@@ -64,4 +69,13 @@ interface IWeatherTile extends ITile
     
     /** Gets or sets the entity name for the wind speed value. */
     windSpeedEntity: string;
+}
+
+interface ICameraTile extends ITile
+{
+    /** Gets or sets the refresh rate, in seconds, of the camera image. */
+    refreshRate: number;
+
+    /** Gets or sets the image crop mode. */
+    imageCropMode: string;
 }

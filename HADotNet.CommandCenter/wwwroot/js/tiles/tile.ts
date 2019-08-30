@@ -12,6 +12,8 @@ abstract class Tile
      */
     protected debounceTimeMs: number;
 
+    protected config: IHaccConfig;
+
     constructor(protected name: string, protected conn: signalR.HubConnection, protected canLoad: boolean = true)
     {
         this.el = $(`.tiles .tile[data-tile-name="${name}"]`);
@@ -29,6 +31,13 @@ abstract class Tile
             });
         }
 
+        conn.on('SendSystemConfig', (tname, cfg) =>
+        {
+            if (name == tname)
+            {
+                this.config = cfg;
+            }
+        });
         conn.on('SendTileState', (t, s) =>
         {
             if (name == (t as ITile).name)
@@ -76,6 +85,11 @@ abstract class Tile
     {
         this.enableLoading(debounce);
         this.conn.invoke('RequestTileState', this.name);
+    }
+
+    protected requestConfig(): void
+    {
+        this.conn.invoke('RequestConfig', this.name);
     }
 
     protected enableLoading(debounce?: number): void
