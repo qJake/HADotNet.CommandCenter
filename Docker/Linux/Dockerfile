@@ -14,7 +14,7 @@ RUN npm install -g npm
 
 RUN mkdir /src \
     && cd /src \
-    && wget -O src.tar.gz https://github.com/qJake/HADotNet.CommandCenter/archive/master.tar.gz \
+    && wget -O src.tar.gz https://github.com/qJake/HADotNet.CommandCenter/archive/v0.3.0.tar.gz \
     && tar xzf src.tar.gz \
     && rm -rf src.tar.gz
 
@@ -38,4 +38,4 @@ COPY --from=publish /app .
 ENV ASPNETCORE_URLS http://*:8095
 ENV ASPNETCORE_ENVIRONMENT Production
 
-# ENTRYPOINT ["dotnet", "HADotNet.CommandCenter.dll"]
+ENTRYPOINT ["dotnet", "HADotNet.CommandCenter.dll"]
