@@ -1,4 +1,4 @@
-﻿using HADotNet.CommandCenter.Hubs;
+﻿using HADotNet.CommandCenter.Hubs;  
 using HADotNet.CommandCenter.Middleware;
 using HADotNet.CommandCenter.Models;
 using HADotNet.CommandCenter.Services;
@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace HADotNet.CommandCenter
 {
@@ -21,10 +22,28 @@ namespace HADotNet.CommandCenter
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services, IHostingEnvironment env)
         {
             services.AddOptions();
-            services.AddLogging();
+            services.AddLogging(l =>
+            {
+                l.ClearProviders();
+
+                l.AddConsole();
+                if (env.IsDevelopment())
+                {
+                    l.AddDebug();
+                    l.SetMinimumLevel(LogLevel.Debug);
+                    l.AddFilter("Microsoft", LogLevel.Information);
+                    l.AddFilter("System", LogLevel.Information);
+                }
+                else
+                {
+                    l.SetMinimumLevel(LogLevel.Information);
+                    l.AddFilter("Microsoft", LogLevel.Error);
+                    l.AddFilter("System", LogLevel.Warning);
+                }
+            });
 
             services.Configure<HaccOptions>(Configuration.GetSection("HACC"));
 

@@ -29,7 +29,7 @@ namespace HADotNet.CommandCenter.Middleware
 
             if (!string.IsNullOrWhiteSpace(config?.Settings?.BaseUri) && !string.IsNullOrWhiteSpace(config?.Settings?.AccessToken))
             {
-                Log.LogInformation($"Initializing HA Client Factory with URL {config?.Settings?.BaseUri ?? "[NULL]"} and access token {new string(config?.Settings?.AccessToken.Take(8).ToArray())}");
+                Log.LogInformation($"Initializing HA Client Factory with URL {config?.Settings?.BaseUri ?? "[NULL]"} and access token [{new string(config?.Settings?.AccessToken.Take(6).ToArray())}•••••••••••{new string(config?.Settings?.AccessToken.TakeLast(6).ToArray())}].");
 
                 ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
             }
