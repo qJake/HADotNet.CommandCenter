@@ -94,5 +94,6 @@ Proudly made with the following software:
 
 * [Semantic UI](https://semantic-ui.com/)
 * [Packery](https://packery.metafizzy.co/)
+* [JSColor](http://jscolor.com/)
 * [Material Design Icons](https://materialdesignicons.com/)
 * [Font Awesome](https://fontawesome.com/)
