@@ -6,10 +6,13 @@ using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.Core;
 using HADotNet.Core.Clients;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace HADotNet.CommandCenter
 {
@@ -26,7 +29,6 @@ namespace HADotNet.CommandCenter
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions();
             services.AddLogging(l =>
             {
                 l.ClearProviders();
@@ -46,8 +48,17 @@ namespace HADotNet.CommandCenter
                     l.AddFilter("System", LogLevel.Warning);
                 }
             });
+            services.AddOptions();
 
             services.Configure<HaccOptions>(Configuration.GetSection("HACC"));
+
+            // For Linux/Docker - Persist keys to /var storage - ASP Core complains otherwise.
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                services.AddDataProtection()
+                        .SetApplicationName("HACC")
+                        .PersistKeysToFileSystem(new DirectoryInfo(@"/var/hacc-keys/"));
+            }
 
             services.AddSingleton<IConfigStore, JsonConfigStore>();
             services.AddScoped(_ => ClientFactory.GetClient<EntityClient>());
