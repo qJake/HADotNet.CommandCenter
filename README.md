@@ -16,11 +16,36 @@ A web-based, wall-mountable command center for Home Assistant.
 * Drag and drop layout editor
 * Dashboard updates via JavaScript (no page reloading)
 
-## Coming Soon
+## Tile Types
+
+### Home Assistant
+
+#### State
+
+Display the state of any entity.
+
+#### Switch and Light
+
+Display a switch, group, or light with an icon. Tap to toggle it on/off.
+
+#### Person
+
+Display a user's current location (zone name) and profile picture, if set.
+
+#### Camera
+
+Display a camera feed from a connected compatible camera. Customize the way the feed is displayed on the dashboard.
+
+#### Weather
+
+Display current weather information (temperature, high/low, conditions, rain, and wind. (For best results, enable the [Dark Sky component](https://www.home-assistant.io/components/weather.darksky/) for use with this tile.)
+
+### Coming Soon
 
 * Support for multiple pages and navigation
 * Support for additional HA entity types
-* Theme Browser
+* Additional weather attributes (humidity, forecast, etc)
+* Theme browser
 
 # Installing
 
