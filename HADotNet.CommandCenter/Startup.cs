@@ -24,6 +24,7 @@ namespace HADotNet.CommandCenter
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+            services.AddLogging();
 
             services.Configure<HaccOptions>(Configuration.GetSection("HACC"));
 
