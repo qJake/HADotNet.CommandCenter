@@ -1,5 +1,6 @@
 ﻿using HADotNet.CommandCenter.Models;
 using HADotNet.CommandCenter.Models.Config;
+using HADotNet.CommandCenter.Models.Config.Themes;
 using HADotNet.CommandCenter.Models.Config.Tiles;
 using HADotNet.CommandCenter.Services.Interfaces;
 using Microsoft.Extensions.Options;
@@ -41,6 +42,12 @@ namespace HADotNet.CommandCenter.Services
             {
                 change(config);
             }
+
+            // Ensure all collections are non-null
+            config.LayoutSettings = config.LayoutSettings ?? new LayoutSettings();
+            config.TileLayout = config.TileLayout ?? new List<TileLayout>();
+            config.Tiles = config.Tiles ?? new List<BaseTile>();
+            config.CurrentTheme = config.CurrentTheme ?? new Theme();
 
             await SaveConfigAsync(config);
         }
