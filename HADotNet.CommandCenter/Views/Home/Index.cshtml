@@ -78,7 +78,10 @@
             {
                 @: color: @(Model.Theme.Tiles.TileFontColor);
             }
-            border-radius: @(Model.Theme.Tiles.TileBorderRadius)px;
+            @if (Model.Theme.Tiles?.TileBorderRadius > 0)
+            { 
+                @: border-radius: @(Model.Theme.Tiles.TileBorderRadius)px;
+            }
         }
 
         body.dashboard > .tiles > .tile .value.state-on
