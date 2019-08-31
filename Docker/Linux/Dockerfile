@@ -14,11 +14,11 @@ RUN npm install -g npm
 
 RUN mkdir /src \
     && cd /src \
-    && wget -O src.tar.gz https://github.com/qJake/HADotNet.CommandCenter/archive/v0.3.1.tar.gz \
+    && wget -O src.tar.gz https://github.com/qJake/HADotNet.CommandCenter/archive/v0.3.2.tar.gz \
     && tar xzf src.tar.gz \
     && rm -rf src.tar.gz
 
-WORKDIR /src/HADotNet.CommandCenter-v0.3.1/HADotNet.CommandCenter
+WORKDIR /src/HADotNet.CommandCenter-0.3.2/HADotNet.CommandCenter
 
 RUN dotnet restore HADotNet.CommandCenter.csproj
 
