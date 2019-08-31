@@ -10,6 +10,8 @@ A web-based, wall-mountable command center for Home Assistant.
 
 ![dashboard](https://raw.githubusercontent.com/qJake/HADotNet.CommandCenter/master/Assets/screenshot-dashboard.png)
 
+*View more screenshots [#screenshots](below).*
+
 # Features
 
 * Point-and-click admin interface for configuring tiles, layout, themes, and more
