@@ -6,9 +6,9 @@
 }
 @section Header
 {
-    @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.PageFontFace))
+    @if (!string.IsNullOrWhiteSpace(Model.Theme.Page?.PageFontFace))
     {
-        if (!string.IsNullOrWhiteSpace(Model.Theme.Page.PageFontWeight))
+        if (!string.IsNullOrWhiteSpace(Model.Theme.Page?.PageFontWeight))
         {
             <link href="https://fonts.googleapis.com/css?family=@(Model.Theme.Page.PageFontFace.Replace(" ", "+")):@(Model.Theme.Page.PageFontWeight)&display=swap" rel="stylesheet">
         }
@@ -21,29 +21,29 @@
     <style type="text/css">
         body.dashboard
         {
-            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.BackgroundColor))
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page?.BackgroundColor))
             {
                 @: background-color: @(Model.Theme.Page.BackgroundColor);
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.BackgroundGradient))
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page?.BackgroundGradient))
             {
                 @: background-image: @(Model.Theme.Page.BackgroundGradient);
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.BackgroundImageUrl))
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page?.BackgroundImageUrl))
             {
                 @: background-image: url('@(Model.Theme.Page.BackgroundImageUrl)');
                 @: background-size: cover;
                 @: background-position: 50%;
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.BackgroundImageBlendMode))
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page?.BackgroundImageBlendMode))
             {
                 @: background-blend-mode: @(Model.Theme.Page.BackgroundImageBlendMode);
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.PageFontFace))
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page?.PageFontFace))
             {
                 @: font-family: '@(Model.Theme.Page.PageFontFace)';
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.PageFontWeight))
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page?.PageFontWeight))
             {
                 @: font-weight: @(Model.Theme.Page.PageFontWeight);
             }
@@ -57,7 +57,7 @@
 
         body.dashboard > .tiles > .tile
         {
-            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page.PageFontSize))
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Page?.PageFontSize))
             {
                 @: font-size: @Model.Theme.Page.PageFontSize;
             }
@@ -66,15 +66,15 @@
                 @: font-size: @(ViewBag.BaseTileSizePx * 0.125)px;
             }
 
-            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles.TileBackgroundColor))
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles?.TileBackgroundColor))
             {
                 @: background-color: @(Model.Theme.Tiles.TileBackgroundColor);
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles.TileBoxShadow))
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles?.TileBoxShadow))
             {
                 @: box-shadow: @(Model.Theme.Tiles.TileBoxShadow);
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles.TileFontColor))
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles?.TileFontColor))
             {
                 @: color: @(Model.Theme.Tiles.TileFontColor);
             }
@@ -83,14 +83,14 @@
 
         body.dashboard > .tiles > .tile .value.state-on
         {
-            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles.TileDefaultOnColor))
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles?.TileDefaultOnColor))
             {
                 @: color: @(Model.Theme.Tiles.TileDefaultOnColor);
             }
         }
         body.dashboard > .tiles > .tile .value.state-off
         {
-            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles.TileDefaultOffColor))
+            @if (!string.IsNullOrWhiteSpace(Model.Theme.Tiles?.TileDefaultOffColor))
             {
                 @: color: @(Model.Theme.Tiles.TileDefaultOffColor);
             }
@@ -99,7 +99,7 @@
 }
 
 <div class="tiles">
-    @foreach (var item in Model.Tiles.Where(m => m.Layout != null))
+    @foreach (var item in Model.Tiles?.Where(m => m.Layout != null))
     {
         <partial name="Tiles/TileView@(item.Tile.TypeProper)" model="@item" />
     }
