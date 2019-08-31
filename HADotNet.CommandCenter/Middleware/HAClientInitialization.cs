@@ -16,7 +16,7 @@ namespace HADotNet.CommandCenter.Middleware
         public IConfigStore ConfigStore { get; }
         public ILogger Log { get; }
 
-        public HAClientInitialization(RequestDelegate next, IConfigStore configStore, ILogger log)
+        public HAClientInitialization(RequestDelegate next, IConfigStore configStore, ILogger<HAClientInitialization> log)
         {
             Next = next;
             Log = log;
