@@ -38,4 +38,4 @@ COPY --from=publish /app .
 ENV ASPNETCORE_URLS http://*:8095
 ENV ASPNETCORE_ENVIRONMENT Production
 
-ENTRYPOINT ["dotnet", "HADotNet.CommandCenter.dll"]
+# ENTRYPOINT ["dotnet", "HADotNet.CommandCenter.dll"]

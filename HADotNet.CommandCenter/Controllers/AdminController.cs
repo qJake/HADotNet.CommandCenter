@@ -40,7 +40,7 @@ namespace HADotNet.CommandCenter.Controllers
             ViewBag.PreviewPadding = config.LayoutSettings?.TileSpacingPx / 2.0;
 
             return View(from t in config.Tiles
-                        join layout in config?.TileLayout on t.Name equals layout.Name into tileGroup
+                        join layout in config.TileLayout on t.Name equals layout.Name into tileGroup
                         from l in tileGroup.DefaultIfEmpty(null)
                         select new TileWithLayoutViewModel
                         {

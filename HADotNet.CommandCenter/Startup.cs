@@ -28,9 +28,9 @@ namespace HADotNet.CommandCenter
             services.Configure<HaccOptions>(Configuration.GetSection("HACC"));
 
             services.AddSingleton<IConfigStore, JsonConfigStore>();
-            services.AddSingleton(_ => ClientFactory.GetClient<EntityClient>());
-            services.AddSingleton(_ => ClientFactory.GetClient<StatesClient>());
-            services.AddSingleton(_ => ClientFactory.GetClient<ServiceClient>());
+            services.AddScoped(_ => ClientFactory.GetClient<EntityClient>());
+            services.AddScoped(_ => ClientFactory.GetClient<StatesClient>());
+            services.AddScoped(_ => ClientFactory.GetClient<ServiceClient>());
 
             services.AddSignalR();
 

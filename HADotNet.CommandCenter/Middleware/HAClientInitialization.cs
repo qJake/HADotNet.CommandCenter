@@ -1,6 +1,7 @@
 ﻿using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.Core;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,12 @@ namespace HADotNet.CommandCenter.Middleware
     {
         private RequestDelegate Next { get; }
         public IConfigStore ConfigStore { get; }
+        public ILogger Log { get; }
 
-        public HAClientInitialization(RequestDelegate next, IConfigStore configStore)
+        public HAClientInitialization(RequestDelegate next, IConfigStore configStore, ILogger log)
         {
             Next = next;
+            Log = log;
             ConfigStore = configStore;
         }
 
@@ -26,6 +29,8 @@ namespace HADotNet.CommandCenter.Middleware
 
             if (!string.IsNullOrWhiteSpace(config?.Settings?.BaseUri) && !string.IsNullOrWhiteSpace(config?.Settings?.AccessToken))
             {
+                Log.LogInformation($"Initializing HA Client Factory with URL {config?.Settings?.BaseUri ?? "[NULL]"} and access token {new string(config?.Settings?.AccessToken.Take(8).ToArray())}");
+
                 ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
             }
 
@@ -33,6 +38,8 @@ namespace HADotNet.CommandCenter.Middleware
             {
                 if (context.Request.Path.ToString().ToLower() != "/admin/settings")
                 {
+                    Log.LogInformation($"Client factory is not initialized, redirecting user to settings area...");
+
                     context.Response.Redirect("/admin/settings?setup=1");
                     return;
                 }
