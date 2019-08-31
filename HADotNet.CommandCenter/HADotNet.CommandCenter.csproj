@@ -47,8 +47,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BuildWebCompiler" Version="1.12.405" />
-    <PackageReference Include="BuildBundlerMinifier" Version="2.9.406" />
+    <!-- Web Compiler is Windows-only. -->
+    <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="BuildWebCompiler" Version="1.12.405" />
+    <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="BuildBundlerMinifier" Version="2.9.406" />
     <PackageReference Include="HADotNet.Core" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
