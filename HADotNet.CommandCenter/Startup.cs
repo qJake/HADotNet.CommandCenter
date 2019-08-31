@@ -15,22 +15,24 @@ namespace HADotNet.CommandCenter
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+        public IHostingEnvironment Environment { get; }
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
-        public IConfiguration Configuration { get; }
-
-        public void ConfigureServices(IServiceCollection services, IHostingEnvironment env)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
             services.AddLogging(l =>
             {
                 l.ClearProviders();
-
                 l.AddConsole();
-                if (env.IsDevelopment())
+
+                if (Environment.IsDevelopment())
                 {
                     l.AddDebug();
                     l.SetMinimumLevel(LogLevel.Debug);
