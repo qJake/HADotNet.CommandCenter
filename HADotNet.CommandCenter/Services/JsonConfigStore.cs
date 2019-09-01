@@ -21,7 +21,7 @@ namespace HADotNet.CommandCenter.Services
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
             Formatting = Formatting.Indented
-    };
+        };
 
         private bool IsValid { get; set; }
         private string ConfigDirectory { get; set; }
@@ -44,7 +44,13 @@ namespace HADotNet.CommandCenter.Services
             }
 
             // Ensure all collections are non-null
-            config.LayoutSettings = config.LayoutSettings ?? new LayoutSettings();
+            config.LayoutSettings = config.LayoutSettings ?? new LayoutSettings()
+            {
+                BaseTileSizePx = 100,
+                TileSpacingPx = 6,
+                DeviceHeightPx = 860,
+                DeviceWidthPx = 965
+            };
             config.TileLayout = config.TileLayout ?? new List<TileLayout>();
             config.Tiles = config.Tiles ?? new List<BaseTile>();
             config.CurrentTheme = config.CurrentTheme ?? new Theme();
