@@ -5,6 +5,7 @@ using HADotNet.Core.Models;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -51,7 +52,10 @@ namespace HADotNet.CommandCenter.Hubs
                     await Clients.All.SendTileState(et, state);
                     break;
                 case DateTile dt:
-                    await Clients.All.SendDateTime(dt, DateTime.Now.ToString("dddd MMMM d"), DateTime.Now.ToString("h:mm tt"));
+                    var date = !string.IsNullOrWhiteSpace(dt.TimeZoneId)
+                        ? TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(dt.TimeZoneId))
+                        : DateTime.Now;
+                    await Clients.All.SendDateTime(dt, date.ToString(dt.DateFormatString ?? "dddd MMMM d"), date.ToString(dt.TimeFormatString ?? "h:mm tt"));
                     break;
                 case BlankTile _:
                 case LabelTile _:

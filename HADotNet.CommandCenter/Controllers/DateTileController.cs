@@ -37,6 +37,16 @@ namespace HADotNet.CommandCenter.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Convert empty to null, empty strings cause the full date/time to print.
+                if (tile.DateFormatString == "")
+                {
+                    tile.DateFormatString = null;
+                }
+                if (tile.TimeFormatString == "")
+                {
+                    tile.TimeFormatString = null;
+                }
+
                 return await SaveBaseTile(ConfigStore, tile);
             }
 

@@ -50,6 +50,39 @@
                         <p><small>Enter one or more CSS properties. Don't enclose them with <code>{ ... }</code>.</small></p>
                     </div>
                 </div>
+                <h3>Date Tile Info</h3>
+                <div class="ui segment">
+                    <div class="field">
+                        <label asp-for="TimeZoneId"></label>
+                        <select asp-for="TimeZoneId" class="ui search dropdown">
+                            <option value="">Current System Time Zone</option>
+                            @foreach (var tz in TimeZoneInfo.GetSystemTimeZones())
+                            {
+                                <option value="@tz.Id">@tz.DisplayName</option>
+                            }
+                        </select>
+                        <span class="ui up pointing small red label" asp-validation-for="TimeZoneId"></span>
+                        <p><small>An internal name to identify this tile, not shown on the dashboard.</small></p>
+                    </div>
+                    <div class="inline field">
+                        <label asp-for="DateFormatString"></label>
+                        <div class="ui left icon input">
+                            <i class="calendar icon"></i>
+                            <input asp-for="DateFormatString" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="DateFormatString"></span>
+                        <div><small>Specify a custom date format string for the date line. <a target="_blank" href="https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings">Refer to the documentation for examples.</a></small></div>
+                    </div>
+                    <div class="inline field">
+                        <label asp-for="TimeFormatString"></label>
+                        <div class="ui left icon input">
+                            <i class="clock icon"></i>
+                            <input asp-for="TimeFormatString" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="TimeFormatString"></span>
+                        <div><small>Specify a custom time format string for the time line. <a target="_blank" href="https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings">Refer to the documentation for examples.</a></small></div>
+                    </div>
+                </div>
                 <div class="field">
                     <button type="submit" class="ui green icon labeled button">
                         <i class="@(Model == null ? "plus" : "save") icon"></i>
