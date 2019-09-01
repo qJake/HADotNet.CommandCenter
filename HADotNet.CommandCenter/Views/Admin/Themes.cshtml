@@ -13,21 +13,28 @@
 
 <partial name="Alerts" />
 
+@* Hidden input for file browser - driven by toolbar button below and some lightweight JS. *@
+<form method="post" enctype="multipart/form-data" asp-action="ImportTheme" class="no-display" id="importForm">
+    <input type="file" accept=".theme.json" id="importBrowser" name="file" />
+</form>
+
 <form method="post" asp-action="SaveTheme" class="ui form">
+    <button type="submit" class="ui green icon labeled button">
+        <i class="save icon"></i>
+        Save Theme
+    </button>
+
     <div class="ui buttons">
-        <button type="submit" class="ui green small icon labeled button">
-            <i class="save icon"></i>
-            Save
-        </button>
-        <button type="button" class="ui small icon labeled button">
+        <button type="button" id="importTheme" class="ui grey icon labeled button">
             <i class="download icon"></i>
-            Import Theme...
+            Import...
         </button>
-        <a class="ui small icon labeled button" asp-action="ExportTheme">
+        <a class="ui grey icon labeled button" asp-action="ExportTheme">
             <i class="upload icon"></i>
-            Export Current Theme
+            Export
         </a>
     </div>
+
 
     <div class="ui padded grid">
         <div class="row">

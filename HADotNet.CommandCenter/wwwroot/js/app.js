@@ -468,6 +468,14 @@ class CommandCenter {
                 return 'You have unsaved changes. Are you sure you want to leave?';
             }
         });
+        $('#importTheme').click(() => {
+            if (confirm('WARNING: This will OVERWRITE your current theme. Export it first if you want to save it! Continue?')) {
+                $('#importBrowser').click();
+            }
+        });
+        $('#importBrowser').change(() => {
+            $('#importForm').submit();
+        });
         $('.ui.accordion').accordion();
         $('.ui.checkbox').checkbox();
         $('.ui.dropdown').not('.no-placeholder').dropdown({ fullTextSearch: true });

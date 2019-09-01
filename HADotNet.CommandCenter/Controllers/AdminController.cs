@@ -4,9 +4,11 @@ using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.CommandCenter.Utils;
 using HADotNet.CommandCenter.ViewModels;
 using HADotNet.Core.Clients;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -136,6 +138,39 @@ namespace HADotNet.CommandCenter.Controllers
             }
 
             return View("Themes", newTheme);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ImportTheme([FromForm] IFormFile file)
+        {
+            if (file == null)
+            {
+                TempData.AddWarning("No file was uploaded. Please try again.");
+                return RedirectToAction("Themes");
+            }
+
+            string contents;
+            using (var sr = new StreamReader(file.OpenReadStream()))
+            {
+                contents = await sr.ReadToEndAsync();
+            }
+
+            try
+            {
+                var newTheme = JsonConvert.DeserializeObject<Theme>(contents);
+
+                var config = await ConfigStore.GetConfigAsync();
+
+                await ConfigStore.ManipulateConfig(c => c.CurrentTheme = newTheme);
+
+                TempData.AddSuccess($"Successfully imported theme file '{file.FileName}' successfully! <a href=\"/\">Go check out your dashboard!</a>");
+            }
+            catch
+            {
+                TempData.AddError("Import file was not a theme file or could not otherwise be imported. Check that the file is not malformed and try again.");
+            }
+
+            return RedirectToAction("Themes");
         }
 
         [HttpGet]

@@ -20,6 +20,9 @@ textarea.code {
   font-family: Consolas, monospace;
   font-size: 12px;
 }
+.no-display {
+  display: none !important;
+}
 /* Preview Grid */
 .preview-layout-grid {
   background: #DDD;
