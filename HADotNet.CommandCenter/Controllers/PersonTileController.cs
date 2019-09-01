@@ -19,11 +19,18 @@ namespace HADotNet.CommandCenter.Controllers
             ConfigStore = configStore;
             EntityClient = entityClient;
         }
+        private async Task PopulateSelectLists()
+        {
+            ViewBag.Entities = (await EntityClient.GetEntities("device_tracker"))
+                .Union(await EntityClient.GetEntities("person"))
+                .OrderBy(e => e)
+                .Select(e => new SelectListItem(e, e));
+        }
 
         [Route("add/person")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.Entities = (await EntityClient.GetEntities("device_tracker")).OrderBy(e => e).Select(e => new SelectListItem(e, e));
+            await PopulateSelectLists();
             return View();
         }
 
@@ -34,7 +41,7 @@ namespace HADotNet.CommandCenter.Controllers
 
             var tile = config.Tiles.FirstOrDefault(t => t.Name == name);
 
-            ViewBag.Entities = (await EntityClient.GetEntities("device_tracker")).OrderBy(e => e).Select(e => new SelectListItem(e, e));
+            await PopulateSelectLists();
 
             return View("Add", tile);
         }
