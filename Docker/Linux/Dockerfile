@@ -6,6 +6,8 @@ EXPOSE 8095
 # ASP.NET Core 2.2.x SDK and Build
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
 
+ENV HACC_VERSION 0.4.1
+
 WORKDIR /
 
 RUN apt-get update -yq && apt-get upgrade -yq && apt-get install -yq curl git nano
@@ -14,11 +16,11 @@ RUN npm install -g npm
 
 RUN mkdir /src \
     && cd /src \
-    && wget -O src.tar.gz https://github.com/qJake/HADotNet.CommandCenter/archive/v0.3.2.tar.gz \
+    && wget -O src.tar.gz https://github.com/qJake/HADotNet.CommandCenter/archive/v$HACC_VERSION.tar.gz \
     && tar xzf src.tar.gz \
     && rm -rf src.tar.gz
 
-WORKDIR /src/HADotNet.CommandCenter-0.3.2/HADotNet.CommandCenter
+WORKDIR /src/HADotNet.CommandCenter-$HACC_VERSION/HADotNet.CommandCenter
 
 RUN dotnet restore HADotNet.CommandCenter.csproj
 
