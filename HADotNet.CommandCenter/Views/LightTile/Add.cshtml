@@ -58,6 +58,15 @@
                         <span class="ui up pointing small red label" asp-validation-for="EntityId"></span>
                     </div>
                     <div class="field">
+                        <label asp-for="RefreshRate"></label>
+                        <div class="ui left icon input">
+                            <i class="refresh icon"></i>
+                            <input asp-for="RefreshRate" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="RefreshRate"></span>
+                        <p><small>The rate, in seconds, to automatically refresh this tile.</small></p>
+                    </div>
+                    <div class="field">
                         <label asp-for="DisplayIcon"></label>
                         <div class="ui left icon input">
                             <i class="large icon mdi-icon-placeholder"></i>

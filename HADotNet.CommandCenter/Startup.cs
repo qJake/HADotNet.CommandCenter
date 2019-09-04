@@ -64,6 +64,7 @@ namespace HADotNet.CommandCenter
             services.AddScoped(_ => ClientFactory.GetClient<EntityClient>());
             services.AddScoped(_ => ClientFactory.GetClient<StatesClient>());
             services.AddScoped(_ => ClientFactory.GetClient<ServiceClient>());
+            services.AddScoped(_ => ClientFactory.GetClient<DiscoveryClient>());
 
             services.AddSignalR();
 
