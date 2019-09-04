@@ -33,6 +33,10 @@ namespace HADotNet.CommandCenter.Middleware
 
                 ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
             }
+            else
+            {
+                ClientFactory.Reset();
+            }
 
             if (!ClientFactory.IsInitialized)
             {

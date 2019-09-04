@@ -6,7 +6,9 @@ using HADotNet.CommandCenter.ViewModels;
 using HADotNet.Core.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,11 +21,15 @@ namespace HADotNet.CommandCenter.Controllers
     {
         public IConfigStore ConfigStore { get; }
         public EntityClient EntityClient { get; }
+        public ILogger<AdminController> Logger { get; }
+        public DiscoveryClient DiscoveryClient { get; }
 
-        public AdminController(IConfigStore configStore, EntityClient entityClient)
+        public AdminController(IConfigStore configStore, EntityClient entityClient, ILogger<AdminController> logger, DiscoveryClient discoveryClient)
         {
             ConfigStore = configStore;
             EntityClient = entityClient;
+            Logger = logger;
+            DiscoveryClient = discoveryClient;
         }
 
         public IActionResult Index()
@@ -96,22 +102,52 @@ namespace HADotNet.CommandCenter.Controllers
         {
             var config = await ConfigStore.GetConfigAsync();
 
+            try
+            {
+                if (TempData["check-settings"] is bool b && b)
+                {
+                    var inst = await DiscoveryClient.GetDiscoveryInfo();
+
+                    ViewBag.Instance = $"Home Assistant instance: <b>{inst.LocationName} (Version {inst.Version}) [{inst.BaseUrl}]</b>";
+                }
+            }
+            catch (Exception ex)
+            {
+                await ConfigStore.ManipulateConfig(c => c.Settings.AccessToken = c.Settings.BaseUri = null);
+
+                config = await ConfigStore.GetConfigAsync();
+
+                TempData.Remove(AlertManager.GRP_SUCCESS);
+                Logger.LogError(ex, "Invalid system settings entered, or unable to reach Home Assistant with the specified information.");
+                TempData.AddError("The settings entered are not valid. HACC is unable to reach your Home Assistant instance. Try your entries again, consult the <a target=\"_blank\" href=\"https://github.com/qJake/HADotNet.CommandCenter/wiki/Initial-System-Setup\">setup guide</a> for help, or check the logs (console) for more information.");
+
+                // Reloads the request showing the error (TempData doesn't commit until a reload).
+                return RedirectToAction("Settings");
+            }
+
             return View(config.Settings);
         }
 
         [HttpPost]
         public async Task<IActionResult> Settings(SystemSettings newSettings)
         {
-            if (ModelState.IsValid)
+            try
             {
-                newSettings.BaseUri = newSettings.BaseUri.TrimEnd('/');
-                await ConfigStore.ManipulateConfig(c => c.Settings = newSettings);
-                
-                TempData.AddSuccess("Saved settings successfully!");
+                if (ModelState.IsValid)
+                {
+                    newSettings.BaseUri = newSettings.BaseUri.TrimEnd('/');
+                    await ConfigStore.ManipulateConfig(c => c.Settings = newSettings);
 
-                return RedirectToAction("Settings");
+                    TempData["check-settings"] = true;
+
+                    return RedirectToAction("Settings");
+                }
             }
-
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Saving system settings failed.");
+                TempData.AddError("Unable to save system settings. See log output (console) for more information.");
+            }
             return View(newSettings);
         }
 
@@ -126,50 +162,65 @@ namespace HADotNet.CommandCenter.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveTheme([FromForm] Theme newTheme)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var config = await ConfigStore.GetConfigAsync();
+                if (ModelState.IsValid)
+                {
+                    var config = await ConfigStore.GetConfigAsync();
 
-                await ConfigStore.ManipulateConfig(c => c.CurrentTheme = newTheme);
+                    await ConfigStore.ManipulateConfig(c => c.CurrentTheme = newTheme);
 
-                TempData.AddSuccess("Saved theme settings successfully!");
+                    TempData.AddSuccess("Saved theme settings successfully!");
 
-                return RedirectToAction("Themes");
+                    return RedirectToAction("Themes");
+                }
             }
-
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Saving theme settings failed.");
+                TempData.AddError("Unable to save theme changes. See log output (console) for more information.");
+            }
             return View("Themes", newTheme);
         }
 
         [HttpPost]
         public async Task<IActionResult> ImportTheme([FromForm] IFormFile file)
         {
-            if (file == null)
-            {
-                TempData.AddWarning("No file was uploaded. Please try again.");
-                return RedirectToAction("Themes");
-            }
-
-            string contents;
-            using (var sr = new StreamReader(file.OpenReadStream()))
-            {
-                contents = await sr.ReadToEndAsync();
-            }
-
             try
             {
-                var newTheme = JsonConvert.DeserializeObject<Theme>(contents);
+                if (file == null)
+                {
+                    TempData.AddWarning("No file was uploaded. Please try again.");
+                    return RedirectToAction("Themes");
+                }
 
-                var config = await ConfigStore.GetConfigAsync();
+                string contents;
+                using (var sr = new StreamReader(file.OpenReadStream()))
+                {
+                    contents = await sr.ReadToEndAsync();
+                }
 
-                await ConfigStore.ManipulateConfig(c => c.CurrentTheme = newTheme);
+                try
+                {
+                    var newTheme = JsonConvert.DeserializeObject<Theme>(contents);
 
-                TempData.AddSuccess($"Successfully imported theme file '{file.FileName}' successfully! <a href=\"/\">Go check out your dashboard!</a>");
+                    var config = await ConfigStore.GetConfigAsync();
+
+                    await ConfigStore.ManipulateConfig(c => c.CurrentTheme = newTheme);
+
+                    TempData.AddSuccess($"Successfully imported theme file '{file.FileName}' successfully! <a href=\"/\">Go check out your dashboard!</a>");
+                }
+                catch
+                {
+                    Logger.LogWarning("File selected was not able to be parsed into a theme. Check file contents and try again.");
+                    TempData.AddError("Import file was not a theme file or could not otherwise be imported. Check that the file is not malformed and try again.");
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                TempData.AddError("Import file was not a theme file or could not otherwise be imported. Check that the file is not malformed and try again.");
+                Logger.LogError(ex, "Importing theme settings failed.");
+                TempData.AddError("Unable to import theme. See log output (console) for more information.");
             }
-
             return RedirectToAction("Themes");
         }
 
@@ -185,6 +236,8 @@ namespace HADotNet.CommandCenter.Controllers
             Response.Headers["Content-Transfer-Encoding"] = "binary";
             Response.Body.Write(themeData, 0, themeData.Length);
             Response.Body.Flush();
+
+            Logger.LogInformation("Exported theme settings.");
 
             return Ok();
         }
