@@ -63,6 +63,8 @@ namespace HADotNet.CommandCenter
                         .PersistKeysToFileSystem(new DirectoryInfo(@"/var/hacc-keys/"));
             }
 
+            services.AddAntiforgery();
+
             services.AddSingleton<IConfigStore, JsonConfigStore>();
             services.AddScoped(_ => ClientFactory.GetClient<EntityClient>());
             services.AddScoped(_ => ClientFactory.GetClient<StatesClient>());
