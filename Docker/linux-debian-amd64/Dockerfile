@@ -1,22 +1,23 @@
 # ASP.NET Core 2.2.x Runtime
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-buster-slim AS base
 WORKDIR /app
 EXPOSE 8095
 
 # ASP.NET Core 2.2.x SDK and Build
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 
-ENV HACC_VERSION 0.4.1
+# ENV HACC_VERSION 0.5.0
+ENV HACC_VERSION master
 
 WORKDIR /
 
 RUN apt-get update -yq && apt-get upgrade -yq && apt-get install -yq curl git nano
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get install -yq nodejs build-essential
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get install -yq nodejs npm build-essential
 RUN npm install -g npm
 
 RUN mkdir /src \
     && cd /src \
-    && wget -O src.tar.gz https://github.com/qJake/HADotNet.CommandCenter/archive/v$HACC_VERSION.tar.gz \
+    && wget -O src.tar.gz https://github.com/qJake/HADotNet.CommandCenter/archive/$HACC_VERSION.tar.gz \
     && tar xzf src.tar.gz \
     && rm -rf src.tar.gz
 
