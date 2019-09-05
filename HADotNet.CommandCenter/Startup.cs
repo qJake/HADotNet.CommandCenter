@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IO;
@@ -19,9 +20,9 @@ namespace HADotNet.CommandCenter
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             Environment = env;
@@ -66,12 +67,16 @@ namespace HADotNet.CommandCenter
             services.AddScoped(_ => ClientFactory.GetClient<ServiceClient>());
             services.AddScoped(_ => ClientFactory.GetClient<DiscoveryClient>());
 
-            services.AddSignalR();
+            services.AddSignalR()
+                    .AddNewtonsoftJsonProtocol();
 
-            services.AddMvc();
+            services.AddControllersWithViews();
+
+            services.AddMvc()
+                    .AddNewtonsoftJson();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -86,12 +91,13 @@ namespace HADotNet.CommandCenter
 
             app.UseHAClientInitialization();
 
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<TileHub>("/hubs/tile");
-            });
+            app.UseRouting();
 
-            app.UseMvcWithDefaultRoute();
+            app.UseEndpoints(ep =>
+            {
+                ep.MapHub<TileHub>("/hubs/tile");
+                ep.MapDefaultControllerRoute();
+            });
         }
     }
 }

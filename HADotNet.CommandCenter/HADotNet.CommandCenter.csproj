@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <RuntimeIdentifiers>win10;alpine.3.10-x64</RuntimeIdentifiers>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <AssemblyVersion>0.4.1.0</AssemblyVersion>
-    <FileVersion>0.4.1.0</FileVersion>
+    <AssemblyVersion>0.5.0.0</AssemblyVersion>
+    <FileVersion>0.5.0.0</FileVersion>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
@@ -55,8 +54,8 @@
     <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="BuildWebCompiler" Version="1.12.405" />
     <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="BuildBundlerMinifier" Version="2.9.406" />
     <PackageReference Include="HADotNet.Core" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-preview9.19424.4" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.0.0-preview9.19424.4" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.6.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
