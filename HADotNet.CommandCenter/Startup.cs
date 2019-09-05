@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Reflection;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 
 namespace HADotNet.CommandCenter
 {
@@ -76,8 +78,24 @@ namespace HADotNet.CommandCenter
                     .AddNewtonsoftJson();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            var svr = app.ServerFeatures.Get<IServerAddressesFeature>();
+            var listen = string.Join(" | ", svr.Addresses);
+            logger.LogInformation($@"
+  _    _          _____ _____ 
+ | |  | |   /\   / ____/ ____|
+ | |__| |  /  \ | |   | |     
+ |  __  | / /\ \| |   | |     
+ | |  | |/ ____ \ |___| |____ 
+ |_|  |_/_/    \_\_____\_____|
+        
+ Home Assistant Command Center
+        Version {Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}
+
+Now listening on: {(!string.IsNullOrWhiteSpace(listen) ? listen : "[Unknown Address]")}
+");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
