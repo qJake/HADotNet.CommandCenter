@@ -1,17 +1,17 @@
 # ASP.NET Core 2.2.x Runtime
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-alpine3.9 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-bionic AS base
 WORKDIR /app
 
 # ASP.NET Core 2.2.x SDK and Build
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-alpine3.9 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0-bionic AS build
 ARG TAG=master
 
 ENV HACC_VERSION $TAG
 
 WORKDIR /
 
-RUN apk update && apk add wget nodejs npm tar
-
+RUN apt-get update -yq && apt-get upgrade -yq && apt-get install -yq curl git nano
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get install -yq nodejs build-essential
 RUN npm install -g npm
 
 RUN mkdir /src \

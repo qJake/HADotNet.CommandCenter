@@ -1,14 +1,15 @@
 # ASP.NET Core 2.2.x Runtime
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS base
 WORKDIR /app
 EXPOSE 8095
 
 # ASP.NET Core 2.2.x SDK and Build
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
 
 ENV NODE_FULL_NAME node-v10.16.3-win-x64
 ENV NODE_VERSION 10.16.3
-ENV HACC_VERSION 0.4.0
+
+ENV HACC_VERSION 0.5.0
 
 WORKDIR /
 
