@@ -4,6 +4,38 @@
 
 <h1>HA Command Center &ndash; Admin Area</h1>
 
-<p>
-    <em>TODO: This page!</em>
-</p>
+<p>Welcome to Home Assistant Command Center (HACC)!</p>
+
+<div class="ui grid">
+    <div class="two column row">
+        <div class="column">
+            <h2>Resources</h2>
+            <ul>
+                <li>
+                    <i class="mdi mdi-web"></i> <a target="_blank" href="https://hacc.dev/">Website</a>
+                </li>
+                <li>
+                    <i class="mdi mdi-github-circle"></i> <a target="_blank" href="https://github.com/qJake/HADotNet.CommandCenter">Project on GitHub</a>
+                </li>
+            </ul>
+        </div>
+        <div class="column">
+            <h2>Technical Information</h2>
+            <h3>Environment Variables</h3>
+            @if (ViewBag.Env is Dictionary<string, string> envVars)
+            {
+                <dl>
+                    @foreach (var env in envVars)
+                    {
+                        <dt><code>@env.Key</code></dt>
+                        <dd>@env.Value</dd>
+                    }
+                </dl>
+            }
+            else
+            {
+                <p><em>No environment variables present. (This is probably bad... you should have at least one.)</em></p>
+            }
+        </div>
+    </div>
+</div>

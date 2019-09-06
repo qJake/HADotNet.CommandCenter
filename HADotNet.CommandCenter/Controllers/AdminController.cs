@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -34,6 +35,8 @@ namespace HADotNet.CommandCenter.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Env = ((Hashtable)Environment.GetEnvironmentVariables()).Cast<DictionaryEntry>().ToDictionary(k => k.Key?.ToString(), v => v.Value?.ToString());
+
             return View();
         }
 

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RuntimeIdentifiers>win10;alpine.3.10-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win10;alpine.3.10-x64;debian.10-arm</RuntimeIdentifiers>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <AssemblyVersion>0.5.0.0</AssemblyVersion>
