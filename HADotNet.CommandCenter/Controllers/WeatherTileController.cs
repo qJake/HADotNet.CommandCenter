@@ -47,6 +47,7 @@ namespace HADotNet.CommandCenter.Controllers
                 return await SaveBaseTile(ConfigStore, tile);
             }
 
+            ViewBag.Entities = (await EntityClient.GetEntities("sensor")).OrderBy(e => e).Select(e => new SelectListItem(e, e));
             return View("Add", tile);
         }
     }

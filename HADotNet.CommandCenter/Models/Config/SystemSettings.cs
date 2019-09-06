@@ -14,5 +14,10 @@ namespace HADotNet.CommandCenter.Models.Config
         [MaxLength(200, ErrorMessage = "This doesn't look like a long-lived access token.")]
         [Display(Name = "Long-Lived Access Token")]
         public string AccessToken { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether or not this is a Hass.io addon environment. Set automatically when initialized from a Hass.io addon container.
+        /// </summary>
+        public bool IsHassIo { get; set; }
     }
 }

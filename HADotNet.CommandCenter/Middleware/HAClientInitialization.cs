@@ -2,6 +2,7 @@
 using HADotNet.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,7 +29,14 @@ namespace HADotNet.CommandCenter.Middleware
             {
                 if (!ClientFactory.IsInitialized)
                 {
-                    Log.LogInformation($"Initializing HA Client Factory with URL {config?.Settings?.BaseUri ?? "[NULL]"} and access token [{new string(config?.Settings?.AccessToken.Take(6).ToArray())}•••••••••••{new string(config?.Settings?.AccessToken.TakeLast(6).ToArray())}].");
+                    if (config.Settings.IsHassIo)
+                    {
+                        Log.LogInformation($"Auto-initializing HACC via Hass.io addon.");
+                    }
+                    else
+                    {
+                        Log.LogInformation($"Initializing HACC API with URL {config?.Settings?.BaseUri ?? "[NULL]"} and access token [{new string(config?.Settings?.AccessToken.Take(6).ToArray())}•••••••••••{new string(config?.Settings?.AccessToken.TakeLast(6).ToArray())}].");
+                    }
                 }
 
                 ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
@@ -40,6 +48,21 @@ namespace HADotNet.CommandCenter.Middleware
 
             if (!ClientFactory.IsInitialized)
             {
+                var hassToken = Environment.GetEnvironmentVariable("HASSIO_TOKEN");
+
+                if (!string.IsNullOrWhiteSpace(hassToken))
+                {
+                    await ConfigStore.ManipulateConfig(c =>
+                    {
+                        c.Settings.BaseUri = "http://hassio/homeassistant";
+                        c.Settings.AccessToken = hassToken;
+                        c.Settings.IsHassIo = true;
+
+                        context.Response.StatusCode = 303;
+                        context.Response.Redirect("/admin");
+                    });
+                }
+
                 if (context.Request.Path.ToString().ToLower() != "/admin/settings")
                 {
                     Log.LogInformation($"Client factory is not initialized, redirecting user to settings area...");

@@ -17,6 +17,8 @@ namespace HADotNet.CommandCenter.Services
     {
         private const string CONFIG_FILE = "config.json";
 
+        private const string HASSIO_CONFIG_LOC = "/data/";
+
         private static JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -31,7 +33,8 @@ namespace HADotNet.CommandCenter.Services
         public JsonConfigStore(IOptions<HaccOptions> haccOptions)
         {
             Options = haccOptions.Value;
-            ConfigDirectory = Environment.ExpandEnvironmentVariables(Options.ConfigLocation);
+            var isHassio = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("HASSIO_TOKEN"));
+            ConfigDirectory = isHassio ? HASSIO_CONFIG_LOC : Environment.ExpandEnvironmentVariables(Options.ConfigLocation);
         }
 
         public async Task ManipulateConfig(params Action<ConfigRoot>[] changes)

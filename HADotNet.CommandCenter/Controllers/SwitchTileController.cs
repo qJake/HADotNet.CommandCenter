@@ -55,6 +55,7 @@ namespace HADotNet.CommandCenter.Controllers
                 return await SaveBaseTile(ConfigStore, tile);
             }
 
+            await PopulateSelectLists();
             return View("Add", tile);
         }
     }
