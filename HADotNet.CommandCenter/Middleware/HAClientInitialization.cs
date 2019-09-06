@@ -1,4 +1,5 @@
-﻿using HADotNet.CommandCenter.Services.Interfaces;
+﻿using HADotNet.CommandCenter.Models.Config;
+using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -54,9 +55,12 @@ namespace HADotNet.CommandCenter.Middleware
                 {
                     await ConfigStore.ManipulateConfig(c =>
                     {
-                        c.Settings.BaseUri = "http://hassio/homeassistant";
-                        c.Settings.AccessToken = hassToken;
-                        c.Settings.IsHassIo = true;
+                        c.Settings = new SystemSettings
+                        {
+                            BaseUri = "http://hassio/homeassistant",
+                            AccessToken = hassToken,
+                            IsHassIo = true
+                        };
 
                         context.Response.StatusCode = 303;
                         context.Response.Redirect("/admin");
