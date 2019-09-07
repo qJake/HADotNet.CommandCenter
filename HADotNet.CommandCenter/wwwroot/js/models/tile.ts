@@ -39,6 +39,15 @@ interface ILightTile extends ISwitchTile
     // Reserved for possible future light-specific properties such as brightness %.
 }
 
+interface ISceneTile extends ITile
+{
+    /** Gets or sets the display icon name. */
+    displayIcon: string;
+
+    /** Gets or sets the "off" color. */
+    iconColor: string;
+}
+
 enum WeatherTileEntities
 {
     entityId = 'entityId',

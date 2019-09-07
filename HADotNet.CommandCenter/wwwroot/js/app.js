@@ -421,6 +421,20 @@ class CameraTile extends Tile {
     }
 }
 /// <reference path="tile.ts" />
+class SceneTile extends Tile {
+    updateState(tile, state) {
+        var sceneTile = tile;
+        let label = state.attributes["friendly_name"].toString();
+        if (tile.overrideLabel) {
+            label = tile.overrideLabel;
+        }
+        $(`#tile-${tile.name}`).find('span[value-name]').text(label);
+        $(`#tile-${tile.name}`).find('span[value-icon]').addClass(`mdi mdi-${sceneTile.displayIcon || 'filmstrip'}`);
+        $(`#tile-${tile.name} .value`).css('color', sceneTile.iconColor);
+        super.updateState();
+    }
+}
+/// <reference path="tile.ts" />
 /// <reference path="blank.tile.ts" />
 /// <reference path="label.tile.ts" />
 /// <reference path="date.tile.ts" />
@@ -430,6 +444,7 @@ class CameraTile extends Tile {
 /// <reference path="person.tile.ts" />
 /// <reference path="weather.tile.ts" />
 /// <reference path="camera.tile.ts" />
+/// <reference path="scene.tile.ts" />
 class TileMap {
 }
 TileMap.ClassMap = {
@@ -442,6 +457,7 @@ TileMap.ClassMap = {
     'Person': PersonTile,
     'Weather': WeatherTile,
     'Camera': CameraTile,
+    'Scene': SceneTile
 };
 /// <reference path="models/models.ts" />
 /// <reference path="typings/window-options.d.ts" />
@@ -468,13 +484,20 @@ class CommandCenter {
                 return 'You have unsaved changes. Are you sure you want to leave?';
             }
         });
-        $('#importTheme').click(() => {
-            if (confirm('WARNING: This will OVERWRITE your current theme. Export it first if you want to save it! Continue?')) {
+        $('#importTheme, #importConfig').click(() => {
+            if (confirm('WARNING: This will OVERWRITE your current settings. Export first if you want to save what you have now! Continue?')) {
                 $('#importBrowser').click();
             }
         });
         $('#importBrowser').change(() => {
             $('#importForm').submit();
+        });
+        $('#resetConfig').click(e => {
+            if (!confirm("WARNING: This will COMPLETELY RESET your HACC installation and PERMANENTLY DELETE all of your tiles, themes, and settings. Are you sure you want to reset your config?")) {
+                e.preventDefault();
+                return false;
+            }
+            return true;
         });
         $('.ui.accordion').accordion();
         $('.ui.checkbox').checkbox();
@@ -489,13 +512,24 @@ class CommandCenter {
             $('#auto-layout').click(() => this.pk.layout());
             // For some reason Draggabilly takes the first element as the grid size, so inject a temporary invisible "fake" one
             $('.preview-layout-grid').prepend(`<div class="preview-layout-item" style="opacity: 0; position: absolute; top: ${window.ccOptions.tilePreviewPadding}px; left: ${window.ccOptions.tilePreviewPadding}px; width: ${window.ccOptions.tilePreviewSize}px; height: ${window.ccOptions.tilePreviewSize}px;" id="grid__tmp"></div>`);
-            this.pk = new Packery('.preview-layout-grid', {
-                itemSelector: '.preview-layout-item',
-                columnWidth: '.preview-layout-item',
-                rowHeight: '.preview-layout-item',
-                gutter: window.ccOptions.tilePreviewPadding,
-                initLayout: false
-            });
+            if (window.ccOptions) {
+                this.pk = new Packery('.preview-layout-grid', {
+                    itemSelector: '.preview-layout-item',
+                    columnWidth: window.ccOptions.tilePreviewSize,
+                    rowHeight: window.ccOptions.tilePreviewSize,
+                    gutter: window.ccOptions.tilePreviewPadding,
+                    initLayout: false
+                });
+            }
+            else {
+                this.pk = new Packery('.preview-layout-grid', {
+                    itemSelector: '.preview-layout-item',
+                    columnWidth: '.preview-layout-item',
+                    rowHeight: '.preview-layout-item',
+                    gutter: window.ccOptions.tilePreviewPadding,
+                    initLayout: false
+                });
+            }
             this.pk.on('layoutComplete', () => this.writeItemLayout());
             this.pk.on('dragItemPositioned', () => {
                 // Things get kinda glitchy if we don't add a slight pause

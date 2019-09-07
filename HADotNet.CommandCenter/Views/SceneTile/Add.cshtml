@@ -1,0 +1,87 @@
+﻿@model SceneTile
+@{
+    ViewData["Title"] = "Add Tile: Scene";
+}
+
+<h1><span class="va-top @(new SceneTile().IconClassName)"></span> @(Model == null ? "Add" : "Edit") Tile: Scene</h1>
+
+<form class="ui form" method="post" asp-action="Save">
+    <input type="hidden" name="originalName" value="@Model?.Name" />
+    <div class="ui grid">
+        <div class="row">
+            <div class="six wide computer twelve wide tablet sixteen wide mobile column">
+                <h3>Basic Tile Info</h3>
+                <div class="ui segment">
+                    <div class="field">
+                        <label asp-for="Name"></label>
+                        <div class="ui left icon input">
+                            <i class="tag icon"></i>
+                            <input asp-for="Name" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="Name"></span>
+                        <p><small>An internal name to identify this tile, not shown on the dashboard.</small></p>
+                    </div>
+                    <div class="inline field">
+                        <label asp-for="SizeX"></label>
+                        <i class="arrows alternate horizontal icon"></i>
+                        <select class="ui dropdown" asp-for="SizeX">
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                        </select>
+                        <span class="ui up pointing small red label" asp-validation-for="SizeX"></span>
+                    </div>
+                    <div class="inline field">
+                        <label asp-for="SizeY"></label>
+                        <i class="arrows alternate vertical icon"></i>
+                        <select class="ui dropdown" asp-for="SizeY">
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                        </select>
+                        <span class="ui up pointing small red label" asp-validation-for="SizeY"></span>
+                    </div>
+                    <div class="field">
+                        <label asp-for="AdditionalCss"></label>
+                        <textarea asp-for="AdditionalCss"></textarea>
+                        <span class="ui up pointing small red label" asp-validation-for="AdditionalCss"></span>
+                        <p><small>Enter one or more CSS properties. Don't enclose them with <code>{ ... }</code>.</small></p>
+                    </div>
+                </div>
+                <h3>Light Tile Details</h3>
+                <div class="ui segment">
+                    <div class="field">
+                        <label asp-for="EntityId"></label>
+                        <select class="ui search selection dropdown" asp-for="EntityId" asp-items="ViewBag.Entities"></select>
+                        <span class="ui up pointing small red label" asp-validation-for="EntityId"></span>
+                    </div>
+                    <div class="field">
+                        <label asp-for="DisplayIcon"></label>
+                        <div class="ui left icon input">
+                            <i class="large icon mdi-icon-placeholder"></i>
+                            <input asp-for="DisplayIcon" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="DisplayIcon"></span>
+                        <p><small>Enter a Material Design icon name. Do not include "mdi" or the "mdi-" prefix (e.g. for "mdi-home", just enter "home").</small></p>
+                    </div>
+                    <div class="field">
+                        <label asp-for="IconColor"></label>
+                        <div class="ui left icon input">
+                            <i class="color-preview tint icon"></i>
+                            <input asp-for="IconColor" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="IconColor"></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <button type="submit" class="ui green icon labeled button">
+                        <i class="@(Model == null ? "plus" : "save") icon"></i>
+                        @(Model == null ? "Add" : "Edit") Tile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -57,10 +57,19 @@
     <a asp-action="Add" asp-controller="CameraTile" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new CameraTile().IconClassName)"></span> Camera Tile</div>
-            <div class="description">A tile that displays a live view of a camera feed. Requires the <code>entity_picture</code> attribute to be present.</div>
+            <div class="description">A tile that displays a live view of a camera feed. Recommended to have the <code>entity_picture</code> attribute set.</div>
         </div>
         <div class="extra content">
             <p>Entity types: <code>camera</code></p>
+        </div>
+    </a>
+    <a asp-action="Add" asp-controller="SceneTile" class="card">
+        <div class="content">
+            <div class="header"><span class="va-bottom @(new SceneTile().IconClassName)"></span> Scene Tile</div>
+            <div class="description">A tile that displays an icon, and when pressed, activates a scene in Home Assistant.</div>
+        </div>
+        <div class="extra content">
+            <p>Entity types: <code>scene</code></p>
         </div>
     </a>
 </div>

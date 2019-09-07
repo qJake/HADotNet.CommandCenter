@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Admin Area";
+}
+
+<h1>HA Command Center &ndash; Technical Info</h1>
+
+<div class="ui stackable grid">
+    <div class="two column row">
+        <div class="column">
+            <h2>Environment Variables</h2>
+            @if (ViewBag.Env is Dictionary<string, string> envVars)
+            {
+                <dl>
+                    @foreach (var env in envVars)
+                    {
+                        <dt><code>@env.Key</code></dt>
+                        <dd>@env.Value</dd>
+                    }
+                </dl>
+            }
+            else
+            {
+                <p><em>No environment variables present. (This is probably bad... you should have at least one.)</em></p>
+            }
+        </div>
+        <div class="column">
+            <h2>Environment Info</h2>
+            <dl>
+                <dt>Process Architecture</dt>
+                <dd>@System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture</dd>
+            </dl>
+            <dl>
+                <dt>Process Bit-ness</dt>
+                <dd>@(Environment.Is64BitProcess ? "64-bit" : "32-bit")</dd>
+            </dl>
+            <dl>
+                <dt>OS</dt>
+                <dd>@System.Runtime.InteropServices.RuntimeInformation.OSDescription</dd>
+            </dl>
+            <dl>
+                <dt>OS Architecture</dt>
+                <dd>@System.Runtime.InteropServices.RuntimeInformation.OSArchitecture</dd>
+            </dl>
+            <dl>
+                <dt>OS Bit-ness</dt>
+                <dd>@(Environment.Is64BitOperatingSystem ? "64-bit" : "32-bit")</dd>
+            </dl>
+            <dl>
+                <dt>Hostname</dt>
+                <dd>@(System.Net.Dns.GetHostName())</dd>
+            </dl>
+            <dl>
+                <dt>Local IP(s)</dt>
+                <dd>@Html.Raw(string.Join("<br />", System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).AddressList.Where(a => a.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).Select(a => a.ToString())))</dd>
+            </dl>
+        </div>
+    </div>
+</div>

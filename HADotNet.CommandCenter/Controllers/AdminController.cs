@@ -33,7 +33,11 @@ namespace HADotNet.CommandCenter.Controllers
             DiscoveryClient = discoveryClient;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Index() => View();
+
+        [HttpGet]
+        public IActionResult Technical()
         {
             ViewBag.Env = ((Hashtable)Environment.GetEnvironmentVariables()).Cast<DictionaryEntry>().ToDictionary(k => k.Key?.ToString(), v => v.Value?.ToString());
 
@@ -109,7 +113,11 @@ namespace HADotNet.CommandCenter.Controllers
             {
                 if (TempData["check-settings"] is bool b && b)
                 {
+                    // This doesn't check if the access token is valid...
                     var inst = await DiscoveryClient.GetDiscoveryInfo();
+
+                    // ... but this does.
+                    var entities = await EntityClient.GetEntities();
 
                     ViewBag.Instance = $"Home Assistant instance: <b>{inst.LocationName} (Version {inst.Version}) [{inst.BaseUrl}]</b>";
                 }
@@ -237,12 +245,92 @@ namespace HADotNet.CommandCenter.Controllers
             Response.ContentType = "application/octet-stream";
             Response.Headers["Content-Disposition"] = "attachment; filename=hacc-export.theme.json";
             Response.Headers["Content-Transfer-Encoding"] = "binary";
-            Response.Body.Write(themeData, 0, themeData.Length);
+            await Response.Body.WriteAsync(themeData, 0, themeData.Length);
             Response.Body.Flush();
 
             Logger.LogInformation("Exported theme settings.");
 
             return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ImportConfig([FromForm] IFormFile file)
+        {
+            try
+            {
+                if (file == null)
+                {
+                    TempData.AddWarning("No file was uploaded. Please try again.");
+                    return RedirectToAction("Index");
+                }
+
+                string contents;
+                using (var sr = new StreamReader(file.OpenReadStream()))
+                {
+                    contents = await sr.ReadToEndAsync();
+                }
+
+                try
+                {
+                    var newConfig = JsonConvert.DeserializeObject<ConfigRoot>(contents);
+
+                    var config = await ConfigStore.GetConfigAsync();
+
+                    newConfig.Settings = null;
+
+                    await ConfigStore.ManipulateConfig(c => c = newConfig);
+
+                    TempData.AddSuccess($"Successfully imported system configuration file '{file.FileName}'!");
+                }
+                catch
+                {
+                    Logger.LogWarning("File selected was not able to be parsed into a config object. Check file contents and try again.");
+                    TempData.AddError("Import file was not a configuration file or could not otherwise be imported. Check that the file is not malformed and try again.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Importing system config settings failed.");
+                TempData.AddError("Unable to import system configuration. See log output (console) for more information.");
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportConfig()
+        {
+            var config = await ConfigStore.GetConfigAsync();
+
+            config.Settings = null;
+
+            var configJson = JsonConvert.SerializeObject(config.CurrentTheme, Formatting.Indented);
+            var configData = Encoding.UTF8.GetBytes(configJson);
+            var filename = $"hacc-export-{DateTime.Now:yyyyMMdd-HHmmss}.config.json";
+
+            Response.ContentType = "application/octet-stream";
+            Response.Headers["Content-Disposition"] = $"attachment; filename={filename}";
+            Response.Headers["Content-Transfer-Encoding"] = "binary";
+            await Response.Body.WriteAsync(configData, 0, configData.Length);
+            Response.Body.Flush();
+
+            TempData.AddWarning("WARNING: Be careful when importing this file into another HACC instance. If the names of Home Assistant entities are different on the target platform, HACC may experience errors!");
+
+            Logger.LogInformation($"Exported system configuration to downloaded file '{filename}'.");
+
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ResetConfig()
+        {
+            await ConfigStore.SaveConfigAsync(new ConfigRoot());
+
+            // This will reset defaults and initialize collections, even if no actions are passed in.
+            await ConfigStore.ManipulateConfig();
+
+            TempData.AddSuccess("Successfully reset HACC configuration.");
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -46,9 +46,9 @@ class CommandCenter
             }
         });
 
-        $('#importTheme').click(() =>
+        $('#importTheme, #importConfig').click(() =>
         {
-            if (confirm('WARNING: This will OVERWRITE your current theme. Export it first if you want to save it! Continue?'))
+            if (confirm('WARNING: This will OVERWRITE your current settings. Export first if you want to save what you have now! Continue?'))
             {
                 $('#importBrowser').click();
             }
@@ -58,6 +58,16 @@ class CommandCenter
         {
             $('#importForm').submit();
         });
+
+        $('#resetConfig').click(e =>
+        {
+            if (!confirm("WARNING: This will COMPLETELY RESET your HACC installation and PERMANENTLY DELETE all of your tiles, themes, and settings. Are you sure you want to reset your config?"))
+            {
+                e.preventDefault();
+                return false;
+            }
+            return true;
+        })
 
         $('.ui.accordion').accordion();
         $('.ui.checkbox').checkbox();
@@ -69,7 +79,7 @@ class CommandCenter
         {
             $(e).parent().siblings('.menu').find('.item[data-value="' + $(e).text() + '"]').css('font-family', $(e).text());
         });
-        
+
         // Only init Packery stuff if we detect we have the preview grid on the page
         if ($('.preview-layout-grid').length)
         {
@@ -78,13 +88,26 @@ class CommandCenter
             // For some reason Draggabilly takes the first element as the grid size, so inject a temporary invisible "fake" one
             $('.preview-layout-grid').prepend(`<div class="preview-layout-item" style="opacity: 0; position: absolute; top: ${window.ccOptions.tilePreviewPadding}px; left: ${window.ccOptions.tilePreviewPadding}px; width: ${window.ccOptions.tilePreviewSize}px; height: ${window.ccOptions.tilePreviewSize}px;" id="grid__tmp"></div>`);
 
-            this.pk = new Packery('.preview-layout-grid', {
-                itemSelector: '.preview-layout-item',
-                columnWidth: '.preview-layout-item',
-                rowHeight: '.preview-layout-item',
-                gutter: window.ccOptions.tilePreviewPadding,
-                initLayout: false
-            });
+            if (window.ccOptions)
+            {
+                this.pk = new Packery('.preview-layout-grid', {
+                    itemSelector: '.preview-layout-item',
+                    columnWidth: window.ccOptions.tilePreviewSize,
+                    rowHeight: window.ccOptions.tilePreviewSize,
+                    gutter: window.ccOptions.tilePreviewPadding,
+                    initLayout: false
+                });
+            }
+            else
+            {
+                this.pk = new Packery('.preview-layout-grid', {
+                    itemSelector: '.preview-layout-item',
+                    columnWidth: '.preview-layout-item',
+                    rowHeight: '.preview-layout-item',
+                    gutter: window.ccOptions.tilePreviewPadding,
+                    initLayout: false
+                });
+            }
 
             this.pk.on('layoutComplete', () => this.writeItemLayout());
             this.pk.on('dragItemPositioned', () =>

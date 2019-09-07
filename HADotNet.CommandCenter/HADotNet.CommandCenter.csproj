@@ -9,6 +9,7 @@
     <FileVersion>0.5.0.0</FileVersion>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Deterministic>false</Deterministic>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +18,7 @@
     <Content Remove="wwwroot\js\tiles\camera.tile.ts" />
     <Content Remove="wwwroot\js\tiles\label.tile.ts" />
     <Content Remove="wwwroot\js\tiles\person.tile.ts" />
+    <Content Remove="wwwroot\js\tiles\scene.tile.ts" />
     <Content Remove="wwwroot\js\tiles\switch.tile.ts" />
     <Content Remove="wwwroot\js\tiles\weather.tile.ts" />
   </ItemGroup>

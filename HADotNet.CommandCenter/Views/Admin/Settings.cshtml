@@ -7,7 +7,7 @@
 
 <partial name="Alerts" />
 
-@if (Context.Request.Query["setup"] == "1")
+@if (Context.Request.Query["setup"] == "1" && (!Model?.IsHassIo ?? false))
 {
     <div class="ui icon labeled info message">
         <i class="info circle icon"></i>
@@ -32,7 +32,7 @@
     </div>
 }
 
-@if (Model.IsHassIo)
+@if (Model?.IsHassIo ?? false)
 {
     <div class="ui icon labeled info message">
         <i class="info circle icon"></i>

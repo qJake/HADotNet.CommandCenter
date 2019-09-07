@@ -6,9 +6,20 @@
 
 <p>Welcome to Home Assistant Command Center (HACC)!</p>
 
-<div class="ui grid">
+@* Hidden input for file browser - driven by toolbar button below and some lightweight JS. *@
+<form method="post" enctype="multipart/form-data" asp-action="ImportConfig" class="no-display" id="importForm">
+    <input type="file" accept=".config.json" id="importBrowser" name="file" />
+</form>
+
+<div class="ui stackable grid">
     <div class="two column row">
         <div class="column">
+            <h2>Getting Started</h2>
+            <ul>
+                <li><a target="_blank" href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Initial-System-Setup">Initial System Setup</a></li>
+                <li><a target="_blank" href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Configuring-Layout-Settings">Configuring Layout Settings</a></li>
+            </ul>
+
             <h2>Resources</h2>
             <ul>
                 <li>
@@ -20,22 +31,28 @@
             </ul>
         </div>
         <div class="column">
-            <h2>Technical Information</h2>
-            <h3>Environment Variables</h3>
-            @if (ViewBag.Env is Dictionary<string, string> envVars)
-            {
-                <dl>
-                    @foreach (var env in envVars)
-                    {
-                        <dt><code>@env.Key</code></dt>
-                        <dd>@env.Value</dd>
-                    }
-                </dl>
-            }
-            else
-            {
-                <p><em>No environment variables present. (This is probably bad... you should have at least one.)</em></p>
-            }
+            <h2>Configuration Control</h2>
+            <div class="ui buttons">
+                <button type="button" id="importConfig" class="ui grey icon labeled button">
+                    <i class="download icon"></i>
+                    Import...
+                </button>
+                <a class="ui grey icon labeled button" asp-action="ExportConfig">
+                    <i class="upload icon"></i>
+                    Export
+                </a>
+                <a class="ui red icon labeled button" id="resetConfig" asp-action="ResetConfig">
+                    <i class="remove icon"></i>
+                    Reset
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="one column row">
+        <div class="column">
+            <p>
+                <b>Version:</b> @(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()), built on @(System.Reflection.Assembly.GetEntryAssembly().GetLinkerTimestampUtc().ToLocalTime())
+            </p>
         </div>
     </div>
 </div>

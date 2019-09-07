@@ -11,7 +11,7 @@ namespace HADotNet.CommandCenter.Models.Config.Themes
         public string TileFontColor { get; set; }
 
         [Display(Name = "Tile Border Radius (px)")]
-        public int TileBorderRadius { get; set; } 
+        public int? TileBorderRadius { get; set; } 
 
         [Display(Name = "Tile Box Shadow")]
         public string TileBoxShadow { get; set; }
@@ -21,6 +21,5 @@ namespace HADotNet.CommandCenter.Models.Config.Themes
 
         [Display(Name = "Default Icon Off Color")]
         public string TileDefaultOffColor { get; set; }
-
     }
 }
