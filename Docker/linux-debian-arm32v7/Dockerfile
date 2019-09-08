@@ -33,7 +33,7 @@ ARG BUILD_VERSION
 LABEL \
     io.hass.name="HACC" \
     io.hass.description="Wall-mountable tablet interface for Home Assistant." \
-    io.hass.arch="armv7|i386|amd64" \
+    io.hass.arch="armv7|armhf|i386|amd64" \
     io.hass.type="addon" \
     io.hass.version=${BUILD_VERSION} \
     maintainer="qJake <https://github.com/qJake/>" \
