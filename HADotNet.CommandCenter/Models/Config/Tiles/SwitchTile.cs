@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using HADotNet.Core;
+using HADotNet.Core.Clients;
 
 namespace HADotNet.CommandCenter.Models.Config.Tiles
 {
@@ -35,5 +38,21 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
         /// </summary>
         [Display(Name = "Off Color")]
         public string OffColor { get; set; }
+
+        public override async Task OnClick(ServiceClient serviceClient)
+        {
+            // If this is a group, we can't use the toggle service, we have to know if it's on/off and call the opposite.
+            if (EntityId.Split('.')[0].ToUpper() == "GROUP")
+            {
+                var stateClient = ClientFactory.GetClient<StatesClient>();
+                var state = await stateClient.GetState(EntityId);
+                var serviceName = state.State.ToUpper() == "ON" ? "turn_off" : "turn_on";
+                await serviceClient.CallService("switch", serviceName, new { entity_id = EntityId });
+            }
+            else
+            {
+                await base.OnClick(serviceClient);
+            }
+        }
     }
 }
