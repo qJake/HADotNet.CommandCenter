@@ -88,7 +88,7 @@
                         <label asp-for="OnColor"></label>
                         <div class="ui left icon input">
                             <i class="color-preview tint icon"></i>
-                            <input asp-for="OnColor" />
+                            <input asp-for="OnColor" class="jscolor" data-jscolor="{refine:false, hash:true}" />
                         </div>
                         <span class="ui up pointing small red label" asp-validation-for="OnColor"></span>
                     </div>
@@ -96,7 +96,7 @@
                         <label asp-for="OffColor"></label>
                         <div class="ui left icon input">
                             <i class="color-preview tint icon"></i>
-                            <input asp-for="OffColor" />
+                            <input asp-for="OffColor" class="jscolor" data-jscolor="{refine:false, hash:true}" />
                         </div>
                         <span class="ui up pointing small red label" asp-validation-for="OffColor"></span>
                     </div>

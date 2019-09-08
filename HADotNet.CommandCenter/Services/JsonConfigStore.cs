@@ -19,7 +19,7 @@ namespace HADotNet.CommandCenter.Services
 
         private const string HASSIO_CONFIG_LOC = "/data/";
 
-        private static JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
+        public static JsonSerializerSettings SerializerSettings { get; } = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
             Formatting = Formatting.Indented

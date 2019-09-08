@@ -67,7 +67,7 @@ namespace HADotNet.CommandCenter.Middleware
                     });
                 }
 
-                if (context.Request.Path.ToString().ToLower() != "/admin/settings")
+                if (context.Request.Path.ToString().ToLower() != "/admin/settings" && context.Request.Path.ToString().ToLower() != "/admin")
                 {
                     Log.LogInformation($"Client factory is not initialized, redirecting user to settings area...");
 

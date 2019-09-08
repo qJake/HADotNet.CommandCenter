@@ -1,5 +1,6 @@
 ﻿using HADotNet.CommandCenter.Models.Config;
 using HADotNet.CommandCenter.Models.Config.Themes;
+using HADotNet.CommandCenter.Services;
 using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.CommandCenter.Utils;
 using HADotNet.CommandCenter.ViewModels;
@@ -273,12 +274,17 @@ namespace HADotNet.CommandCenter.Controllers
                 try
                 {
                     var newConfig = JsonConvert.DeserializeObject<ConfigRoot>(contents);
-
-                    var config = await ConfigStore.GetConfigAsync();
-
                     newConfig.Settings = null;
 
-                    await ConfigStore.ManipulateConfig(c => c = newConfig);
+                    var config = await ConfigStore.GetConfigAsync();
+                    var oldSettings = config.Settings;
+
+                    newConfig.Settings = oldSettings;
+
+                    await ConfigStore.SaveConfigAsync(newConfig);
+
+                    // Ensures arrays are non-null even if no actions are performed.
+                    await ConfigStore.ManipulateConfig();
 
                     TempData.AddSuccess($"Successfully imported system configuration file '{file.FileName}'!");
                 }
@@ -303,7 +309,7 @@ namespace HADotNet.CommandCenter.Controllers
 
             config.Settings = null;
 
-            var configJson = JsonConvert.SerializeObject(config.CurrentTheme, Formatting.Indented);
+            var configJson = JsonConvert.SerializeObject(config, JsonConfigStore.SerializerSettings);
             var configData = Encoding.UTF8.GetBytes(configJson);
             var filename = $"hacc-export-{DateTime.Now:yyyyMMdd-HHmmss}.config.json";
 
