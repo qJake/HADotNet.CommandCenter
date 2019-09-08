@@ -1,25 +1,31 @@
-# ASP.NET Core 2.2.x Runtime
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-alpine3.9-arm64v8 AS base
+# ASP.NET Core 3.x Runtime
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-buster-slim-arm64v8 AS base
 WORKDIR /app
 
-# ASP.NET Core 2.2.x SDK and Build
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-alpine3.9-arm64v8 AS build
-ARG TAG=master
+# ASP.NET Core 3.x SDK and Build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster-arm64v8 AS build
+ARG TAG
 
 ENV HACC_VERSION $TAG
 
 WORKDIR /
 
-RUN apk update && apk add wget nodejs npm tar
+RUN apt-get update -yq && apt-get upgrade -yq && apt-get install -yq curl
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get install -yq nodejs npm build-essential
 
+# Needed for ARM architecture
+RUN npm config set unsafe-perm true 
 RUN npm install -g npm
 
 RUN mkdir /src \
     && cd /src \
     && wget -qO src.tar.gz https://github.com/qJake/HADotNet.CommandCenter/archive/$TAG.tar.gz \
     && tar xzf src.tar.gz --strip=1 --exclude pax_global_header \
-    && rm -rf src.tar.gz
-
+    && rm -rf src.tar.gz \
+	&& ln -s /usr/share/dotnet/sdk/3.0.100-preview9-014004/ /usr/share/dotnet/sdk/3.0.0 \
+	&& ln -s /usr/share/dotnet/host/fxr/3.0.0-preview9-19423-09/ /usr/share/dotnet/host/fxr/3.0.0 \
+	&& dotnet --info
+	
 WORKDIR /src/HADotNet.CommandCenter
 
 RUN dotnet restore HADotNet.CommandCenter.csproj

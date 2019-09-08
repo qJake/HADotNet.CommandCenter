@@ -1,16 +1,16 @@
-# ASP.NET Core 2.2.x Runtime
+# ASP.NET Core 3.x Runtime
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-bionic AS base
 WORKDIR /app
 
-# ASP.NET Core 2.2.x SDK and Build
+# ASP.NET Core 3.x SDK and Build
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-bionic AS build
-ARG TAG=master
+ARG TAG
 
 ENV HACC_VERSION $TAG
 
 WORKDIR /
 
-RUN apt-get update -yq && apt-get upgrade -yq && apt-get install -yq curl git nano
+RUN apt-get update -yq && apt-get upgrade -yq && apt-get install -yq curl
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get install -yq nodejs build-essential
 RUN npm install -g npm
 

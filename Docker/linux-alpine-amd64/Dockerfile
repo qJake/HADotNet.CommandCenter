@@ -1,10 +1,10 @@
-# ASP.NET Core 2.2.x Runtime
+# ASP.NET Core 3.x Runtime
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-alpine3.9 AS base
 WORKDIR /app
 
-# ASP.NET Core 2.2.x SDK and Build
+# ASP.NET Core 3.x SDK and Build
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-alpine3.9 AS build
-ARG TAG=master
+ARG TAG
 
 ENV HACC_VERSION $TAG
 
