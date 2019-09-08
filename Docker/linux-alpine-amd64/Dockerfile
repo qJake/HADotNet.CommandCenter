@@ -16,7 +16,7 @@ RUN npm install -g npm
 
 RUN mkdir /src \
     && cd /src \
-    && wget -qO src.tar.gz https://github.com/qJake/HADotNet.CommandCenter/archive/$TAG.tar.gz \
+    && wget -qO src.tar.gz https://github.com/qJake/HADotNet.CommandCenter/archive/v$TAG.tar.gz \
     && tar xzf src.tar.gz --strip=1 --exclude pax_global_header \
     && rm -rf src.tar.gz
 
