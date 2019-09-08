@@ -41,8 +41,8 @@ LABEL \
     org.label-schema.build-date=${BUILD_DATE} \
     org.label-schema.name="HACC" \
     org.label-schema.schema-version="$TAG" \
-    org.label-schema.url="https://github.com/qJake/HADotNet.Panel/" \
-    org.label-schema.usage="https://github.com/qJake/HADotNet.Panel/README.md" \
+    org.label-schema.url="https://github.com/qJake/HADotNet.CommandCenter/" \
+    org.label-schema.usage="https://github.com/qJake/HADotNet.CommandCenter/README.md" \
     org.label-schema.vcs-ref=${BUILD_REF} \
-    org.label-schema.vcs-url="https://github.com/qJake/HADotNet.Panel/" \
+    org.label-schema.vcs-url="https://github.com/qJake/HADotNet.CommandCenter/" \
     org.label-schema.vendor="qJake"
