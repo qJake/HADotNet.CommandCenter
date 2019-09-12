@@ -1,4 +1,5 @@
-﻿@{
+﻿@model HADotNet.Core.Models.DiscoveryObject
+@{
     ViewData["Title"] = "Admin Area";
 }
 
@@ -24,32 +25,30 @@
             }
         </div>
         <div class="column">
+            <h2>Home Assistant Info</h2>
+            <dl>
+                <dt>Location / Instance Name</dt>
+                <dd>@Model.LocationName</dd>
+                <dt>Base URL</dt>
+                <dd>@Model.BaseUrl</dd>
+                <dt>Version</dt>
+                <dd>@Model.Version</dd>
+            </dl>
+
             <h2>Environment Info</h2>
             <dl>
                 <dt>Process Architecture</dt>
                 <dd>@System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture</dd>
-            </dl>
-            <dl>
                 <dt>Process Bit-ness</dt>
                 <dd>@(Environment.Is64BitProcess ? "64-bit" : "32-bit")</dd>
-            </dl>
-            <dl>
                 <dt>OS</dt>
                 <dd>@System.Runtime.InteropServices.RuntimeInformation.OSDescription</dd>
-            </dl>
-            <dl>
                 <dt>OS Architecture</dt>
                 <dd>@System.Runtime.InteropServices.RuntimeInformation.OSArchitecture</dd>
-            </dl>
-            <dl>
                 <dt>OS Bit-ness</dt>
                 <dd>@(Environment.Is64BitOperatingSystem ? "64-bit" : "32-bit")</dd>
-            </dl>
-            <dl>
                 <dt>Hostname</dt>
                 <dd>@(System.Net.Dns.GetHostName())</dd>
-            </dl>
-            <dl>
                 <dt>Local IP(s)</dt>
                 <dd>@Html.Raw(string.Join("<br />", System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).AddressList.Where(a => a.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).Select(a => a.ToString())))</dd>
             </dl>

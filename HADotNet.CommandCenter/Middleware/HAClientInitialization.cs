@@ -1,6 +1,7 @@
 ﻿using HADotNet.CommandCenter.Models.Config;
 using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.Core;
+using HADotNet.Core.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
@@ -34,6 +35,10 @@ namespace HADotNet.CommandCenter.Middleware
                     {
                         Log.LogInformation($"Auto-initializing HACC via Hass.io addon.");
                         ClientFactory.Initialize(config.Settings.BaseUri, Environment.GetEnvironmentVariable("HASSIO_TOKEN"));
+
+                        var discovery = ClientFactory.GetClient<DiscoveryClient>();
+                        var discInfo = await discovery.GetDiscoveryInfo();
+                        await ConfigStore.ManipulateConfig(c => c.Settings.ExternalBaseUri = discInfo.BaseUrl);
                     }
                     else
                     {

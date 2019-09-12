@@ -266,7 +266,7 @@ class SwitchTile extends Tile {
 class PersonTile extends Tile {
     updateState(tile, state) {
         //console.log("State received for: " + tile.name, state);
-        let picture = state.attributes['entity_picture2'] ? state.attributes['entity_picture2'].toString() : '';
+        let picture = state.attributes['entity_picture'] ? state.attributes['entity_picture'].toString() : '';
         let location = state.state.replace('_', ' ');
         let label = state.attributes['friendly_name'].toString();
         if (tile.overrideLabel) {

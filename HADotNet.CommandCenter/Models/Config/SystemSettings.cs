@@ -9,6 +9,11 @@ namespace HADotNet.CommandCenter.Models.Config
         [Display(Name = "Home Assistant Base URL")]
         public string BaseUri { get; set; }
 
+        /// <summary>
+        /// Set automatically if running in Hass.io mode. Contains the discovered external URL of Home Assistant, for retrieving image assets (camera feeds, etc).
+        /// </summary>
+        public string ExternalBaseUri { get; set; }
+
         [Required]
         [MinLength(100, ErrorMessage = "This doesn't look like a long-lived access token.")]
         [MaxLength(200, ErrorMessage = "This doesn't look like a long-lived access token.")]

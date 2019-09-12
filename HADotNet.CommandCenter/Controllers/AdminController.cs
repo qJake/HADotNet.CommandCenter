@@ -38,11 +38,13 @@ namespace HADotNet.CommandCenter.Controllers
         public IActionResult Index() => View();
 
         [HttpGet]
-        public IActionResult Technical()
+        public async Task<IActionResult> Technical()
         {
             ViewBag.Env = ((Hashtable)Environment.GetEnvironmentVariables()).Cast<DictionaryEntry>().ToDictionary(k => k.Key?.ToString(), v => v.Value?.ToString());
 
-            return View();
+            var discovery = await DiscoveryClient.GetDiscoveryInfo();
+
+            return View(discovery);
         }
 
         public async Task<IActionResult> Layout()
