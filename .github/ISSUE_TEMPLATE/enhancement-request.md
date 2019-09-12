@@ -1,5 +1,5 @@
 ---
-name: Enhancement Request
+name: Enhancement request
 about: Got a new idea that you think should be added to HACC? Let us know!
 title: ''
 labels: enhancement
