@@ -98,6 +98,11 @@
                 @: color: @(Model.Theme.Tiles.TileDefaultOffColor);
             }
         }
+
+        @if (!string.IsNullOrWhiteSpace(Model.Theme.AdditionalCss))
+        {
+            @Html.Raw(Model.Theme.AdditionalCss);
+        }
     </style>
 }
 
