@@ -249,7 +249,7 @@ namespace HADotNet.CommandCenter.Controllers
             Response.Headers["Content-Disposition"] = "attachment; filename=hacc-export.theme.json";
             Response.Headers["Content-Transfer-Encoding"] = "binary";
             await Response.Body.WriteAsync(themeData, 0, themeData.Length);
-            Response.Body.Flush();
+            await Response.Body.FlushAsync();
 
             Logger.LogInformation("Exported theme settings.");
 
@@ -319,7 +319,7 @@ namespace HADotNet.CommandCenter.Controllers
             Response.Headers["Content-Disposition"] = $"attachment; filename={filename}";
             Response.Headers["Content-Transfer-Encoding"] = "binary";
             await Response.Body.WriteAsync(configData, 0, configData.Length);
-            Response.Body.Flush();
+            await Response.Body.FlushAsync();
 
             TempData.AddWarning("WARNING: Be careful when importing this file into another HACC instance. If the names of Home Assistant entities are different on the target platform, HACC may experience errors!");
 
