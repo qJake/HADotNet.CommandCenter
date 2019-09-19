@@ -124,3 +124,17 @@ body.dashboard .tiles .tile.tile-loading:after {
 .tile.tile-type--weather > span.value[value-summary] {
   font-size: 1.8em;
 }
+.tile.tile-type--media {
+  justify-content: space-between !important;
+}
+.tile.tile-type--media.media-idle {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+.tile.tile-type--media span.top-label,
+.tile.tile-type--media span.bottom-label {
+  margin: 0.5em 0;
+  color: white;
+  font-weight: 600;
+  font-size: 1.4em;
+  text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.8);
+}

@@ -36,6 +36,12 @@ abstract class Tile
             if (name == tname)
             {
                 this.config = cfg;
+
+                // New config = re-request state
+                if (this.canLoad)
+                {
+                    this.requestState();
+                }
             }
         });
         conn.on('SendTileState', (t, s) =>

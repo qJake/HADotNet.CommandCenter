@@ -94,6 +94,10 @@ class Tile {
         conn.on('SendSystemConfig', (tname, cfg) => {
             if (name == tname) {
                 this.config = cfg;
+                // New config = re-request state
+                if (this.canLoad) {
+                    this.requestState();
+                }
             }
         });
         conn.on('SendTileState', (t, s) => {
@@ -435,6 +439,68 @@ class SceneTile extends Tile {
     }
 }
 /// <reference path="tile.ts" />
+class MediaTile extends Tile {
+    constructor(name, conn) {
+        super(name, conn, true);
+        // Kind of a hack/workaround since it's not easy to control the order (requestTileState comes before requestConfig so it's missing the first time around).
+        this.firstLoadIgnored = false;
+        this.requestConfig();
+    }
+    updateState(tile, state) {
+        var mediaTile = tile;
+        let label = state.attributes["friendly_name"].toString();
+        if (tile.overrideLabel) {
+            label = tile.overrideLabel;
+        }
+        $(`#tile-${tile.name}`).toggleClass('media-idle', state.attributes['media_title'] === 'Nothing playing' || ((state.state == 'paused' || state.state == 'idle') && !state.attributes["entity_picture"]));
+        $(`#tile-${tile.name}`).find('span[value-name]').text(mediaTile.showLabel ? label : '');
+        $(`#tile-${tile.name}`).find('span[value-title]').text(mediaTile.showTitle && state.attributes['media_title'] && state.attributes['media_title'] !== 'Nothing playing' ? state.attributes['media_title'].toString() : '');
+        if (!this.config || !this.config.baseUrl) {
+            if (this.firstLoadIgnored) {
+                console.warn("Missing config.baseUrl, unable to render media display.", this.config);
+            }
+            else {
+                this.firstLoadIgnored = true;
+            }
+            this.queueTileRefresh(tile);
+        }
+        else {
+            if (!state.attributes["entity_picture"]) {
+                this.queueTileRefresh(tile, true);
+                return;
+            }
+            const cacheBuster = Math.floor(Math.random() * Math.floor(99999999));
+            let imageUrl = this.config.baseUrl + state.attributes["entity_picture"].toString() + "&_nocache=" + cacheBuster;
+            Utils.preloadImage(imageUrl)
+                .then(img => {
+                let imageSize = mediaTile.imageCropMode.toLowerCase() === 'cover' || mediaTile.imageCropMode.toLowerCase() === 'contain'
+                    ? mediaTile.imageCropMode.toLowerCase()
+                    : '100% 100%';
+                let imagePosition = mediaTile.imageCropMode.toLowerCase() === 'cover' || mediaTile.imageCropMode.toLowerCase() === 'contain'
+                    ? '50% 50%'
+                    : '0 0';
+                $(`#tile-${tile.name}`).css({
+                    backgroundImage: `url('${img}')`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: imagePosition,
+                    backgroundSize: imageSize
+                });
+            })
+                .finally(() => this.queueTileRefresh(tile, true));
+        }
+    }
+    queueTileRefresh(tile, clearLoading) {
+        if (clearLoading) {
+            super.updateState();
+        }
+        if (tile.refreshRate > 0) {
+            setTimeout(() => {
+                this.requestState((tile.refreshRate * 1000) - 100);
+            }, tile.refreshRate * 1000);
+        }
+    }
+}
+/// <reference path="tile.ts" />
 /// <reference path="blank.tile.ts" />
 /// <reference path="label.tile.ts" />
 /// <reference path="date.tile.ts" />
@@ -445,6 +511,7 @@ class SceneTile extends Tile {
 /// <reference path="weather.tile.ts" />
 /// <reference path="camera.tile.ts" />
 /// <reference path="scene.tile.ts" />
+/// <reference path="media.tile.ts" />
 class TileMap {
 }
 TileMap.ClassMap = {
@@ -457,7 +524,8 @@ TileMap.ClassMap = {
     'Person': PersonTile,
     'Weather': WeatherTile,
     'Camera': CameraTile,
-    'Scene': SceneTile
+    'Scene': SceneTile,
+    'Media': MediaTile
 };
 /// <reference path="models/models.ts" />
 /// <reference path="typings/window-options.d.ts" />

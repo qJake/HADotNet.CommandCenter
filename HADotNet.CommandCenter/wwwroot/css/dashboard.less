@@ -177,4 +177,24 @@ body.dashboard
             font-size: 1.8em;
         }
     }
+
+    &.tile-type--media
+    {
+        justify-content: space-between !important;
+
+        &.media-idle
+        {
+            background-color: rgba(0,0,0,0.7) !important;
+        }
+
+        span.top-label,
+        span.bottom-label
+        {
+            margin: 0.5em 0;
+            color: white;
+            font-weight: 600;
+            font-size: 1.4em;
+            text-shadow: 2px 2px 1px rgba(0,0,0,0.8);
+        }
+    }
 }

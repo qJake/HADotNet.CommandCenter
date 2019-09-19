@@ -92,3 +92,18 @@ interface ICameraTile extends ITile
     /** Gets or sets the image crop mode. */
     imageCropMode: string;
 }
+
+interface IMediaTile extends ITile
+{
+    /** Gets or sets the refresh rate, in seconds, of the camera image. */
+    refreshRate: number;
+
+    /** Gets or sets the image crop mode. */
+    imageCropMode: string;
+
+    /** Whether or not to show the media title. */
+    showTitle: boolean;
+
+/** Whether or not to show the entity name. */
+    showLabel: boolean;
+}
