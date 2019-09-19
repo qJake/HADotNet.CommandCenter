@@ -1,0 +1,20 @@
+name: "Stale Issue Closer"
+on:
+  schedule:
+  - cron: "0 0 * * *"
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/stale@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        stale-issue-message: 'This issue hasn''t received an update in 2 weeks. 5 days from today, this issue will be closed. Comment to remove the stale label and extend the time.'
+        stale-pr-message: 'This PR hasn''t received an update in 2 weeks. 5 days from today, this PR will be closed. Comment to remove the stale label and extend the time.'
+        stale-issue-label: 'stale'
+        exempt-issue-label: 'enhancement'
+        days-before-stale: 14
+        days-before-close: 5
+        stale-pr-label: 'stale'
+        #exempt-pr-label: 'awaiting-approval
