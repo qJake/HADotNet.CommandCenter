@@ -1,0 +1,13 @@
+name: Greetings
+
+on: [pull_request, issues]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: 'Hey there, looks like this is your first time submitting a bug or enhancement to HACC! Thanks for helping make HACC a better app! 🎉'
+        pr-message: 'Hey, looks like this is your first PR to HACC! Thanks for contributing to the app! 🎉'
