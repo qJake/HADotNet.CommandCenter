@@ -1,4 +1,4 @@
-﻿using HADotNet.CommandCenter.Hubs;  
+﻿using HADotNet.CommandCenter.Hubs;
 using HADotNet.CommandCenter.Middleware;
 using HADotNet.CommandCenter.Models;
 using HADotNet.CommandCenter.Services;
@@ -8,15 +8,14 @@ using HADotNet.Core.Clients;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Reflection;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
 
 namespace HADotNet.CommandCenter
 {
@@ -117,7 +116,7 @@ Now listening on: {(!string.IsNullOrWhiteSpace(listen) ? listen : "[Unknown Addr
             app.UseEndpoints(ep =>
             {
                 ep.MapHub<TileHub>("/hubs/tile");
-                ep.MapDefaultControllerRoute();
+                ep.MapControllerRoute("HaccRoute", "{controller=Admin}/{action=Index}/{id?}", new { controller = "Admin", action = "Index" });
             });
         }
     }

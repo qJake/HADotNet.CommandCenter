@@ -8,6 +8,8 @@ function Test-ExitCode ([int] $Expected = 0)
     }
 }
 
+Write-Host "Started: $((Get-Date))"
+
 $prgAct = 'Building HACC Docker images...'
 $prgStat = 'Building'
 
@@ -97,3 +99,5 @@ docker push qjake/hacc-hassio-armhf:latest
 docker push qjake/hacc-hassio-armv7:latest
 docker push qjake/hacc:$version
 docker push qjake/hacc:latest
+
+Write-Host "Completed: $((Get-Date))"

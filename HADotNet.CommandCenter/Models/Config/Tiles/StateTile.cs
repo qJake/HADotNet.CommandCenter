@@ -1,6 +1,6 @@
-﻿using System;
+﻿using HADotNet.Core.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
-using HADotNet.Core.Models;
 
 namespace HADotNet.CommandCenter.Models.Config.Tiles
 {

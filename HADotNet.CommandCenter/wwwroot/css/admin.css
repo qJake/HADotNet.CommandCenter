@@ -13,6 +13,11 @@ span.ui.label.field-validation-valid:before,
 span.ui.label.field-validation-valid:before {
   display: none;
 }
+.ui.form .field input[readonly] {
+  opacity: 0.45;
+  pointer-events: none;
+  user-select: none;
+}
 textarea.no-resize {
   resize: none !important;
 }

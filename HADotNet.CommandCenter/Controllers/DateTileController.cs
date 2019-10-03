@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HADotNet.CommandCenter.Controllers
 {
-    [Route("admin/tile")]
+    [Route("admin/pages/{page}/tile")]
     public class DateTileController : BaseTileController
     {
         public IConfigStore ConfigStore { get; }
@@ -23,17 +23,17 @@ namespace HADotNet.CommandCenter.Controllers
         public IActionResult Add() => View();
 
         [Route("edit/date")]
-        public async Task<IActionResult> Edit([FromQuery] string name)
+        public async Task<IActionResult> Edit([FromRoute] string page, [FromQuery] string name)
         {
             var config = await ConfigStore.GetConfigAsync();
 
-            var tile = config.Tiles.FirstOrDefault(t => t.Name == name);
+            var tile = config[page].Tiles.FirstOrDefault(t => t.Name == name);
 
             return View("Add", tile);
         }
 
         [HttpPost("add/date")]
-        public async Task<IActionResult> Save(DateTile tile)
+        public async Task<IActionResult> Save([FromRoute] string page, DateTile tile)
         {
             if (ModelState.IsValid)
             {
@@ -47,7 +47,7 @@ namespace HADotNet.CommandCenter.Controllers
                     tile.TimeFormatString = null;
                 }
 
-                return await SaveBaseTile(ConfigStore, tile);
+                return await SaveBaseTile(page, ConfigStore, tile);
             }
 
             return View("Add", tile);

@@ -9,7 +9,7 @@
 <h2>Home Assistant Tiles</h2>
 
 <div class="ui cards">
-    <a asp-action="Add" asp-controller="StateTile" class="card">
+    <a asp-action="Add" asp-controller="StateTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new StateTile().IconClassName)"></span> State Tile</div>
             <div class="description">A simple tile that displays state information for an entity.</div>
@@ -18,7 +18,7 @@
             <p>Entity types: <code>All</code></p>
         </div>
     </a>
-    <a asp-action="Add" asp-controller="WeatherTile" class="card">
+    <a asp-action="Add" asp-controller="WeatherTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new WeatherTile().IconClassName)"></span> Weather Tile</div>
             <div class="description">A tile used to display up-to-date weather information.</div>
@@ -27,7 +27,7 @@
             <p>Entity types: <code>sensor</code></p>
         </div>
     </a>
-    <a asp-action="Add" asp-controller="SwitchTile" class="card">
+    <a asp-action="Add" asp-controller="SwitchTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new SwitchTile().IconClassName)"></span> Switch  Tile</div>
             <div class="description">A tile to represent the state of a switch, and to turn the switch on and off when clicked.</div>
@@ -36,7 +36,7 @@
             <p>Entity types: <code>switch, group</code></p>
         </div>
     </a>
-    <a asp-action="Add" asp-controller="LightTile" class="card">
+    <a asp-action="Add" asp-controller="LightTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new LightTile().IconClassName)"></span> Light Tile</div>
             <div class="description">A tile to represent the state of a light, and to turn the light on and off when clicked.</div>
@@ -45,7 +45,7 @@
             <p>Entity types: <code>light</code></p>
         </div>
     </a>
-    <a asp-action="Add" asp-controller="PersonTile" class="card">
+    <a asp-action="Add" asp-controller="PersonTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new PersonTile().IconClassName)"></span> Person Tile</div>
             <div class="description">A tile to represent the current location and picture of a person.</div>
@@ -54,7 +54,7 @@
             <p>Entity types: <code>device_tracker, person</code></p>
         </div>
     </a>
-    <a asp-action="Add" asp-controller="CameraTile" class="card">
+    <a asp-action="Add" asp-controller="CameraTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new CameraTile().IconClassName)"></span> Camera Tile</div>
             <div class="description">A tile that displays a live view of a camera feed. Recommended to have the <code>entity_picture</code> attribute set.</div>
@@ -63,7 +63,7 @@
             <p>Entity types: <code>camera</code></p>
         </div>
     </a>
-    <a asp-action="Add" asp-controller="SceneTile" class="card">
+    <a asp-action="Add" asp-controller="SceneTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new SceneTile().IconClassName)"></span> Scene Tile</div>
             <div class="description">A tile that displays an icon, and when pressed, activates a scene in Home Assistant.</div>
@@ -72,7 +72,7 @@
             <p>Entity types: <code>scene</code></p>
         </div>
     </a>
-    <a asp-action="Add" asp-controller="MediaTile" class="card">
+    <a asp-action="Add" asp-controller="MediaTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new MediaTile().IconClassName)"></span> Media Tile</div>
             <div class="description">A tile that displays the cover art and current media title for a media player.</div>
@@ -86,7 +86,7 @@
 <h2>Utility Tiles</h2>
 
 <div class="ui cards">
-    <a asp-action="Add" asp-controller="BlankTile" class="card">
+    <a asp-action="Add" asp-controller="BlankTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new BlankTile().IconClassName)"></span> Blank Tile</div>
             <div class="description">A blank tile, useful for taking up space in the layout but not actually rendering anything.</div>
@@ -95,7 +95,7 @@
             <p>Entity types: <code>N/A</code></p>
         </div>
     </a>
-    <a asp-action="Add" asp-controller="LabelTile" class="card">
+    <a asp-action="Add" asp-controller="LabelTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new LabelTile().IconClassName)"></span> Label Tile</div>
             <div class="description">A label tile, useful for displaying some static text.</div>
@@ -104,7 +104,7 @@
             <p>Entity types: <code>N/A</code></p>
         </div>
     </a>
-    <a asp-action="Add" asp-controller="DateTile" class="card">
+    <a asp-action="Add" asp-controller="DateTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new DateTile().IconClassName)"></span> Date Tile</div>
             <div class="description">A tile used to render a date and/or time.</div>

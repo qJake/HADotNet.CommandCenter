@@ -65,7 +65,7 @@
             <vc:layout-settings />
         </div>
         <div class="twelve wide column">
-            <form asp-action="UpdateLayout" method="post">
+            <form asp-action="UpdateLayout" asp-route-page="@Context.Request.RouteValues["page"]" method="post">
                 <h2>Tile Layout and Preview (50% Scale)</h2>
                 <p>
                     <button type="submit" class="ui small icon labeled green button">

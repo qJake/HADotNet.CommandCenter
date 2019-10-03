@@ -1,6 +1,6 @@
 ﻿@model LayoutSettings
 
-    <form class="ui form" asp-action="UpdateLayoutSettings" method="post">
+    <form class="ui form" asp-action="UpdateLayoutSettings" asp-route-page="@Context.Request.RouteValues["page"]" method="post">
         <div class="field">
             <button type="submit" class="ui small green icon labeled button">
                 <i class="check icon"></i>

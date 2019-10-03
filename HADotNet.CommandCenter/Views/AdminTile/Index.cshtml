@@ -7,7 +7,7 @@
 
 <partial name="Alerts" />
 
-<a asp-action="AddTile" class="ui green icon labeled button">
+<a asp-action="AddTile" asp-route-page="@Context.Request.RouteValues["page"]" class="ui green icon labeled button">
     <i class="add icon"></i>    
     Add Tile
 </a>
@@ -33,10 +33,10 @@
                 var entityTile = tile as BaseEntityTile;
                 <tr>
                     <td>
-                        <a class="ui mini yellow basic circular icon button" asp-action="EditTile" asp-route-name="@tile.Name" title="Delete this tile">
+                        <a class="ui mini yellow basic circular icon button" asp-action="EditTile" asp-route-name="@tile.Name" asp-route-page="@Context.Request.RouteValues["page"]" title="Delete this tile">
                             <i class="pencil icon"></i>
                         </a>
-                        <a class="ui mini red basic circular icon button" asp-action="DeleteTile" asp-route-name="@tile.Name" title="Delete this tile">
+                        <a class="ui mini red basic circular icon button" asp-action="DeleteTile" asp-route-name="@tile.Name" asp-route-page="@Context.Request.RouteValues["page"]" title="Delete this tile">
                             <i class="trash icon"></i>
                         </a>
                     </td>

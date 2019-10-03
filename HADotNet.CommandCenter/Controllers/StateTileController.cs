@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HADotNet.CommandCenter.Controllers
 {
-    [Route("admin/tile")]
+    [Route("admin/pages/{page}/tile")]
     public class StateTileController : BaseTileController
     {
         public IConfigStore ConfigStore { get; }
@@ -28,11 +28,11 @@ namespace HADotNet.CommandCenter.Controllers
         }
 
         [Route("edit/state")]
-        public async Task<IActionResult> Edit([FromQuery] string name)
+        public async Task<IActionResult> Edit([FromRoute] string page, [FromQuery] string name)
         {
             var config = await ConfigStore.GetConfigAsync();
 
-            var tile = config.Tiles.FirstOrDefault(t => t.Name == name);
+            var tile = config[page].Tiles.FirstOrDefault(t => t.Name == name);
 
             ViewBag.Entities = (await EntityClient.GetEntities()).OrderBy(e => e).Select(e => new SelectListItem(e, e));
 
@@ -40,11 +40,11 @@ namespace HADotNet.CommandCenter.Controllers
         }
 
         [HttpPost("add/state")]
-        public async Task<IActionResult> Save(StateTile tile)
+        public async Task<IActionResult> Save([FromRoute] string page, StateTile tile)
         {
             if (ModelState.IsValid)
             {
-                return await SaveBaseTile(ConfigStore, tile);
+                return await SaveBaseTile(page, ConfigStore, tile);
             }
 
             ViewBag.Entities = (await EntityClient.GetEntities()).OrderBy(e => e).Select(e => new SelectListItem(e, e));

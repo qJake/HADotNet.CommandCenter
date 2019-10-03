@@ -1,36 +1,43 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using HADotNet.CommandCenter.Services.Interfaces;
+﻿using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.CommandCenter.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HADotNet.CommandCenter.Controllers
 {
-    public class HomeController : Controller
+    public class DashboardController : Controller
     {
         public IConfigStore ConfigStore { get; }
 
-        public HomeController(IConfigStore configStore)
+        public DashboardController(IConfigStore configStore)
         {
             ConfigStore = configStore;
         }
 
-        public async Task<IActionResult> Index()
+        [Route("d/{page?}")]
+        public async Task<IActionResult> Index([FromRoute] string page)
         {
             var config = await ConfigStore.GetConfigAsync();
 
+            if (string.IsNullOrWhiteSpace(page))
+            {
+                page = config.Pages.FirstOrDefault(p => p.IsDefaultPage)?.Name ?? throw new Exception("No default page set. Update page configuration via admin UI.");
+            }
+
             return View(new TileDisplayViewModel
             {
-                PageLayout = config.LayoutSettings,
+                PageLayout = config[page].LayoutSettings,
                 Theme = config.CurrentTheme,
-                Tiles = from t in config.Tiles
-                        join layout in config.TileLayout on t.Name equals layout.Name into tileGroup
+                Tiles = from t in config[page].Tiles
+                        join layout in config[page].TileLayout on t.Name equals layout.Name into tileGroup
                         from l in tileGroup.DefaultIfEmpty(null)
                         select new TileWithLayoutViewModel
                         {
                             Tile = t,
                             Layout = l,
-                            Settings = config.LayoutSettings
+                            Settings = config[page].LayoutSettings
                         }
             });
         }

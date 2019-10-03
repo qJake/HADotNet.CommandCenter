@@ -1,10 +1,12 @@
 ﻿using HADotNet.CommandCenter.Models.Config;
+using HADotNet.CommandCenter.Models.Config.Pages;
 using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.Core;
 using HADotNet.Core.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -80,6 +82,31 @@ namespace HADotNet.CommandCenter.Middleware
                     return;
                 }
             }
+
+            // Pages Migration
+
+            #pragma warning disable CS0612
+            if ((config.TileLayout?.Count > 0 || config.Tiles?.Count > 0) && (config.Pages?.Count ?? 0) == 0)
+            {
+                await ConfigStore.ManipulateConfig(config =>
+                {
+                    config.Pages ??= new List<Page>();
+                    config.Pages.Add(new Page
+                    {
+                        Name = "default",
+                        Description = "[Automatically generated from previous configuration.]",
+                        IsDefaultPage = true,
+                        Tiles = config.Tiles,
+                        TileLayout = config.TileLayout,
+                        LayoutSettings = config.LayoutSettings
+                    });
+                    config.TileLayout = null;
+                    config.Tiles = null;
+                    config.LayoutSettings = null;
+                });
+                context.Response.Redirect("/admin/pageMigration");
+            }
+            #pragma warning restore CS0612
 
             await Next(context);
         }

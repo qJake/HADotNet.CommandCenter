@@ -1,0 +1,59 @@
+﻿@model List<Page>
+@{
+    ViewData["Title"] = "Pages";
+}
+
+<h1>Dashboard Pages</h1>
+
+<partial name="Alerts" />
+
+<p>Define your dashboard pages here.</p>
+<p>Pages are a collection of one or more tiles, and a layout for those tiles.</p>
+
+<a asp-action="AddPage" class="ui green icon labeled button">
+    <i class="add icon"></i>
+    Add Page
+</a>
+
+<table class="ui compact striped celled collapsing definition table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Default Page</th>
+            <th>URL</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model == null || !Model.Any())
+        {
+            <tr class="info"><td colspan="6"><em>No pages. This is bad - you need to have at least one page for stuff to function.</em></td></tr>
+        }
+        else
+        {
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>
+                        <a class="ui mini yellow basic circular icon button" asp-action="EditPage" asp-route-page="@p.Name" title="Edit this page">
+                            <i class="pencil icon"></i>
+                        </a>
+                        <a class="ui mini red basic circular icon button" asp-action="DeletePage" asp-route-page="@p.Name" title="Delete this page">
+                            <i class="trash icon"></i>
+                        </a>
+                    </td>
+                    <td>@p.Name</td>
+                    <td>@p.Description</td>
+                    <td class="center aligned">@(Html.Raw(p.IsDefaultPage ? "<i class=\"large green check icon\"></i>" : ""))</td>
+                    <td><a target="_blank" href="/d/@(p.Name)"><i class="small external link icon"></i> /d/@(p.Name)</a></td>
+                    <td>
+                        <a asp-action="Layout" asp-route-page="@p.Name" class="ui mini icon labeled blue button"><i class="th large icon"></i> Layout</a>
+                        <a asp-action="Index" asp-controller="AdminTile" asp-route-page="@p.Name" class="ui mini icon labeled green button"><i class="expand icon"></i> Tiles</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

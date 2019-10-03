@@ -1,0 +1,27 @@
+﻿@model Page
+@{
+    ViewData["Title"] = "Delete Page";
+}
+
+<h1>Delete Page: @Model.Description (@Model.Name)</h1>
+
+<p><b>WARNING:</b> If you delete this page, you will also delete:</p>
+<ul>
+    <li>All settings for this page</li>
+    <li>All tiles and tile settings within this page</li>
+    <li>Any tile layout settings</li>
+</ul>
+<p><b>This action is irreversible.</b> Are you sure you want to delete this page?</p>
+
+<form asp-action="DeletePage" method="post" asp-route-page="@Model.Name">
+    <div class="ui buttons">
+        <button class="ui red icon labeled button">
+            <i class="trash icon"></i>
+            Delete Page
+        </button>
+        <div class="or"></div>
+        <a class="ui gray button" asp-action="Index">
+            Cancel
+        </a>
+    </div>
+</form>

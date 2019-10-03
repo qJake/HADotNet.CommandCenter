@@ -4,11 +4,8 @@
     </i>
     <span class="valign-middle">HACC Admin</span>
 </a>
-<a class="item @(Context.Request.Path.ToString().ToLower().StartsWith("/admin/tile") ? "active" : "")" href="/admin/tile">
-    <i class="expand icon"></i> Tiles
-</a>
-<a class="item @(Context.Request.Path.ToString().ToLower().StartsWith("/admin/layout") ? "active" : "")" href="/admin/layout">
-    <i class="th large icon"></i> Layout
+<a class="item @(Context.Request.Path.ToString().ToLower().StartsWith("/admin/pages") ? "active" : "")" href="/admin/pages">
+    <i class="file icon"></i> Pages
 </a>
 <a class="item @(Context.Request.Path.ToString().ToLower().StartsWith("/admin/themes") ? "active" : "")" href="/admin/themes">
     <i class="paint brush icon"></i> Themes

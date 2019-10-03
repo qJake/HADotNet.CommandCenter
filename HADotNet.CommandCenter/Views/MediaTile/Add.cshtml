@@ -5,7 +5,7 @@
 
 <h1><span class="va-top @(new CameraTile().IconClassName)"></span> @(Model == null ? "Add" : "Edit") Tile: Media</h1>
 
-<form class="ui form" method="post" asp-action="Save">
+<form class="ui form" method="post" asp-action="Save" asp-route-page="@Context.Request.RouteValues["page"]">
     <input type="hidden" name="originalName" value="@Model?.Name" />
     <div class="ui grid">
         <div class="row">
