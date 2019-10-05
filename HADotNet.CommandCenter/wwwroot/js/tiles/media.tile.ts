@@ -5,9 +5,9 @@ class MediaTile extends Tile
     // Kind of a hack/workaround since it's not easy to control the order (requestTileState comes before requestConfig so it's missing the first time around).
     private firstLoadIgnored = false;
 
-    constructor(name: string, conn: signalR.HubConnection)
+    constructor(page: string, name: string, conn: signalR.HubConnection)
     {
-        super(name, conn, true);
+        super(page, name, conn, true);
 
         this.requestConfig();
     }

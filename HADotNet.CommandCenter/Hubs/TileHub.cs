@@ -23,11 +23,11 @@ namespace HADotNet.CommandCenter.Hubs
             ConfigStore = configStore;
         }
 
-        public async Task RequestTileState(string tileName)
+        public async Task RequestTileState(string page, string tileName)
         {
             var config = await ConfigStore.GetConfigAsync();
 
-            var tile = config.Tiles.FirstOrDefault(t => t.Name == tileName);
+            var tile = config[page].Tiles.FirstOrDefault(t => t.Name == tileName);
 
             // TOOD: Refactor this into something more elegant.
             switch (tile)
@@ -56,6 +56,9 @@ namespace HADotNet.CommandCenter.Hubs
                         : DateTime.Now;
                     await Clients.All.SendDateTime(dt, date.ToString(dt.DateFormatString ?? "dddd MMMM d"), date.ToString(dt.TimeFormatString ?? "h:mm tt"));
                     break;
+                case NavigationTile nt:
+                    await Clients.All.SendTile(nt);
+                    break;
                 case BlankTile _:
                 case LabelTile _:
                 case null:
@@ -73,11 +76,11 @@ namespace HADotNet.CommandCenter.Hubs
             await Clients.All.SendSystemConfig(tileName, new { BaseUrl = config.Settings.IsHassIo ? config.Settings.ExternalBaseUri : config.Settings.BaseUri });
         }
 
-        public async Task OnTileClicked(string tileName)
+        public async Task OnTileClicked(string page, string tileName)
         {
             var config = await ConfigStore.GetConfigAsync();
 
-            var tile = config.Tiles.FirstOrDefault(t => t.Name == tileName);
+            var tile = config[page].Tiles.FirstOrDefault(t => t.Name == tileName);
 
             switch (tile)
             {

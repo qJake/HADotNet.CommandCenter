@@ -23,11 +23,17 @@ namespace HADotNet.CommandCenter.Controllers
 
             if (string.IsNullOrWhiteSpace(page))
             {
-                page = config.Pages.FirstOrDefault(p => p.IsDefaultPage)?.Name ?? throw new Exception("No default page set. Update page configuration via admin UI.");
+                page = config.Pages.FirstOrDefault(p => p.IsDefaultPage)?.Name;
+            }
+
+            if (string.IsNullOrWhiteSpace(page))
+            {
+                return NotFound();
             }
 
             return View(new TileDisplayViewModel
             {
+                CurrentPage = config[page],
                 PageLayout = config[page].LayoutSettings,
                 Theme = config.CurrentTheme,
                 Tiles = from t in config[page].Tiles

@@ -7,6 +7,8 @@ declare interface ICcOptions
     tileSize: number;
     tilePreviewSize: number;
     mode: PageMode;
+    pageId: string;
+    autoReturn: number;
 }
 
 declare interface Window

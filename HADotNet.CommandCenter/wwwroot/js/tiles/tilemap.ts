@@ -10,6 +10,7 @@
 /// <reference path="camera.tile.ts" />
 /// <reference path="scene.tile.ts" />
 /// <reference path="media.tile.ts" />
+/// <reference path="navigation.tile.ts" />
 
 type TypeMap = {
     [name: string]: any;
@@ -28,6 +29,7 @@ class TileMap
         'Weather': WeatherTile,
         'Camera': CameraTile,
         'Scene': SceneTile,
-        'Media': MediaTile
+        'Media': MediaTile,
+        'Navigation': NavigationTile
     };
 }

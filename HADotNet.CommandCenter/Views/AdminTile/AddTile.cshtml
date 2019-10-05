@@ -86,6 +86,15 @@
 <h2>Utility Tiles</h2>
 
 <div class="ui cards">
+    <a asp-action="Add" asp-controller="NavigationTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
+        <div class="content">
+            <div class="header"><span class="va-bottom @(new NavigationTile().IconClassName)"></span> Navigation Tile</div>
+            <div class="description">A navigation tile that can go to a different page or reload the current page.</div>
+        </div>
+        <div class="extra content">
+            <p>Entity types: <code>N/A</code></p>
+        </div>
+    </a>
     <a asp-action="Add" asp-controller="BlankTile" asp-route-page="@Context.Request.RouteValues["page"]" class="card">
         <div class="content">
             <div class="header"><span class="va-bottom @(new BlankTile().IconClassName)"></span> Blank Tile</div>

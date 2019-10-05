@@ -145,7 +145,7 @@ class CommandCenter
             {
                 try
                 {
-                    let tile: Tile = new TileMap.ClassMap[$(e).data('tile-type').toString()]($(e).data('tile-name'), this.tileConn);
+                    let tile: Tile = new TileMap.ClassMap[$(e).data('tile-type').toString()](window.ccOptions.pageId, $(e).data('tile-name'), this.tileConn);
                     this.tiles.push(tile);
                 }
                 catch (ex)
@@ -153,6 +153,11 @@ class CommandCenter
                     console.error('Error instantiating class "' + ($(e).data('tile-type') || '__MISSING__') + 'Tile". Was it added to the tile type map?', ex, e);
                 }
             });
+
+            if (window.ccOptions.autoReturn > 0)
+            {
+                window.setTimeout(() => window.location.href = '/d/', window.ccOptions.autoReturn * 1000);
+            }
         });
     }
 

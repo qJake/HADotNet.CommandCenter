@@ -104,6 +104,21 @@ interface IMediaTile extends ITile
     /** Whether or not to show the media title. */
     showTitle: boolean;
 
-/** Whether or not to show the entity name. */
+    /** Whether or not to show the entity name. */
     showLabel: boolean;
+}
+
+interface INavigationTile extends ITile
+{
+    /** Gets or sets the refresh rate, in seconds, of the camera image. */
+    mode: string;
+
+    /** Gets or sets the image crop mode. */
+    target: string;
+
+    /** Whether or not to show the media title. */
+    label: string;
+
+    /** Whether or not to show the entity name. */
+    displayIcon: string;
 }

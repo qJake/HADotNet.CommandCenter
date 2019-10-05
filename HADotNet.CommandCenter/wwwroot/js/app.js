@@ -77,7 +77,8 @@ class Utils {
 /// <reference path="../../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
 /// <reference path="../utils.ts" />
 class Tile {
-    constructor(name, conn, canLoad = true) {
+    constructor(page, name, conn, canLoad = true) {
+        this.page = page;
         this.name = name;
         this.conn = conn;
         this.canLoad = canLoad;
@@ -98,6 +99,11 @@ class Tile {
                 if (this.canLoad) {
                     this.requestState();
                 }
+            }
+        });
+        conn.on('SendTile', t => {
+            if (name == t.name) {
+                this.updateTileState(t);
             }
         });
         conn.on('SendTileState', (t, s) => {
@@ -121,7 +127,10 @@ class Tile {
         }
     }
     onClick() {
-        return this.conn.invoke("OnTileClicked", this.name);
+        return this.conn.invoke("OnTileClicked", this.page, this.name);
+    }
+    updateTileState(tile, ...args) {
+        this.disableLoading();
     }
     updateState(tile, ...args) {
         this.disableLoading();
@@ -131,7 +140,7 @@ class Tile {
     }
     requestState(debounce) {
         this.enableLoading(debounce);
-        this.conn.invoke('RequestTileState', this.name);
+        this.conn.invoke('RequestTileState', this.page, this.name);
     }
     requestConfig() {
         this.conn.invoke('RequestConfig', this.name);
@@ -159,14 +168,14 @@ class Tile {
 }
 /// <reference path="tile.ts" />
 class BlankTile extends Tile {
-    constructor(name, conn) {
-        super(name, conn, false);
+    constructor(page, name, conn) {
+        super(page, name, conn, false);
     }
 }
 /// <reference path="tile.ts" />
 class LabelTile extends Tile {
-    constructor(name, conn) {
-        super(name, conn, false);
+    constructor(page, name, conn) {
+        super(page, name, conn, false);
     }
 }
 /// <reference path="tile.ts" />
@@ -294,8 +303,9 @@ class PersonTile extends Tile {
 /// <reference path="tile.ts" />
 /// <reference path="../models/skycons.d.ts" />
 class WeatherTile extends Tile {
-    constructor(name, conn, canLoad = true) {
-        super(name, conn, canLoad);
+    constructor(page, name, conn, canLoad = true) {
+        super(page, name, conn, canLoad);
+        this.page = page;
         this.name = name;
         this.conn = conn;
         this.canLoad = canLoad;
@@ -375,8 +385,8 @@ class WeatherTile extends Tile {
 }
 /// <reference path="tile.ts" />
 class CameraTile extends Tile {
-    constructor(name, conn) {
-        super(name, conn, true);
+    constructor(page, name, conn) {
+        super(page, name, conn, true);
         // Kind of a hack/workaround since it's not easy to control the order (requestTileState comes before requestConfig so it's missing the first time around).
         this.firstLoadIgnored = false;
         this.requestConfig();
@@ -440,8 +450,8 @@ class SceneTile extends Tile {
 }
 /// <reference path="tile.ts" />
 class MediaTile extends Tile {
-    constructor(name, conn) {
-        super(name, conn, true);
+    constructor(page, name, conn) {
+        super(page, name, conn, true);
         // Kind of a hack/workaround since it's not easy to control the order (requestTileState comes before requestConfig so it's missing the first time around).
         this.firstLoadIgnored = false;
         this.requestConfig();
@@ -501,6 +511,28 @@ class MediaTile extends Tile {
     }
 }
 /// <reference path="tile.ts" />
+class NavigationTile extends Tile {
+    updateTileState(tile) {
+        this.navTile = tile;
+        $(`#tile-${tile.name}`).find('span[value-name]').text(this.navTile.label);
+        $(`#tile-${tile.name}`).find('span[value-icon]').addClass(`mdi mdi-${this.navTile.displayIcon}`);
+        super.updateState();
+    }
+    onClick() {
+        switch (this.navTile.mode.toLowerCase().trim()) {
+            case 'home':
+                window.location.href = '/d/';
+                return;
+            case 'refresh':
+                window.location.reload();
+                return;
+            case 'nav':
+                window.location.href = `/d/${this.navTile.target}`;
+                return;
+        }
+    }
+}
+/// <reference path="tile.ts" />
 /// <reference path="blank.tile.ts" />
 /// <reference path="label.tile.ts" />
 /// <reference path="date.tile.ts" />
@@ -512,6 +544,7 @@ class MediaTile extends Tile {
 /// <reference path="camera.tile.ts" />
 /// <reference path="scene.tile.ts" />
 /// <reference path="media.tile.ts" />
+/// <reference path="navigation.tile.ts" />
 class TileMap {
 }
 TileMap.ClassMap = {
@@ -525,7 +558,8 @@ TileMap.ClassMap = {
     'Weather': WeatherTile,
     'Camera': CameraTile,
     'Scene': SceneTile,
-    'Media': MediaTile
+    'Media': MediaTile,
+    'Navigation': NavigationTile
 };
 /// <reference path="models/models.ts" />
 /// <reference path="typings/window-options.d.ts" />
@@ -622,13 +656,16 @@ class CommandCenter {
         this.tileConn.start().then(() => {
             $('.tiles .tile').each((_, e) => {
                 try {
-                    let tile = new TileMap.ClassMap[$(e).data('tile-type').toString()]($(e).data('tile-name'), this.tileConn);
+                    let tile = new TileMap.ClassMap[$(e).data('tile-type').toString()](window.ccOptions.pageId, $(e).data('tile-name'), this.tileConn);
                     this.tiles.push(tile);
                 }
                 catch (ex) {
                     console.error('Error instantiating class "' + ($(e).data('tile-type') || '__MISSING__') + 'Tile". Was it added to the tile type map?', ex, e);
                 }
             });
+            if (window.ccOptions.autoReturn > 0) {
+                window.setTimeout(() => window.location.href = '/d/', window.ccOptions.autoReturn * 1000);
+            }
         });
     }
     initializeMdiPreview() {

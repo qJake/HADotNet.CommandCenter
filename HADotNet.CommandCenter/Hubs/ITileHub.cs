@@ -7,6 +7,8 @@ namespace HADotNet.CommandCenter.Hubs
 {
     public interface ITileHub
     {
+        Task SendTile(BaseTile tile);
+
         Task SendTileState(BaseTile tile, StateObject state);
 
         Task SendTileStates(BaseTile tile, Dictionary<string, StateObject> states);
