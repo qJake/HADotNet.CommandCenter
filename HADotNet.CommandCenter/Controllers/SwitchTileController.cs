@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HADotNet.CommandCenter.Controllers
 {
-    [Route("admin/tile")]
+    [Route("admin/pages/{page}/tile")]
     public class SwitchTileController : BaseTileController
     {
         public IConfigStore ConfigStore { get; }
@@ -38,22 +38,22 @@ namespace HADotNet.CommandCenter.Controllers
         }
 
         [Route("edit/switch")]
-        public async Task<IActionResult> Edit([FromQuery] string name)
+        public async Task<IActionResult> Edit([FromRoute] string page, [FromQuery] string name)
         {
             await PopulateSelectLists();
 
             var config = await ConfigStore.GetConfigAsync();
-            var tile = config.Tiles.FirstOrDefault(t => t.Name == name);
+            var tile = config[page].Tiles.FirstOrDefault(t => t.Name == name);
 
             return View("Add", tile);
         }
 
         [HttpPost("add/switch")]
-        public async Task<IActionResult> Save(SwitchTile tile)
+        public async Task<IActionResult> Save([FromRoute] string page, SwitchTile tile)
         {
             if (ModelState.IsValid)
             {
-                return await SaveBaseTile(ConfigStore, tile);
+                return await SaveBaseTile(page, ConfigStore, tile);
             }
 
             await PopulateSelectLists();

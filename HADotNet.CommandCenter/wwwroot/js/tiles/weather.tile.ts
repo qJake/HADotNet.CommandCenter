@@ -6,9 +6,9 @@ class WeatherTile extends Tile
     private skycons: Skycons;
     private iconEl: Element;
 
-    constructor(protected name: string, protected conn: signalR.HubConnection, protected canLoad: boolean = true)
+    constructor(protected page: string, protected name: string, protected conn: signalR.HubConnection, protected canLoad: boolean = true)
     {
-        super(name, conn, canLoad);
+        super(page, name, conn, canLoad);
 
         this.iconEl = this.el.find('.condition-icon')[0];
 

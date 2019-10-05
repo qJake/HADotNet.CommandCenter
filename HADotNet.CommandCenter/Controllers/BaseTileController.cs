@@ -9,31 +9,31 @@ namespace HADotNet.CommandCenter.Controllers
 {
     public class BaseTileController : Controller
     {
-        protected async Task<IActionResult> SaveBaseTile(IConfigStore store, BaseTile tile)
+        protected async Task<IActionResult> SaveBaseTile([FromRoute] string page, IConfigStore store, BaseTile tile)
         {
             await store.ManipulateConfig(c =>
             {
                 if (!string.IsNullOrWhiteSpace(Request.Form["originalName"]))
                 {
-                    var existing = c.Tiles.FirstOrDefault(t => t.Name == Request.Form["originalName"]);
+                    var existing = c[page].Tiles.FirstOrDefault(t => t.Name == Request.Form["originalName"]);
                     if (existing == null)
                     {
                         TempData.AddError($"Unable to update tile with original name '{Request.Form["originalName"]}'.");
                     }
 
-                    var i = c.Tiles.IndexOf(existing);
-                    c.Tiles.RemoveAt(i);
-                    c.Tiles.Insert(i, tile);
+                    var i = c[page].Tiles.IndexOf(existing);
+                    c[page].Tiles.RemoveAt(i);
+                    c[page].Tiles.Insert(i, tile);
                 }
                 else
                 {
-                    c.Tiles.Add(tile);
+                    c[page].Tiles.Add(tile);
                 }
             });
 
             TempData.AddSuccess($"Successfully saved {tile.Type} tile '{tile.Name}'.");
 
-            return RedirectToAction("Index", "AdminTile");
+            return RedirectToAction("Index", "AdminTile", new { page });
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using HADotNet.CommandCenter.Models;
 using HADotNet.CommandCenter.Models.Config;
+using HADotNet.CommandCenter.Models.Config.Pages;
 using HADotNet.CommandCenter.Models.Config.Themes;
 using HADotNet.CommandCenter.Models.Config.Tiles;
 using HADotNet.CommandCenter.Services.Interfaces;
+using HADotNet.CommandCenter.Utils;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -22,7 +24,12 @@ namespace HADotNet.CommandCenter.Services
         public static JsonSerializerSettings SerializerSettings { get; } = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            Formatting = Formatting.Indented
+            Formatting = Formatting.Indented,
+            NullValueHandling = NullValueHandling.Ignore,
+            Converters =
+            {
+                new TileTypeJsonConverter()
+            }
         };
 
         private bool IsValid { get; set; }
@@ -47,16 +54,8 @@ namespace HADotNet.CommandCenter.Services
             }
 
             // Ensure all collections are non-null
-            config.LayoutSettings = config.LayoutSettings ?? new LayoutSettings()
-            {
-                BaseTileSizePx = 100,
-                TileSpacingPx = 6,
-                DeviceHeightPx = 860,
-                DeviceWidthPx = 965
-            };
-            config.TileLayout = config.TileLayout ?? new List<TileLayout>();
-            config.Tiles = config.Tiles ?? new List<BaseTile>();
-            config.CurrentTheme = config.CurrentTheme ?? new Theme();
+            config.CurrentTheme ??= new Theme();
+            config.Pages ??= new List<Page>();
 
             await SaveConfigAsync(config);
         }
@@ -77,9 +76,6 @@ namespace HADotNet.CommandCenter.Services
                 }
 
                 var cfg = JsonConvert.DeserializeObject<ConfigRoot>(contents, SerializerSettings);
-
-                // Perform some cleanup - if lists are null, for example
-                cfg.Tiles = cfg.Tiles ?? new List<BaseTile>();
 
                 return cfg;
             }

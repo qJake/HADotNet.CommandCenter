@@ -14,7 +14,7 @@ abstract class Tile
 
     protected config: IHaccConfig;
 
-    constructor(protected name: string, protected conn: signalR.HubConnection, protected canLoad: boolean = true)
+    constructor(protected page: string, protected name: string, protected conn: signalR.HubConnection, protected canLoad: boolean = true)
     {
         this.el = $(`.tiles .tile[data-tile-name="${name}"]`);
 
@@ -42,6 +42,13 @@ abstract class Tile
                 {
                     this.requestState();
                 }
+            }
+        });
+        conn.on('SendTile', t =>
+        {
+            if (name == (t as ITile).name)
+            {
+                this.updateTileState(t);
             }
         });
         conn.on('SendTileState', (t, s) =>
@@ -74,7 +81,12 @@ abstract class Tile
 
     protected onClick(): Promise<any>
     {
-        return this.conn.invoke("OnTileClicked", this.name);
+        return this.conn.invoke("OnTileClicked", this.page, this.name);
+    }
+
+    protected updateTileState(tile?: ITile, ...args: any): void
+    {
+        this.disableLoading();
     }
 
     protected updateState(tile?: ITile, ...args: any): void
@@ -90,7 +102,7 @@ abstract class Tile
     protected requestState(debounce?: number): void
     {
         this.enableLoading(debounce);
-        this.conn.invoke('RequestTileState', this.name);
+        this.conn.invoke('RequestTileState', this.page, this.name);
     }
 
     protected requestConfig(): void

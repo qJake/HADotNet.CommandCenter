@@ -1,0 +1,70 @@
+﻿@model Page
+@{
+    ViewData["Title"] = "Edit Page";
+}
+
+<h1>Edit Page: @Model.Description (@Model.Name)</h1>
+
+<partial name="Alerts" />
+
+<form class="ui form" asp-action="EditPage" method="post">
+    <div class="ui grid">
+        <div class="row">
+            <div class="six wide computer twelve wide tablet sixteen wide mobile column">
+                <h3>Page Information</h3>
+                <div class="ui segment">
+                    <div class="field">
+                        <label asp-for="Name"></label>
+                        <div class="ui left icon input">
+                            <i class="tag icon"></i>
+                            <input asp-for="Name" readonly="readonly" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="Name"></span>
+                        <p><small>This value can't be edited. If you want to change the Page ID, you'll have to create a new page instead.</small></p>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Description"></label>
+                        <div class="ui left icon input">
+                            <i class="font icon"></i>
+                            <input asp-for="Description" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="Description"></span>
+                        <p><small>The human friendly name or description of this page.</small></p>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox @(Model.IsDefaultPage ? "disabled" : "")">
+                            <input asp-for="IsDefaultPage" />
+                            <label asp-for="IsDefaultPage"></label>
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="IsDefaultPage"></span>
+                        @if (Model.IsDefaultPage)
+                        {
+                            <div><small>This page is the default page, so you cannot change this setting. To change the default page, set another page as the default.</small></div>
+                        }
+                        else
+                        {
+                            <div><small>If you set this page as the default, the previous default page will be updated to reflect this change.</small></div>
+                        }
+                    </div>
+                    <div class="field">
+                        <label asp-for="AutoReturnSeconds"></label>
+                        <div class="ui left icon input">
+                            <i class="stopwatch icon"></i>
+                            <input asp-for="AutoReturnSeconds" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="AutoReturnSeconds"></span>
+                        <p><small>If set, will return to the default page after this many seconds. Does not apply on the default page itself. Set to <code>0</code> to disable.</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="one column row">
+            <div class="column">
+                <button type="submit" class="ui green icon labeled button">
+                    <i class="check icon"></i>
+                    Save Page
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

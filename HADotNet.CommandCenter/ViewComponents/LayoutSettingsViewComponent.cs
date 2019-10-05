@@ -17,7 +17,7 @@ namespace HADotNet.CommandCenter.ViewComponents
         {
             var config = await ConfigStore.GetConfigAsync();
 
-            return View(config.LayoutSettings);
+            return View(config[Request.RouteValues["page"].ToString()].LayoutSettings);
         }
     }
 }

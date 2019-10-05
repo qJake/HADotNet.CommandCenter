@@ -112,3 +112,11 @@
         <partial name="Tiles/TileView@(item.Tile.TypeProper)" model="@item" />
     }
 </div>
+
+@section scripts
+{
+    <script>
+        window.ccOptions.autoReturn = @Model.CurrentPage.AutoReturnSeconds;
+        window.ccOptions.pageId = '@Model.CurrentPage.Name';
+    </script>
+}

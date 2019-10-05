@@ -2,8 +2,8 @@
 
 class BlankTile extends Tile
 {
-    constructor(name: string, conn: signalR.HubConnection)
+    constructor(page: string, name: string, conn: signalR.HubConnection)
     {
-        super(name, conn, false);
+        super(page, name, conn, false);
     }
 }
