@@ -44,6 +44,14 @@ Display a camera feed from a connected compatible camera. Customize the way the 
 
 Display current weather information (temperature, high/low, conditions, rain, and wind. (For best results, enable the [Dark Sky component](https://www.home-assistant.io/components/weather.darksky/) for use with this tile.)
 
+#### Scene
+
+Start a scene in Home Assistant with a custom icon and label.
+
+#### Calendar
+
+Pull Google Calendar information and display the next *n* events on your dashboard.
+
 ### Coming Soon
 
 * Support for multiple pages and navigation
@@ -53,7 +61,7 @@ Display current weather information (temperature, high/low, conditions, rain, an
 
 # Installing
 
-HACC is an ASP.NET Core 2.2.x project. Therefore, it should be able to run on any environment that supports the ASP.NET 2.2 Runtime (Windows, Linux, and macOS).
+HACC is an [ASP.NET Core 3.1 LTS](https://devblogs.microsoft.com/dotnet/announcing-net-core-3-1/) project. Therefore, it should be able to run on any environment that supports the ASP.NET 3.1 Runtime (Windows, Linux, macOS, ARM64, anything really).
 
 ## Via Docker
 
