@@ -17,7 +17,7 @@ jobs:
         dotnet-version: 3.0.100-preview8-013656
         
     - name: Setup NPM
-      uses: actions/npm@v2.0.0
+      uses: actions/setup-node@v1.1.0
       
     - name: npm install
       run: cd HADotNet.CommandCenter && npm install
