@@ -14,13 +14,15 @@ namespace HADotNet.CommandCenter.Hubs
     {
         private StatesClient StatesClient { get; }
         public ServiceClient ServiceClient { get; }
+        public CalendarClient CalendarClient { get; }
         public IConfigStore ConfigStore { get; }
 
-        public TileHub(StatesClient statesClient, ServiceClient serviceClient, IConfigStore configStore)
+        public TileHub(StatesClient statesClient, ServiceClient serviceClient, CalendarClient calendarClient, IConfigStore configStore)
         {
             StatesClient = statesClient;
             ServiceClient = serviceClient;
             ConfigStore = configStore;
+            CalendarClient = calendarClient;
         }
 
         public async Task RequestTileState(string page, string tileName)
@@ -44,6 +46,12 @@ namespace HADotNet.CommandCenter.Hubs
                         [nameof(wt.WindDirectionEntity)] = string.IsNullOrWhiteSpace(wt.WindDirectionEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.WindDirectionEntity))
                     };
                     await Clients.All.SendTileStates(wt, states);
+                    break;
+                case CalendarTile ct:
+                    var calendarInfo = await CalendarClient.GetEvents(ct.EntityId);
+                    var calState = await StatesClient.GetState(ct.EntityId);
+                    calState = ct.StateManipulator(calState);
+                    await Clients.All.SendCalendarInfo(ct, calState, calendarInfo);
                     break;
                 case BaseEntityTile et:
                     var state = await StatesClient.GetState(et.EntityId);

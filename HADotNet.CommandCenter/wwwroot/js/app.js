@@ -103,22 +103,32 @@ class Tile {
         });
         conn.on('SendTile', t => {
             if (name == t.name) {
+                console.debug(`Received: "SendTile" for tile: ${t.name}`);
                 this.updateTileState(t);
             }
         });
         conn.on('SendTileState', (t, s) => {
             if (name == t.name) {
+                console.debug(`Received: "SendTileState" for tile: ${t.name}`);
                 this.updateState(t, s);
             }
         });
         conn.on('SendTileStates', (t, s) => {
             if (name == t.name) {
+                console.debug(`Received: "SendTileStates" for tile: ${t.name}`);
                 this.updateStates(t, s);
+            }
+        });
+        conn.on('SendCalendarInfo', (t, s, e) => {
+            if (name == t.name) {
+                console.debug(`Received: "SendCalendarInfo" for tile: ${t.name}`);
+                this.updateCalendar(t, s, e);
             }
         });
         conn.on('SendWarning', msg => console.warn(msg));
         conn.on('SendDateTime', (tile, d, t) => {
             if (name == tile.name) {
+                console.debug(`Received: "SendDateTime" for tile: ${tile.name}`);
                 this.updateState(tile, d, t);
             }
         });
@@ -138,8 +148,12 @@ class Tile {
     updateStates(tile, ...args) {
         this.disableLoading();
     }
+    updateCalendar(tile, ...args) {
+        this.disableLoading();
+    }
     requestState(debounce) {
         this.enableLoading(debounce);
+        console.debug(`Sending: "RequestTileState" for tile: ${this.name}`);
         this.conn.invoke('RequestTileState', this.page, this.name);
     }
     requestConfig() {
@@ -533,6 +547,66 @@ class NavigationTile extends Tile {
     }
 }
 /// <reference path="tile.ts" />
+/// <reference path="../models/eventData.ts" />
+/// <reference path="../typings/moment.d.ts" />
+class CalendarTile extends Tile {
+    constructor(page, name, conn) {
+        super(page, name, conn, true);
+        this.eventContainer = $(`#tile-${name} div.calendar-events`);
+    }
+    updateCalendar(tile, state, events) {
+        let label = state.attributes["friendly_name"].toString();
+        if (tile.overrideLabel) {
+            label = tile.overrideLabel;
+        }
+        $(`#tile-${tile.name}`).find('span[value-name]').text(label);
+        this.refreshEvents(events);
+        super.updateState();
+        if (tile.refreshRate > 0) {
+            setTimeout(() => {
+                this.requestState(1000);
+            }, tile.refreshRate * 1000);
+        }
+    }
+    refreshEvents(events) {
+        this.eventContainer.empty();
+        if (!events.length) {
+            this.eventContainer.append('<span class="no-events">No events!</span>');
+        }
+        else {
+            let lastGroup = '';
+            for (let i = 0; i < events.length; i++) {
+                const evt = events[i];
+                const thisGroup = this.getEventHeader(evt);
+                if (lastGroup != thisGroup) {
+                    // Write header
+                    this.eventContainer.append(`<h3>${thisGroup}</h3>`);
+                    lastGroup = thisGroup;
+                }
+                this.eventContainer.append(`<p><span class="summary">${evt.summary}</span><span class="time">${moment(evt.start.dateTime).format('LT')}</span></p>`);
+            }
+        }
+    }
+    getEventHeader(event) {
+        const today = moment();
+        const tomorrow = moment().add(1, 'day');
+        let todayHeader = this.formatHeader(today);
+        let tomorrowHeader = this.formatHeader(tomorrow);
+        const mt = moment(event.start.dateTime);
+        let header = this.formatHeader(mt);
+        if (header === todayHeader) {
+            header += ' (Today)';
+        }
+        else if (header === tomorrowHeader) {
+            header += ' (Tomorrow)';
+        }
+        return header;
+    }
+    formatHeader(mt) {
+        return mt.format('ddd') + ', ' + mt.format('ll');
+    }
+}
+/// <reference path="tile.ts" />
 /// <reference path="blank.tile.ts" />
 /// <reference path="label.tile.ts" />
 /// <reference path="date.tile.ts" />
@@ -545,6 +619,7 @@ class NavigationTile extends Tile {
 /// <reference path="scene.tile.ts" />
 /// <reference path="media.tile.ts" />
 /// <reference path="navigation.tile.ts" />
+/// <reference path="calendar.tile.ts" />
 class TileMap {
 }
 TileMap.ClassMap = {
@@ -559,7 +634,8 @@ TileMap.ClassMap = {
     'Camera': CameraTile,
     'Scene': SceneTile,
     'Media': MediaTile,
-    'Navigation': NavigationTile
+    'Navigation': NavigationTile,
+    'Calendar': CalendarTile
 };
 /// <reference path="models/models.ts" />
 /// <reference path="typings/window-options.d.ts" />
