@@ -138,3 +138,38 @@ body.dashboard .tiles .tile.tile-loading:after {
   font-size: 1.4em;
   text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.8);
 }
+.tile.tile-type--calendar {
+  justify-content: flex-start !important;
+}
+.tile.tile-type--calendar .top-label {
+  display: block;
+  font-size: 1.75em;
+  margin: 0.5em;
+}
+.tile.tile-type--calendar .calendar-events {
+  width: 100%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  text-align: left;
+}
+.tile.tile-type--calendar .calendar-events h3 {
+  margin: 0;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(190, 190, 190, 0.7);
+  font-size: 1.2em;
+}
+.tile.tile-type--calendar .calendar-events h3:not(:first-of-type) {
+  margin-top: 1rem;
+}
+.tile.tile-type--calendar .calendar-events p {
+  margin: 0;
+}
+.tile.tile-type--calendar .calendar-events p > span.summary {
+  font-size: 1.1em;
+}
+.tile.tile-type--calendar .calendar-events p > span.time {
+  display: inline-block;
+  margin-left: 0.65em;
+  font-size: 0.9em;
+  font-weight: 600;
+}

@@ -11,9 +11,12 @@ namespace HADotNet.CommandCenter.Hubs
 
         Task SendTileState(BaseTile tile, StateObject state);
 
+
         Task SendTileStates(BaseTile tile, Dictionary<string, StateObject> states);
 
         Task SendDateTime(BaseTile tile, string date, string time);
+
+        Task SendCalendarInfo(BaseTile tile, StateObject state, List<CalendarObject> events);
 
         Task SendWarning(string message);
 

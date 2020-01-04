@@ -48,6 +48,7 @@ abstract class Tile
         {
             if (name == (t as ITile).name)
             {
+                console.debug(`Received: "SendTile" for tile: ${(t as ITile).name}`);
                 this.updateTileState(t);
             }
         });
@@ -55,6 +56,7 @@ abstract class Tile
         {
             if (name == (t as ITile).name)
             {
+                console.debug(`Received: "SendTileState" for tile: ${(t as ITile).name}`);
                 this.updateState(t, s);
             }
         });
@@ -62,7 +64,16 @@ abstract class Tile
         {
             if (name == (t as ITile).name)
             {
+                console.debug(`Received: "SendTileStates" for tile: ${(t as ITile).name}`);
                 this.updateStates(t, s);
+            }
+        });
+        conn.on('SendCalendarInfo', (t, s, e) =>
+        {
+            if (name == (t as ITile).name)
+            {
+                console.debug(`Received: "SendCalendarInfo" for tile: ${(t as ITile).name}`);
+                this.updateCalendar(t, s, e);
             }
         });
         conn.on('SendWarning', msg => console.warn(msg));
@@ -70,6 +81,7 @@ abstract class Tile
         {
             if (name == (tile as ITile).name)
             {
+                console.debug(`Received: "SendDateTime" for tile: ${(tile as ITile).name}`);
                 this.updateState(tile, d, t);
             }
         });
@@ -99,9 +111,15 @@ abstract class Tile
         this.disableLoading();
     }
 
+    protected updateCalendar(tile?: ITile, ...args: any): void
+    {
+        this.disableLoading();
+    }
+
     protected requestState(debounce?: number): void
     {
         this.enableLoading(debounce);
+        console.debug(`Sending: "RequestTileState" for tile: ${this.name}`);
         this.conn.invoke('RequestTileState', this.page, this.name);
     }
 
