@@ -5,8 +5,8 @@
     <RuntimeIdentifiers>win10;alpine.3.10-x64;debian.10-arm</RuntimeIdentifiers>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <AssemblyVersion>0.6.0.0</AssemblyVersion>
-    <FileVersion>0.6.0.0</FileVersion>
+    <AssemblyVersion>0.7.0.0</AssemblyVersion>
+    <FileVersion>0.7.0.0</FileVersion>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Deterministic>false</Deterministic>
@@ -15,6 +15,7 @@
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
     <Content Remove="compilerconfig.json" />
+    <Content Remove="wwwroot\js\tiles\calendar.tile.ts" />
     <Content Remove="wwwroot\js\tiles\camera.tile.ts" />
     <Content Remove="wwwroot\js\tiles\label.tile.ts" />
     <Content Remove="wwwroot\js\tiles\media.tile.ts" />
@@ -26,12 +27,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="HADotNet.CommandCenter-armhf.tar" />
+    <None Remove="HADotNet.CommandCenter-armhf.tar.gz" />
+  </ItemGroup>
+
+  <ItemGroup>
     <TypeScriptCompile Remove="wwwroot\js\blank.tile.ts" />
     <TypeScriptCompile Remove="wwwroot\js\date.tile.ts.ts" />
     <TypeScriptCompile Remove="wwwroot\js\draggabilly.d.ts" />
     <TypeScriptCompile Remove="wwwroot\js\entityState.ts" />
     <TypeScriptCompile Remove="wwwroot\js\light.tile.ts" />
     <TypeScriptCompile Remove="wwwroot\js\models.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\models\eventData.ts" />
     <TypeScriptCompile Remove="wwwroot\js\models\skycons.d.ts" />
     <TypeScriptCompile Remove="wwwroot\js\packery.d.ts" />
     <TypeScriptCompile Remove="wwwroot\js\packery.jquery.d.ts" />
@@ -40,6 +47,7 @@
     <TypeScriptCompile Remove="wwwroot\js\tile.ts" />
     <TypeScriptCompile Remove="wwwroot\js\tilemap.ts" />
     <TypeScriptCompile Remove="wwwroot\js\tileType.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\typings\moment.d.ts" />
     <TypeScriptCompile Remove="wwwroot\js\utils.ts" />
     <TypeScriptCompile Remove="wwwroot\js\window-options.d.ts" />
   </ItemGroup>
@@ -57,7 +65,7 @@
     <!-- Web Compiler is Windows-only. -->
     <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="BuildWebCompiler" Version="1.12.405" />
     <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="BuildBundlerMinifier" Version="2.9.406" />
-    <PackageReference Include="HADotNet.Core" Version="1.1.0" />
+    <PackageReference Include="HADotNet.Core" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.0" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.6.2">

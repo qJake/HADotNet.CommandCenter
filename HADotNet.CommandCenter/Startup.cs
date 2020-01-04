@@ -70,6 +70,7 @@ namespace HADotNet.CommandCenter
             services.AddScoped(_ => ClientFactory.GetClient<StatesClient>());
             services.AddScoped(_ => ClientFactory.GetClient<ServiceClient>());
             services.AddScoped(_ => ClientFactory.GetClient<DiscoveryClient>());
+            services.AddScoped(_ => ClientFactory.GetClient<CalendarClient>());
 
             services.AddSignalR()
                     .AddNewtonsoftJsonProtocol();
