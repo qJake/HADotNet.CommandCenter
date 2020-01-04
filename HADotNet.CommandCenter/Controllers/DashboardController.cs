@@ -36,15 +36,17 @@ namespace HADotNet.CommandCenter.Controllers
                 CurrentPage = config[page],
                 PageLayout = config[page].LayoutSettings,
                 Theme = config.CurrentTheme,
-                Tiles = from t in config[page].Tiles
-                        join layout in config[page].TileLayout on t.Name equals layout.Name into tileGroup
-                        from l in tileGroup.DefaultIfEmpty(null)
-                        select new TileWithLayoutViewModel
-                        {
-                            Tile = t,
-                            Layout = l,
-                            Settings = config[page].LayoutSettings
-                        }
+                Tiles = config[page].Tiles == null
+                        ? null
+                        : from t in config[page].Tiles
+                          join layout in config[page].TileLayout on t.Name equals layout.Name into tileGroup
+                          from l in tileGroup.DefaultIfEmpty(null)
+                          select new TileWithLayoutViewModel
+                          {
+                              Tile = t,
+                              Layout = l,
+                              Settings = config[page].LayoutSettings
+                          }
             });
         }
 

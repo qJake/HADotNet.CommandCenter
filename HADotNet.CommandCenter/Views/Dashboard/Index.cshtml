@@ -79,7 +79,7 @@
                 @: color: @(Model.Theme.Tiles.TileFontColor);
             }
             @if (Model.Theme.Tiles?.TileBorderRadius > 0)
-            { 
+            {
                 @: border-radius: @(Model.Theme.Tiles.TileBorderRadius)px;
             }
         }
@@ -105,11 +105,18 @@
         }
     </style>
 }
-
+ 
 <div class="tiles">
-    @foreach (var item in Model.Tiles?.Where(m => m.Layout != null))
+    @if (Model.Tiles == null || Model.Tiles.Count() == 0)
     {
-        <partial name="Tiles/TileView@(item.Tile.TypeProper)" model="@item" />
+        <h2><em>No tiles are configured on this page.</em></h2>
+    }
+    else
+    {
+        foreach (var item in Model.Tiles?.Where(m => m.Layout != null))
+        {
+            <partial name="Tiles/TileView@(item.Tile.TypeProper)" model="@item" />
+        }
     }
 </div>
 
