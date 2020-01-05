@@ -14,9 +14,12 @@ abstract class Tile
 
     protected config: IHaccConfig;
 
+    protected entityId: string;
+
     constructor(protected page: string, protected name: string, protected conn: signalR.HubConnection, protected canLoad: boolean = true)
     {
         this.el = $(`.tiles .tile[data-tile-name="${name}"]`);
+        this.entityId = this.el.data('tile-entityid')?.toString();
 
         if (canLoad)
         {
@@ -155,5 +158,10 @@ abstract class Tile
         }
         this.loadingDebouncer = null;
         this.el.removeClass("tile-loading");
+    }
+
+    public getEntityId(): string
+    {
+        return this.entityId;
     }
 }

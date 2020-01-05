@@ -1,3 +1,226 @@
+var HAMessageType;
+(function (HAMessageType) {
+    HAMessageType["Auth"] = "auth";
+    HAMessageType["AuthRequired"] = "auth_required";
+    HAMessageType["AuthOK"] = "auth_ok";
+    HAMessageType["AuthInvalid"] = "auth_invalid";
+    HAMessageType["GetStates"] = "get_states";
+    HAMessageType["StateChanged"] = "state_changed";
+    HAMessageType["SubscribeToEvents"] = "subscribe_events";
+    HAMessageType["Result"] = "result";
+    HAMessageType["Event"] = "event";
+    HAMessageType["Ping"] = "ping";
+    HAMessageType["Pong"] = "pong";
+})(HAMessageType || (HAMessageType = {}));
+var HAErrorType;
+(function (HAErrorType) {
+    HAErrorType["IDReuse"] = "id_reuse";
+})(HAErrorType || (HAErrorType = {}));
+var HAEventType;
+(function (HAEventType) {
+    HAEventType["StateChanged"] = "state_changed";
+})(HAEventType || (HAEventType = {}));
+var HAResponseType;
+(function (HAResponseType) {
+    HAResponseType[HAResponseType["StateList"] = 0] = "StateList";
+})(HAResponseType || (HAResponseType = {}));
+/// <reference path="typings/reconnecting-websocket.d.ts" />
+/// <reference path="models/home-assistant-ws.ts" />
+/** Defines the current state of the HA connection. */
+var HAConnectionState;
+(function (HAConnectionState) {
+    HAConnectionState[HAConnectionState["Closed"] = 0] = "Closed";
+    HAConnectionState[HAConnectionState["Opening"] = 1] = "Opening";
+    HAConnectionState[HAConnectionState["Auth"] = 2] = "Auth";
+    HAConnectionState[HAConnectionState["Open"] = 3] = "Open";
+})(HAConnectionState || (HAConnectionState = {}));
+class ConnectionEvent {
+    constructor() {
+        this.handlers = [];
+    }
+    on(handler) {
+        this.handlers.push(handler);
+    }
+    off(handler) {
+        this.handlers = this.handlers.filter(h => h !== handler);
+    }
+    invoke(data) {
+        this.handlers.slice(0).forEach(h => h(data));
+    }
+    event() {
+        return this;
+    }
+}
+class HAConnection {
+    constructor(targetInstance) {
+        this.targetInstance = targetInstance;
+        this.PING_INTERVAL = 30 * 1000; // 30 seconds
+        this.evStateChanged = new ConnectionEvent();
+        this.expectedResults = {};
+        this.state = HAConnectionState.Closed;
+    }
+    // Events
+    get OnStateChanged() { return this.evStateChanged.event(); }
+    initialize() {
+        this.state = HAConnectionState.Opening;
+        this.msgId = 1;
+        if (!this.ws || this.ws.readyState !== this.ws.OPEN) {
+            this.ws = new ReconnectingWebSocket(this.parseSocketUrl(this.targetInstance), null, { automaticOpen: false });
+        }
+        this.ws.addEventListener('open', () => this.handleOpen());
+        this.ws.addEventListener('close', () => this.handleClose());
+        this.ws.addEventListener('message', e => this.handleMessage(e));
+        this.ws.open();
+    }
+    refreshAllStates() {
+        this.sendStateRequest();
+    }
+    handleMessage(e) {
+        let msg = JSON.parse(e.data);
+        if (this.isHAMessage(msg)) {
+            console.debug('-> RCV:' + msg.type, msg);
+            switch (msg.type) {
+                case HAMessageType.AuthRequired:
+                    this.sendAuth();
+                    return;
+                case HAMessageType.AuthOK:
+                    this.isReady();
+                    return;
+                case HAMessageType.Result:
+                    let res = msg;
+                    if (res.success) {
+                        if (this.handleHaExpectedResult(res)) {
+                            delete this.expectedResults[res.id];
+                        }
+                        else {
+                            console.info('HA result OK', res);
+                        }
+                    }
+                    else {
+                        this.handleHaError(res.error);
+                    }
+                    return;
+                case HAMessageType.Event:
+                    this.handleHaEvent(msg);
+                    return;
+                case HAMessageType.AuthInvalid:
+                    console.error('Unable to authenticate with Home Assistant API. Check settings.');
+                    this.ws.maxReconnectAttempts = 1; // Don't retry - nothing is going to change. They need to refresh the page.
+                    this.ws.close();
+                    return;
+            }
+        }
+        else {
+            console.warn('-> RCV', e.data);
+        }
+    }
+    isReady() {
+        this.state = HAConnectionState.Open;
+        // Set up ping
+        this.pingInterval = window.setInterval(() => this.sendPing(), this.PING_INTERVAL);
+        // Set up state change subscription
+        this.sendEventSubscriptionRequest(HAEventType.StateChanged);
+    }
+    handleHaEvent(msg) {
+        if (this.isHAEventStateChanged(msg.event)) {
+            this.eventStateChanged(msg.event);
+        }
+        // else if (isOther(...)) { ... }
+    }
+    handleHaExpectedResult(msg) {
+        let er = this.expectedResults[msg.id];
+        if (typeof er !== 'undefined') {
+            switch (er) {
+                case HAResponseType.StateList:
+                    this.resultStateList(msg.result);
+                    break;
+                default:
+                    console.warn('Unhandled response type for this message.', msg);
+            }
+            return true;
+        }
+        return false;
+    }
+    resultStateList(states) {
+        for (let s of states) {
+            this.evStateChanged.invoke({
+                data: {
+                    entity_id: s.entity_id,
+                    new_state: s,
+                    old_state: null
+                },
+                event_type: HAEventType.StateChanged,
+                origin: null,
+                time_fired: null
+            });
+        }
+    }
+    eventStateChanged(ev) {
+        var _a, _b;
+        console.info(`HA State Changed [${ev.data.entity_id}] ${(_b = (_a = ev.data.old_state) === null || _a === void 0 ? void 0 : _a.state, (_b !== null && _b !== void 0 ? _b : '<NULL>'))} -> ${ev.data.new_state.state}`);
+        this.evStateChanged.invoke(ev);
+    }
+    sendAuth() {
+        this.send({
+            type: HAMessageType.Auth,
+            access_token: window.ccOptions.token
+        });
+    }
+    sendStateRequest() {
+        let responseId = this.send({ type: HAMessageType.GetStates });
+        this.expectedResults[responseId] = HAResponseType.StateList;
+    }
+    sendEventSubscriptionRequest(type) {
+        this.send({
+            type: HAMessageType.SubscribeToEvents,
+            event_type: type
+        });
+    }
+    handleHaError(err) {
+        console.error('HA API Error [' + err.code + '] ' + err.message);
+    }
+    sendPing() {
+        this.send({
+            type: HAMessageType.Ping
+        });
+    }
+    send(data) {
+        console.debug('<- SND:' + data.type, data);
+        if (this.state !== HAConnectionState.Closed && this.state !== HAConnectionState.Opening) {
+            if (this.state === HAConnectionState.Open) {
+                // Set message ID only if connection is open, and auth was previously successful
+                data.id = this.msgId++;
+            }
+            this.ws.send(JSON.stringify(data));
+            return data.id;
+        }
+        else {
+            console.warn('Tried to send socket message, but connection isn\'t ready.', data);
+            return -1;
+        }
+    }
+    handleOpen() {
+        this.state = HAConnectionState.Auth;
+    }
+    handleClose() {
+        this.state = HAConnectionState.Closed;
+        if (this.pingInterval) {
+            window.clearInterval(this.pingInterval);
+            this.pingInterval = 0;
+        }
+    }
+    parseSocketUrl(baseUrl) {
+        let aTag = document.createElement('a');
+        aTag.href = baseUrl;
+        return `${(aTag.protocol.toLowerCase() === 'https:' ? 'wss' : 'ws')}://${aTag.host}/api/websocket`;
+    }
+    isHAMessage(msg) {
+        return msg && typeof msg.type === 'string';
+    }
+    isHAEventStateChanged(msg) {
+        return msg && typeof msg.event_type === 'string' && msg.event_type === HAEventType.StateChanged;
+    }
+}
 /// <reference path="entityState.ts" />
 var PageMode;
 (function (PageMode) {
@@ -78,11 +301,13 @@ class Utils {
 /// <reference path="../utils.ts" />
 class Tile {
     constructor(page, name, conn, canLoad = true) {
+        var _a;
         this.page = page;
         this.name = name;
         this.conn = conn;
         this.canLoad = canLoad;
         this.el = $(`.tiles .tile[data-tile-name="${name}"]`);
+        this.entityId = (_a = this.el.data('tile-entityid')) === null || _a === void 0 ? void 0 : _a.toString();
         if (canLoad) {
             this.el.click(() => {
                 this.onClick()
@@ -178,6 +403,9 @@ class Tile {
         }
         this.loadingDebouncer = null;
         this.el.removeClass("tile-loading");
+    }
+    getEntityId() {
+        return this.entityId;
     }
 }
 /// <reference path="tile.ts" />
@@ -728,6 +956,16 @@ class CommandCenter {
         }
     }
     initUser() {
+        if (window.ccOptions.baseUrl) {
+            this.conn = new HAConnection(window.ccOptions.baseUrl);
+        }
+        this.conn.OnStateChanged.on(state => {
+            var tiles = this.findTilesByEntityId(state.data.entity_id);
+            for (let t of tiles) {
+                console.info(`Updating tile for entity "${t.getEntityId()}" to state "${state.data.new_state.state}".`);
+            }
+        });
+        this.conn.initialize();
         this.tileConn = new signalR.HubConnectionBuilder().withUrl('/hubs/tile').build();
         this.tileConn.start().then(() => {
             $('.tiles .tile').each((_, e) => {
@@ -739,9 +977,17 @@ class CommandCenter {
                     console.error('Error instantiating class "' + ($(e).data('tile-type') || '__MISSING__') + 'Tile". Was it added to the tile type map?', ex, e);
                 }
             });
+            // Load all initial states
+            this.conn.refreshAllStates();
             if (window.ccOptions.autoReturn > 0) {
                 window.setTimeout(() => window.location.href = '/d/', window.ccOptions.autoReturn * 1000);
             }
+        });
+    }
+    findTilesByEntityId(entityId) {
+        return this.tiles.filter(t => {
+            let thisId = t.getEntityId();
+            return thisId && thisId.toLowerCase() === entityId.toLowerCase();
         });
     }
     initializeMdiPreview() {

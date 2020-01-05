@@ -11,5 +11,6 @@ namespace HADotNet.CommandCenter.ViewModels
         public LayoutSettings PageLayout { get; set; }
         public Theme Theme { get; set; }
         public IEnumerable<TileWithLayoutViewModel> Tiles { get; set; }
+        public SystemSettings SystemSettings { get; set; }
     }
 }

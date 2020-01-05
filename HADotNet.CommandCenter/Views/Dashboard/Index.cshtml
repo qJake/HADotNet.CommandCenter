@@ -125,5 +125,7 @@
     <script>
         window.ccOptions.autoReturn = @Model.CurrentPage.AutoReturnSeconds;
         window.ccOptions.pageId = '@Model.CurrentPage.Name';
+        window.ccOptions.baseUrl = '@Model.SystemSettings.BaseUri';
+        window.ccOptions.token = '@Model.SystemSettings.AccessToken';
     </script>
 }

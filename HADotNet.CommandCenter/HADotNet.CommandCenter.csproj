@@ -36,6 +36,7 @@
     <TypeScriptCompile Remove="wwwroot\js\date.tile.ts.ts" />
     <TypeScriptCompile Remove="wwwroot\js\draggabilly.d.ts" />
     <TypeScriptCompile Remove="wwwroot\js\entityState.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\HAConnection.ts" />
     <TypeScriptCompile Remove="wwwroot\js\light.tile.ts" />
     <TypeScriptCompile Remove="wwwroot\js\models.ts" />
     <TypeScriptCompile Remove="wwwroot\js\models\eventData.ts" />
@@ -48,6 +49,7 @@
     <TypeScriptCompile Remove="wwwroot\js\tilemap.ts" />
     <TypeScriptCompile Remove="wwwroot\js\tileType.ts" />
     <TypeScriptCompile Remove="wwwroot\js\typings\moment.d.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\typings\reconnecting-websocket.d.ts" />
     <TypeScriptCompile Remove="wwwroot\js\utils.ts" />
     <TypeScriptCompile Remove="wwwroot\js\window-options.d.ts" />
   </ItemGroup>
@@ -68,7 +70,7 @@
     <PackageReference Include="HADotNet.Core" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.0" />
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.6.2">
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.7.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

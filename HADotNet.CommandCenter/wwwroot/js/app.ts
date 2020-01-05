@@ -15,6 +15,8 @@ type TilePos = {
 
 class CommandCenter
 {
+    private conn: HAConnection;
+
     private pk: Packery;
     private pageIsDirty: boolean;
     private tileConn: signalR.HubConnection;
@@ -138,6 +140,22 @@ class CommandCenter
 
     private initUser(): void
     {
+        if (window.ccOptions.baseUrl)
+        {
+            this.conn = new HAConnection(window.ccOptions.baseUrl);
+        }
+
+        this.conn.OnStateChanged.on(state =>
+        {
+            var tiles = this.findTilesByEntityId(state.data.entity_id);
+            for (let t of tiles)
+            {
+                console.info(`Updating tile for entity "${t.getEntityId()}" to state "${state.data.new_state.state}".`)
+            }
+        });
+
+        this.conn.initialize();
+
         this.tileConn = new signalR.HubConnectionBuilder().withUrl('/hubs/tile').build();
         this.tileConn.start().then(() =>
         {
@@ -154,10 +172,22 @@ class CommandCenter
                 }
             });
 
+            // Load all initial states
+            this.conn.refreshAllStates();
+
             if (window.ccOptions.autoReturn > 0)
             {
                 window.setTimeout(() => window.location.href = '/d/', window.ccOptions.autoReturn * 1000);
             }
+        });
+    }
+
+    private findTilesByEntityId(entityId: string): Tile[]
+    {
+        return this.tiles.filter(t =>
+        {
+            let thisId = t.getEntityId();
+            return thisId && thisId.toLowerCase() === entityId.toLowerCase();
         });
     }
 
