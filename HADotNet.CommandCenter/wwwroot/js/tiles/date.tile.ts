@@ -2,12 +2,12 @@
 
 class DateTile extends Tile
 {
-    protected updateState(tile: ITile, date: string, time: string): void
+    protected updateDateTime(tile: ITile, date: string, time: string): void
     {
         $(`#tile-${tile.name}`).find('span[value-date]').text(date);
         $(`#tile-${tile.name}`).find('span[value-time]').text(time);
 
-        super.updateState();
+        super.updateDateTime();
 
         setTimeout(() =>
         {

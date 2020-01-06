@@ -2,20 +2,24 @@
 
 class SceneTile extends Tile
 {
-    public updateState(tile: ITile, state: IEntityState): void
-    {
-        var sceneTile = <ISceneTile>tile;
+    private tile: ISceneTile;
 
-        let label = state.attributes["friendly_name"].toString();
-        if (tile.overrideLabel)
+    public updateTile(t: ITile)
+    {
+        this.tile = <ISceneTile>t;
+        super.updateTile(t);
+    }
+
+    public updateState(state: IHAStateChangedData): void
+    {
+        let label = state.new_state.attributes["friendly_name"].toString();
+        if (this.tile.overrideLabel)
         {
-            label = tile.overrideLabel;
+            label = this.tile.overrideLabel;
         }
 
-        $(`#tile-${tile.name}`).find('span[value-name]').text(label);
-        $(`#tile-${tile.name}`).find('span[value-icon]').addClass(`mdi mdi-${sceneTile.displayIcon || 'filmstrip'}`);
-        $(`#tile-${tile.name} .value`).css('color', sceneTile.iconColor)
-            
-        super.updateState();
+        $(`#tile-${this.tile.name}`).find('span[value-name]').text(label);
+        $(`#tile-${this.tile.name}`).find('span[value-icon]').addClass(`mdi mdi-${this.tile.displayIcon || 'filmstrip'}`);
+        $(`#tile-${this.tile.name} .value`).css('color', this.tile.iconColor)
     }
 }

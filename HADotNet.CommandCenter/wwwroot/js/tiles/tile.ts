@@ -14,33 +14,46 @@ abstract class Tile
 
     protected config: IHaccConfig;
 
-    constructor(protected page: string, protected name: string, protected conn: signalR.HubConnection, protected canLoad: boolean = true)
+    protected entityIds: string[];
+
+    public loaded: boolean;
+
+    constructor(protected page: string, protected name: string, protected conn: signalR.HubConnection, haConn: HAConnection, protected canLoad: boolean = true)
     {
+        this.entityIds = [];
+        this.loaded = !canLoad;
         this.el = $(`.tiles .tile[data-tile-name="${name}"]`);
 
         if (canLoad)
         {
             this.el.click(() =>
             {
-                this.onClick()
-                    .then(() => Utils.delayPromise(500))
-                    .then(() =>
-                    {
-                        this.requestState(1000);
-                    });
+                this.onClick();
             });
+        }
+
+        var entityList = this.el.data('tile-entityid');
+        if (typeof entityList === 'object' && Array.isArray(entityList))
+        {
+            this.entityIds = entityList;
+        }
+        else
+        {
+            this.entityIds.push(entityList?.toString());
         }
 
         conn.on('SendSystemConfig', (tname, cfg) =>
         {
             if (name == tname)
             {
+                console.debug(`Received "SendSystemConfig" for tile: ${tname}`);
                 this.config = cfg;
 
                 // New config = re-request state
                 if (this.canLoad)
                 {
-                    this.requestState();
+                    //why?
+                    //this.requestState();
                 }
             }
         });
@@ -48,32 +61,16 @@ abstract class Tile
         {
             if (name == (t as ITile).name)
             {
-                console.debug(`Received: "SendTile" for tile: ${(t as ITile).name}`);
-                this.updateTileState(t);
-            }
-        });
-        conn.on('SendTileState', (t, s) =>
-        {
-            if (name == (t as ITile).name)
-            {
-                console.debug(`Received: "SendTileState" for tile: ${(t as ITile).name}`);
-                this.updateState(t, s);
-            }
-        });
-        conn.on('SendTileStates', (t, s) =>
-        {
-            if (name == (t as ITile).name)
-            {
-                console.debug(`Received: "SendTileStates" for tile: ${(t as ITile).name}`);
-                this.updateStates(t, s);
+                console.debug(`Received "SendTile" for tile: ${(t as ITile).name}`);
+                this.updateTile(t);
             }
         });
         conn.on('SendCalendarInfo', (t, s, e) =>
         {
             if (name == (t as ITile).name)
             {
-                console.debug(`Received: "SendCalendarInfo" for tile: ${(t as ITile).name}`);
-                this.updateCalendar(t, s, e);
+                //console.debug(`Received: "SendCalendarInfo" for tile: ${(t as ITile).name}`);
+                this.updateCalendar(s, e);
             }
         });
         conn.on('SendWarning', msg => console.warn(msg));
@@ -81,10 +78,13 @@ abstract class Tile
         {
             if (name == (tile as ITile).name)
             {
-                console.debug(`Received: "SendDateTime" for tile: ${(tile as ITile).name}`);
-                this.updateState(tile, d, t);
+                //console.debug(`Received: "SendDateTime" for tile: ${(tile as ITile).name}`);
+                this.updateDateTime(tile, d, t);
             }
         });
+
+        this.requestConfig(page);
+
         if (this.canLoad)
         {
             this.requestState();
@@ -93,25 +93,23 @@ abstract class Tile
 
     protected onClick(): Promise<any>
     {
-        return this.conn.invoke("OnTileClicked", this.page, this.name);
+        return this.conn.invoke('OnTileClicked', this.page, this.name);
     }
 
-    protected updateTileState(tile?: ITile, ...args: any): void
+    protected updateTile(tile?: ITile)
+    {
+        this.disableLoading();
+        this.loaded = true;
+    }
+
+    public updateState(state?: IHAStateChangedData): void { }
+
+    protected updateCalendar(state?: IEntityState, events?: ICalendarEvent[]): void
     {
         this.disableLoading();
     }
 
-    protected updateState(tile?: ITile, ...args: any): void
-    {
-        this.disableLoading();
-    }
-
-    protected updateStates(tile?: ITile, ...args: any): void
-    {
-        this.disableLoading();
-    }
-
-    protected updateCalendar(tile?: ITile, ...args: any): void
+    protected updateDateTime(tile?: ITile, ...args: any): void
     {
         this.disableLoading();
     }
@@ -119,13 +117,12 @@ abstract class Tile
     protected requestState(debounce?: number): void
     {
         this.enableLoading(debounce);
-        console.debug(`Sending: "RequestTileState" for tile: ${this.name}`);
         this.conn.invoke('RequestTileState', this.page, this.name);
     }
 
-    protected requestConfig(): void
+    protected requestConfig(page: string): void
     {
-        this.conn.invoke('RequestConfig', this.name);
+        this.conn.invoke('RequestConfig', page, this.name);
     }
 
     protected enableLoading(debounce?: number): void
@@ -155,5 +152,10 @@ abstract class Tile
         }
         this.loadingDebouncer = null;
         this.el.removeClass("tile-loading");
+    }
+
+    public getEntityIds(): string[]
+    {
+        return this.entityIds;
     }
 }

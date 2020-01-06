@@ -2,35 +2,33 @@
 
 class PersonTile extends Tile
 {
-    public updateState(tile: ITile, state: IEntityState): void
+    private tile: ITile;
+
+    public updateTile(t: ITile)
+    {
+        this.tile = t;
+        super.updateTile(t);
+    }
+
+    public updateState(state: IHAStateChangedData): void
     {
         //console.log("State received for: " + tile.name, state);
-        let picture = state.attributes['entity_picture'] ? state.attributes['entity_picture'].toString() : '';
-        let location = state.state.replace('_', ' ');
-        let label = state.attributes['friendly_name'].toString();
-        if (tile.overrideLabel)
+        let picture = state.new_state.attributes['entity_picture'] ? state.new_state.attributes['entity_picture'].toString() : '';
+        let location = state.new_state.state.replace('_', ' ');
+        let label = state.new_state.attributes['friendly_name'].toString();
+        if (this.tile.overrideLabel)
         {
-            label = tile.overrideLabel;
+            label = this.tile.overrideLabel;
         }
 
         let isHome = location.toLowerCase() === 'home';
 
-        $(`#tile-${tile.name}`).find('span[value-name]').text(label);
-        $(`#tile-${tile.name}`).find('span[value-location]').text(location);
-        $(`#tile-${tile.name}`).find('span[value-picture]').css('background-image', `url(${picture})`).removeClass('bw');
+        $(`#tile-${this.tile.name}`).find('span[value-name]').text(label);
+        $(`#tile-${this.tile.name}`).find('span[value-location]').text(location);
+        $(`#tile-${this.tile.name}`).find('span[value-picture]').css('background-image', `url(${picture})`).removeClass('bw');
         if (!isHome)
         {
-            $(`#tile-${tile.name}`).find('span[value-picture]').addClass('bw');
-        }
-            
-        super.updateState();
-
-        if (tile.refreshRate > 0)
-        {
-            setTimeout(() =>
-            {
-                this.requestState(2000);
-            }, tile.refreshRate * 1000);
+            $(`#tile-${this.tile.name}`).find('span[value-picture]').addClass('bw');
         }
     }
 }

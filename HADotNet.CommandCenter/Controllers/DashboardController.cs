@@ -33,6 +33,7 @@ namespace HADotNet.CommandCenter.Controllers
 
             return View(new TileDisplayViewModel
             {
+                SystemSettings = config.Settings,
                 CurrentPage = config[page],
                 PageLayout = config[page].LayoutSettings,
                 Theme = config.CurrentTheme,

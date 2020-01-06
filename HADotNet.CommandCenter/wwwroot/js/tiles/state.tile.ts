@@ -2,31 +2,29 @@
 
 class StateTile extends Tile
 {
-    public updateState(tile: ITile, state: IEntityState): void
+    private tile: IStateTile;
+
+    public updateTile(t: ITile)
+    {
+        this.tile = <IStateTile>t;
+        super.updateTile(t);
+    }
+
+    public updateState(state: IHAStateChangedData): void
     {
         //console.log("State received for: " + tile.name, state);
-        let label = state.attributes["friendly_name"].toString();
-        if (tile.overrideLabel)
+        let label = state.new_state.attributes["friendly_name"].toString();
+        if (this.tile.overrideLabel)
         {
-            label = tile.overrideLabel;
+            label = this.tile.overrideLabel;
         }
-        $(`#tile-${tile.name}`).find('span[value-name]').text(label);
+        $(`#tile-${this.tile.name}`).find('span[value-name]').text(label);
 
-        let value = state.state;
-        if (state.attributes["unit_of_measurement"])
+        let value = this.tile.roundDecimals ? parseInt(state.new_state.state).toString() : state.new_state.state;
+        if (state.new_state.attributes["unit_of_measurement"])
         {
-            value += state.attributes["unit_of_measurement"].toString();
+            value += state.new_state.attributes["unit_of_measurement"].toString();
         }
-        $(`#tile-${tile.name}`).find('span[value-state]').text(value);
-
-        super.updateState();
-
-        if (tile.refreshRate > 0)
-        {
-            setTimeout(() =>
-            {
-                this.requestState(1000);
-            }, tile.refreshRate * 1000);
-        }
+        $(`#tile-${this.tile.name}`).find('span[value-state]').text(value);
     }
 }

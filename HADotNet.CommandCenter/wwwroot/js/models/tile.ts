@@ -19,6 +19,12 @@ interface ITile
     overrideLabel?: string;
 }
 
+interface IStateTile extends ITile
+{
+    /** Gets or sets a value indicating if decimal values should be rounded. */
+    roundDecimals: boolean;
+}
+
 interface ISwitchTile extends ITile
 {
     /** Gets or sets the display icon name. */
@@ -82,6 +88,9 @@ interface IWeatherTile extends ITile
     
     /** Gets or sets the entity name for the wind direction value. */
     windDirectionEntity: string;
+
+    /** Gets or sets a value indicating if wind speed should be rounded. */
+    roundWindSpeed: boolean;
 }
 
 interface ICameraTile extends ITile

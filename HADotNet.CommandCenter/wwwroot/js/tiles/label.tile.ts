@@ -2,8 +2,8 @@
 
 class LabelTile extends Tile
 {
-    constructor(page: string, name: string, conn: signalR.HubConnection)
+    constructor(page: string, name: string, conn: signalR.HubConnection, haConn: HAConnection)
     {
-        super(page, name, conn, false);
+        super(page, name, conn, haConn, false);
     }
 }

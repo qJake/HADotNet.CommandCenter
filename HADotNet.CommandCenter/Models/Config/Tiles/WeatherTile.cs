@@ -1,5 +1,7 @@
 ﻿using HADotNet.Core.Models;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace HADotNet.CommandCenter.Models.Config.Tiles
@@ -32,14 +34,19 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
         [Display(Name = "Wind Direction Entity")]
         public string WindDirectionEntity { get; set; }
 
-        public override StateObject StateManipulator(StateObject state)
+        public string GetJsonEntityList()
         {
-            if (RoundWindSpeed && state.EntityId == WindSpeedEntity && decimal.TryParse(state.State, out var value))
+            return JsonConvert.SerializeObject(new List<string>
             {
-                state.State = Math.Round(value, 0).ToString();
-            }
-
-            return state;
+                EntityId,
+                IconEntity,
+                SummaryEntity,
+                PrecipChanceEntity,
+                HighTempEntity,
+                LowTempEntity,
+                WindSpeedEntity,
+                WindDirectionEntity
+            });
         }
     }
 }

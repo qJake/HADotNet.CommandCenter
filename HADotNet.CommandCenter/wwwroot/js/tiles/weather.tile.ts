@@ -5,10 +5,16 @@ class WeatherTile extends Tile
 {
     private skycons: Skycons;
     private iconEl: Element;
+    private tile: IWeatherTile;
 
-    constructor(protected page: string, protected name: string, protected conn: signalR.HubConnection, protected canLoad: boolean = true)
+    private windSpeed = '';
+    private windDir = '';
+    private hi = '';
+    private lo = '';
+
+    constructor(protected page: string, protected name: string, protected conn: signalR.HubConnection, haConn: HAConnection)
     {
-        super(page, name, conn, canLoad);
+        super(page, name, conn, haConn, true);
 
         this.iconEl = this.el.find('.condition-icon')[0];
 
@@ -18,95 +24,82 @@ class WeatherTile extends Tile
         this.skycons.add(this.iconEl, Skycons.CLEAR_DAY);
     }
 
-    public updateStates(tile: ITile, states: StateDictionary): void
+    public updateTile(t: ITile)
     {
-        // Some are combination variables
-        let windSpeed = '';
-        let windDir = '';
-        let hi = '';
-        let lo = '';
+        this.tile = <IWeatherTile>t;
+        super.updateTile(t);
+    }
 
-        for (let state in states)
+    public updateState(state: IHAStateChangedData): void
+    {       
+        let value = state.new_state == null ? null : state.new_state.state;
+        switch (state.entity_id)
         {
-            let value = states[state] == null ? null : states[state].state;
-            switch (state)
-            {
-                case WeatherTileEntities.entityId:
-                    if (states[state].attributes["unit_of_measurement"])
-                    {
-                        value += states[state].attributes["unit_of_measurement"].toString();
-                    }
-                    $(`#tile-${tile.name}`).find('span[value-temp]').text(value);
-                    break;
+            case this.tile.entityId:
+                if (state.new_state.attributes["unit_of_measurement"])
+                {
+                    value += state.new_state.attributes["unit_of_measurement"].toString();
+                }
+                $(`#tile-${this.tile.name}`).find('span[value-temp]').text(value);
+                break;
 
-                case WeatherTileEntities.highTempEntity:
-                    if (states[state].attributes["unit_of_measurement"])
-                    {
-                        value += states[state].attributes["unit_of_measurement"].toString();
-                    }
-                    hi = `<i class="mdi mdi-arrow-up-thick"></i> ${value}`;
-                    break;
+            case this.tile.highTempEntity:
+                if (state.new_state.attributes["unit_of_measurement"])
+                {
+                    value += state.new_state.attributes["unit_of_measurement"].toString();
+                }
+                this.hi = `<i class="mdi mdi-arrow-up-thick"></i> ${value}`;
+                break;
 
-                case WeatherTileEntities.lowTempEntity:
-                    if (states[state].attributes["unit_of_measurement"])
-                    {
-                        value += states[state].attributes["unit_of_measurement"].toString();
-                    }
-                    lo = `<i class="mdi mdi-arrow-down-thick"></i> ${value}`;
-                    break;
+            case this.tile.lowTempEntity:
+                if (state.new_state.attributes["unit_of_measurement"])
+                {
+                    value += state.new_state.attributes["unit_of_measurement"].toString();
+                }
+                this.lo = `<i class="mdi mdi-arrow-down-thick"></i> ${value}`;
+                break;
 
-                case WeatherTileEntities.summaryEntity:
-                    $(`#tile-${tile.name}`).find('span[value-summary]').text(value);
-                    break;
+            case this.tile.summaryEntity:
+                $(`#tile-${this.tile.name}`).find('span[value-summary]').text(value);
+                break;
 
-                case WeatherTileEntities.precipChanceEntity:
-                    if (states[state].attributes["unit_of_measurement"])
-                    {
-                        value += states[state].attributes["unit_of_measurement"].toString();
-                    }
-                    $(`#tile-${tile.name}`).find('span[value-rain]').text(`Rain: ${value}`);
-                    break;
+            case this.tile.precipChanceEntity:
+                if (state.new_state.attributes["unit_of_measurement"])
+                {
+                    value += state.new_state.attributes["unit_of_measurement"].toString();
+                }
+                $(`#tile-${this.tile.name}`).find('span[value-rain]').text(`Rain: ${value}`);
+                break;
 
-                case WeatherTileEntities.windSpeedEntity:
-                    if (states[state].attributes["unit_of_measurement"])
-                    {
-                        value += states[state].attributes["unit_of_measurement"].toString();
-                    }
-                    windSpeed = value;
-                    break;
+            case this.tile.windSpeedEntity:
+                this.windSpeed = this.tile.roundWindSpeed ? parseInt(value).toString() : value;
+                if (state.new_state.attributes["unit_of_measurement"])
+                {
+                    this.windSpeed += state.new_state.attributes["unit_of_measurement"].toString();
+                }
+                break;
 
-                case WeatherTileEntities.windDirectionEntity:
-                    windDir = Utils.convertDegreesToCardinal(parseInt(value));
-                    windDir = `<i class="mdi mdi-${Utils.convertCardinalToIcon(windDir)}"></i> ${windDir}`
-                    break;
+            case this.tile.windDirectionEntity:
+                this.windDir = Utils.convertDegreesToCardinal(parseInt(value));
+                this.windDir = `<i class="mdi mdi-${Utils.convertCardinalToIcon(this.windDir)}"></i> ${this.windDir}`
+                break;
 
-                case WeatherTileEntities.iconEntity:
-                    if (value)
-                    {
-                        this.skycons.set(this.iconEl, value);
-                        this.skycons.play();
-                    }
-                    else
-                    {
-                        this.skycons.remove(this.iconEl);
-                        $(this.iconEl).hide();
-                    }
-                    break;
-            }
+            case this.tile.iconEntity:
+                if (value)
+                {
+                    this.skycons.set(this.iconEl, value);
+                    this.skycons.play();
+                }
+                else
+                {
+                    this.skycons.remove(this.iconEl);
+                    $(this.iconEl).hide();
+                }
+                break;
         }
 
         // Update the compound values
-        $(`#tile-${tile.name}`).find('span[value-hi-lo]').html(`${(hi && lo ? hi + ' / ' + lo : hi + lo)}`);
-        $(`#tile-${tile.name}`).find('span[value-wind]').html(`Wind: ${(windSpeed + ' ' + windDir).trim()}`);
-            
-        super.updateState();
-
-        if (tile.refreshRate > 0)
-        {
-            setTimeout(() =>
-            {
-                this.requestState(2000);
-            }, tile.refreshRate * 1000);
-        }
+        $(`#tile-${this.tile.name}`).find('span[value-hi-lo]').html(`${(this.hi && this.lo ? this.hi + ' / ' + this.lo : this.hi + this.lo)}`);
+        $(`#tile-${this.tile.name}`).find('span[value-wind]').html(`Wind: ${(this.windSpeed + ' ' + this.windDir).trim()}`);
     }
 }

@@ -15,10 +15,13 @@ type TilePos = {
 
 class CommandCenter
 {
+    private conn: HAConnection;
+
     private pk: Packery;
     private pageIsDirty: boolean;
     private tileConn: signalR.HubConnection;
     private tiles: Tile[];
+    private initHandle: number;
 
     constructor()
     {
@@ -138,6 +141,23 @@ class CommandCenter
 
     private initUser(): void
     {
+        if (window.ccOptions.baseUrl)
+        {
+            this.conn = new HAConnection(window.ccOptions.baseUrl);
+        }
+
+        this.conn.OnStateChanged.on(state =>
+        {
+            var tiles = this.findTilesByEntityId(state.data.entity_id);
+            for (let t of tiles)
+            {
+                t.updateState(state.data);
+                console.info(`Updating tile for entity "${state.data.entity_id}" to state "${state.data.new_state.state}".`);
+            }
+        });
+
+        this.conn.initialize();
+
         this.tileConn = new signalR.HubConnectionBuilder().withUrl('/hubs/tile').build();
         this.tileConn.start().then(() =>
         {
@@ -145,7 +165,7 @@ class CommandCenter
             {
                 try
                 {
-                    let tile: Tile = new TileMap.ClassMap[$(e).data('tile-type').toString()](window.ccOptions.pageId, $(e).data('tile-name'), this.tileConn);
+                    let tile: Tile = new TileMap.ClassMap[$(e).data('tile-type').toString()](window.ccOptions.pageId, $(e).data('tile-name'), this.tileConn, this.conn);
                     this.tiles.push(tile);
                 }
                 catch (ex)
@@ -154,10 +174,44 @@ class CommandCenter
                 }
             });
 
+            if (!this.initHandle)
+            {
+                this.initHandle = window.setInterval(() => this.waitAndPerformInit(), 25)
+            }
+
             if (window.ccOptions.autoReturn > 0)
             {
                 window.setTimeout(() => window.location.href = '/d/', window.ccOptions.autoReturn * 1000);
             }
+        });
+    }
+
+    private waitAndPerformInit()
+    {
+        if (!this.conn)
+        {
+            console.warn('Cancelling tile initialization - connection is not set up.');
+            window.clearInterval(this.initHandle);
+        }
+
+        if (this.conn.ConnectionState !== HAConnectionState.Open)
+            return;
+        
+        if (this.tiles.filter(t => t.loaded).length !== this.tiles.length)
+            return;
+        
+        // Now, refresh all of them at once
+        this.conn.refreshAllStates();
+
+        window.clearInterval(this.initHandle);
+    }
+
+    private findTilesByEntityId(entityId: string): Tile[]
+    {
+        return this.tiles.filter(t =>
+        {
+            let definedIds = t.getEntityIds();
+            return definedIds.some(e => e.toLowerCase() === entityId.toLowerCase());
         });
     }
 

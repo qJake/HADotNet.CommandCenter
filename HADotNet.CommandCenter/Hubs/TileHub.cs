@@ -1,10 +1,8 @@
 ﻿using HADotNet.CommandCenter.Models.Config.Tiles;
 using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.Core.Clients;
-using HADotNet.Core.Models;
 using Microsoft.AspNetCore.SignalR;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,57 +29,17 @@ namespace HADotNet.CommandCenter.Hubs
 
             var tile = config[page].Tiles.FirstOrDefault(t => t.Name == tileName);
 
-            // TOOD: Refactor this into something more elegant.
-            switch (tile)
-            {
-                case WeatherTile wt:
-                    var states = new Dictionary<string, StateObject> {
-                        [nameof(wt.EntityId)] = wt.StateManipulator(await StatesClient.GetState(wt.EntityId)),
-                        [nameof(wt.IconEntity)] = string.IsNullOrWhiteSpace(wt.IconEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.IconEntity)),
-                        [nameof(wt.SummaryEntity)] = string.IsNullOrWhiteSpace(wt.SummaryEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.SummaryEntity)),
-                        [nameof(wt.PrecipChanceEntity)] = string.IsNullOrWhiteSpace(wt.PrecipChanceEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.PrecipChanceEntity)),
-                        [nameof(wt.HighTempEntity)] = string.IsNullOrWhiteSpace(wt.HighTempEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.HighTempEntity)),
-                        [nameof(wt.LowTempEntity)] = string.IsNullOrWhiteSpace(wt.LowTempEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.LowTempEntity)),
-                        [nameof(wt.WindSpeedEntity)] = string.IsNullOrWhiteSpace(wt.WindSpeedEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.WindSpeedEntity)),
-                        [nameof(wt.WindDirectionEntity)] = string.IsNullOrWhiteSpace(wt.WindDirectionEntity) ? null : wt.StateManipulator(await StatesClient.GetState(wt.WindDirectionEntity))
-                    };
-                    await Clients.All.SendTileStates(wt, states);
-                    break;
-                case CalendarTile ct:
-                    var calendarInfo = await CalendarClient.GetEvents(ct.EntityId);
-                    var calState = await StatesClient.GetState(ct.EntityId);
-                    calState = ct.StateManipulator(calState);
-                    await Clients.All.SendCalendarInfo(ct, calState, calendarInfo);
-                    break;
-                case BaseEntityTile et:
-                    var state = await StatesClient.GetState(et.EntityId);
-                    state = et.StateManipulator(state);
-                    await Clients.All.SendTileState(et, state);
-                    break;
-                case DateTile dt:
-                    var date = !string.IsNullOrWhiteSpace(dt.TimeZoneId)
-                        ? TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(dt.TimeZoneId))
-                        : DateTime.Now;
-                    await Clients.All.SendDateTime(dt, date.ToString(dt.DateFormatString ?? "dddd MMMM d"), date.ToString(dt.TimeFormatString ?? "h:mm tt"));
-                    break;
-                case NavigationTile nt:
-                    await Clients.All.SendTile(nt);
-                    break;
-                case BlankTile _:
-                case LabelTile _:
-                case null:
-                    break;
-                default:
-                    await Clients.All.SendWarning($"Tile of type {tile.GetType().FullName} does not have a send method.");
-                    break;
-            }
-
+            // Contains special tiles and overrides that require server-side data(not obtainable directly from HA directly)
+            await ProcessOverrides(tile);
         }
 
-        public async Task RequestConfig(string tileName)
+        public async Task RequestConfig(string page, string tileName)
         {
             var config = await ConfigStore.GetConfigAsync();
             await Clients.All.SendSystemConfig(tileName, new { BaseUrl = config.Settings.IsHassIo ? config.Settings.ExternalBaseUri : config.Settings.BaseUri });
+
+            var tile = config[page].Tiles.FirstOrDefault(t => t.Name == tileName);
+            await Clients.All.SendTile(tile);
         }
 
         public async Task OnTileClicked(string page, string tileName)
@@ -97,6 +55,26 @@ namespace HADotNet.CommandCenter.Hubs
                     break;
                 default:
                     break;
+            }
+        }
+
+        private async Task ProcessOverrides(BaseTile tile)
+        {
+            switch (tile)
+            {
+                // Calendars use a special API that isn't (might not be?) exposed via the WebSocket API.
+                case CalendarTile ct:
+                    await Clients.All.SendCalendarInfo(ct, await StatesClient.GetState(ct.EntityId), await CalendarClient.GetEvents(ct.EntityId));
+                    break;
+
+                // Date and time are rendered server-side to verify server connection, and to enforce timezone and date format selection.
+                case DateTile dt:
+                    var date = !string.IsNullOrWhiteSpace(dt.TimeZoneId)
+                        ? TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(dt.TimeZoneId))
+                        : DateTime.Now;
+                    await Clients.All.SendDateTime(dt, date.ToString(dt.DateFormatString ?? "dddd MMMM d"), date.ToString(dt.TimeFormatString ?? "h:mm tt"));
+                    break;
+
             }
         }
     }

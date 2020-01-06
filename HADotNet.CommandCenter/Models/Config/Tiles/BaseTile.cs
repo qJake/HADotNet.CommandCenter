@@ -71,12 +71,6 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
             }
         }
 
-        /// <summary>
-        /// Allows each tile to manipulate a state object before it is sent to the UI - for example, rounding a decimal value.
-        /// </summary>
-        /// <param name="state">The original state object.</param>
-        public virtual StateObject StateManipulator(StateObject state) => state;
-
         public int GetTileSizeX(int tileSize, int padding) => Math.Min(Math.Max(SizeX, 1), 4) * tileSize + (Math.Min(Math.Max(SizeX, 1), 4) - 1) * padding;
         public int GetTileSizeY(int tileSize, int padding) => Math.Min(Math.Max(SizeY, 1), 4) * tileSize + (Math.Min(Math.Max(SizeY, 1), 4) - 1) * padding;
     }

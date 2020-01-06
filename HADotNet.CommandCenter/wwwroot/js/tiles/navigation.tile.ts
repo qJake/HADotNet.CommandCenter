@@ -4,14 +4,14 @@ class NavigationTile extends Tile
 {
     private navTile: INavigationTile;
 
-    public updateTileState(tile: ITile): void
+    public updateTile(tile: ITile): void
     {
         this.navTile = <INavigationTile>tile;
 
         $(`#tile-${tile.name}`).find('span[value-name]').text(this.navTile.label);
         $(`#tile-${tile.name}`).find('span[value-icon]').addClass(`mdi mdi-${this.navTile.displayIcon}`);
             
-        super.updateState();
+        super.updateTile();
     }
 
     protected onClick(): Promise<any>

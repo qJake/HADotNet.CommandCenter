@@ -2,6 +2,8 @@
 
 declare interface ICcOptions
 {
+    baseUrl: string;
+    token: string;
     tilePadding: number;
     tilePreviewPadding: number;
     tileSize: number;
