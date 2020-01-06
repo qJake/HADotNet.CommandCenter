@@ -26,15 +26,5 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
         /// </summary>
         [Display(Name = "Round Decimals")]
         public bool RoundDecimals { get; set; }
-
-        public override StateObject StateManipulator(StateObject state)
-        {
-            if (RoundDecimals && decimal.TryParse(state.State, out var newVal))
-            {
-                state.State = Math.Round(newVal).ToString("F0");
-            }
-
-            return state;
-        }
     }
 }

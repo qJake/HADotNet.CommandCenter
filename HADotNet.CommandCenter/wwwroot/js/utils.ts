@@ -14,6 +14,21 @@ class Utils
     }
 
     /**
+     * Causes the current thread to sleep for the specified number of milliseconds.
+     * @param ms The number of milliseconds to sleep for.
+     */
+    public static sleep(ms: number): void
+    {
+        const date = Date.now();
+        let now = null;
+        do
+        {
+            now = Date.now();
+        }
+        while (now - date < ms);
+    }
+
+    /**
      * Resolves various icon options to display the correct one.
      * @param defaultIcon The icon defined in Home Assistant.
      * @param overrideIcon The user's override icon choice.

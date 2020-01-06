@@ -5,33 +5,40 @@
 class CalendarTile extends Tile
 {
     private eventContainer: JQuery
+    private tile: ITile;
 
-    constructor(page: string, name: string, conn: signalR.HubConnection)
+    constructor(page: string, name: string, conn: signalR.HubConnection, haConn: HAConnection)
     {
-        super(page, name, conn, true);
+        super(page, name, conn, haConn, true);
 
         this.eventContainer = $(`#tile-${name} div.calendar-events`);
     }
 
-    public updateCalendar(tile: ITile, state: IEntityState, events: ICalendarEvent[]): void
+    public updateTile(t: ITile)
+    {
+        this.tile = t;
+        super.updateTile(t);
+    }
+
+    public updateCalendar(state: IEntityState, events: ICalendarEvent[]): void
     {
         let label = state.attributes["friendly_name"].toString();
-        if (tile.overrideLabel)
+        if (this.tile.overrideLabel)
         {
-            label = tile.overrideLabel;
+            label = this.tile.overrideLabel;
         }
-        $(`#tile-${tile.name}`).find('span[value-name]').text(label);
+        $(`#tile-${this.tile.name}`).find('span[value-name]').text(label);
 
         this.refreshEvents(events);
 
-        super.updateState();
+        super.updateCalendar();
 
-        if (tile.refreshRate > 0)
+        if (this.tile.refreshRate > 0)
         {
             setTimeout(() =>
             {
                 this.requestState(1000);
-            }, tile.refreshRate * 1000);
+            }, this.tile.refreshRate * 1000);
         }
     }
 

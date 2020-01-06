@@ -7,6 +7,8 @@
     GetStates = 'get_states',
     StateChanged = 'state_changed',
     SubscribeToEvents = 'subscribe_events',
+    CameraThumbnail = 'camera_thumbnail',
+    MediaThumbnail = 'media_player_thumbnail',
     Result = 'result',
     Event = 'event',
     Ping = 'ping',
@@ -46,9 +48,25 @@ interface IHAResultMessage extends IHAMessage
     result: any
 }
 
+interface IHAEntityMessage extends IHAMessage
+{
+    entity_id: string
+}
+
 interface IHAStateResultMessage extends IHAResultMessage
 {
     result: IHAEntityState[]
+}
+
+interface IHAThumbnailResultMessage extends IHAResultMessage
+{
+    result: IHAThumbnailData
+}
+
+interface IHAThumbnailData
+{
+    content_type: string
+    content: string
 }
 
 interface IHAEventRequestMessage extends IHAMessage
@@ -64,6 +82,11 @@ interface IHAEventMessage extends IHAMessage
 interface IHAExpectedResults
 {
     [id: number]: HAResponseType
+}
+
+interface IHAExpectedPromises
+{
+    [id: number]: (value?: IHAThumbnailResultMessage | PromiseLike<IHAThumbnailResultMessage>) => void
 }
 
 interface IHAEntityState

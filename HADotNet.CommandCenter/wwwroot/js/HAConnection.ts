@@ -52,15 +52,18 @@ class HAConnection
     private pingInterval: number;
     private msgId: number;
     private expectedResults: IHAExpectedResults;
+    private expectedPromises: IHAExpectedPromises;
 
     private readonly evStateChanged = new ConnectionEvent<IHAStateChangedEvent>();
 
     // Events
     public get OnStateChanged() { return this.evStateChanged.event(); }
+    public get ConnectionState() { return this.state; }
 
     constructor(private targetInstance: string)
     {
         this.expectedResults = {};
+        this.expectedPromises = {};
         this.state = HAConnectionState.Closed;
     }
 
@@ -84,6 +87,24 @@ class HAConnection
     public refreshAllStates(): void
     {
         this.sendStateRequest();
+    }
+
+    public getCameraImage(entity: string): Promise<IHAThumbnailResultMessage>
+    {
+        var p = new Promise<IHAThumbnailResultMessage>((res, rej) =>
+        {
+            this.sendCameraThumbnailRequest(entity, res);
+        });
+        return p;
+    }
+
+    public getMediaImage(entity: string): Promise<IHAThumbnailResultMessage>
+    {
+        var p = new Promise<IHAThumbnailResultMessage>((res, rej) =>
+        {
+            this.sendMediaThumbnailRequest(entity, res);
+        });
+        return p;
     }
 
     private handleMessage(e: MessageEvent): any
@@ -170,6 +191,13 @@ class HAConnection
             }
             return true;
         }
+
+        let promise = this.expectedPromises[msg.id];
+        if (typeof promise !== 'undefined')
+        {
+            promise(<IHAThumbnailResultMessage>msg)
+            return true;
+        }
         return false;
     }
 
@@ -208,6 +236,18 @@ class HAConnection
     {
         let responseId = this.send(<IHAMessage>{ type: HAMessageType.GetStates });
         this.expectedResults[responseId] = HAResponseType.StateList;
+    }
+
+    private sendCameraThumbnailRequest(entity: string, res: (value?: IHAThumbnailResultMessage | PromiseLike<IHAThumbnailResultMessage>) => void): void
+    {
+        let responseId = this.send(<IHAEntityMessage>{ type: HAMessageType.CameraThumbnail, entity_id: entity });
+        this.expectedPromises[responseId] = res;
+    }
+
+    private sendMediaThumbnailRequest(entity: string, res: (value?: IHAThumbnailResultMessage | PromiseLike<IHAThumbnailResultMessage>) => void): void
+    {
+        let responseId = this.send(<IHAEntityMessage>{ type: HAMessageType.MediaThumbnail, entity_id: entity });
+        this.expectedPromises[responseId] = res;
     }
 
     private sendEventSubscriptionRequest(type: HAEventType | string)
