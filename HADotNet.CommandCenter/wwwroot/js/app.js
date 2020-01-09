@@ -163,7 +163,7 @@ class HAConnection {
         return false;
     }
     resultStateList(states) {
-        for (let s of states) {
+        for (var s of states) {
             this.evStateChanged.invoke({
                 data: {
                     entity_id: s.entity_id,
@@ -952,7 +952,7 @@ class CommandCenter {
         }
         this.conn.OnStateChanged.on(state => {
             var tiles = this.findTilesByEntityId(state.data.entity_id);
-            for (let t of tiles) {
+            for (var t of tiles) {
                 t.updateState(state.data);
                 console.info(`Updating tile for entity "${state.data.entity_id}" to state "${state.data.new_state.state}".`);
             }

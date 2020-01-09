@@ -100,7 +100,7 @@
   </Target>
 
   <Target Name="PostBuild" AfterTargets="AfterPublish" Condition="'$(Configuration)' == 'Release' and '$(HACC_PUB_ADDTL)' == 'true'">
-    <Exec Command="powershell -nologo -noprofile -command write-host 'Building .tar.gz release...'; cd $(ProjectDir); Copy-Item .\bin\Release\netcoreapp3.0\publish\wwwroot .\bin\Release\netcoreapp3.0\debian.10-arm\ -Recurse -Force; cd .\bin\Release\netcoreapp3.0\debian.10-arm\; 7z a -ttar HADotNet.CommandCenter-armhf.tar *; 7z a -tgzip HADotNet.CommandCenter-armhf.tar.gz HADotNet.CommandCenter-armhf.tar; Copy-Item HADotNet.CommandCenter-armhf.tar.gz ../../; " />
+    <!--<Exec Command="powershell -nologo -noprofile -command write-host 'Building .tar.gz release...'; cd $(ProjectDir); Copy-Item .\bin\Release\netcoreapp3.0\publish\wwwroot .\bin\Release\netcoreapp3.0\debian.10-arm\ -Recurse -Force; cd .\bin\Release\netcoreapp3.0\debian.10-arm\; 7z a -ttar HADotNet.CommandCenter-armhf.tar *; 7z a -tgzip HADotNet.CommandCenter-armhf.tar.gz HADotNet.CommandCenter-armhf.tar; Copy-Item HADotNet.CommandCenter-armhf.tar.gz ../../; " />-->
   </Target>
 
 </Project>

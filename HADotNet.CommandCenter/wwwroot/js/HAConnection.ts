@@ -203,7 +203,7 @@ class HAConnection
 
     private resultStateList(states: IHAEntityState[])
     {
-        for (let s of states)
+        for (var s of states)
         {
             this.evStateChanged.invoke({
                 data: {
