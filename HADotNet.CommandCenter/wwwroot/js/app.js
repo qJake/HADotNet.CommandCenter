@@ -540,6 +540,10 @@ class PersonTile extends Tile {
             label = this.tile.overrideLabel;
         }
         let isHome = location.toLowerCase() === 'home';
+        // Adjust base URL
+        if (!picture.toLowerCase().startsWith('http')) {
+            picture = window.ccOptions.baseUrl + picture;
+        }
         $(`#tile-${this.tile.name}`).find('span[value-name]').text(label);
         $(`#tile-${this.tile.name}`).find('span[value-location]').text(location);
         $(`#tile-${this.tile.name}`).find('span[value-picture]').css('background-image', `url(${picture})`).removeClass('bw');
