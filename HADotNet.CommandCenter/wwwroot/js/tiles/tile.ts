@@ -98,50 +98,24 @@ abstract class Tile
 
     protected updateTile(tile?: ITile)
     {
-        this.disableLoading();
         this.loaded = true;
+        this.disableLoading();
     }
 
     public updateState(state?: IHAStateChangedData): void { }
 
-    protected updateCalendar(state?: IEntityState, events?: ICalendarEvent[]): void
-    {
-        this.disableLoading();
-    }
+    protected updateCalendar(state?: IEntityState, events?: ICalendarEvent[]): void { }
 
-    protected updateDateTime(tile?: ITile, ...args: any): void
-    {
-        this.disableLoading();
-    }
+    protected updateDateTime(tile?: ITile, ...args: any): void { }
 
     protected requestState(debounce?: number): void
     {
-        this.enableLoading(debounce);
         this.conn.invoke('RequestTileState', this.page, this.name);
     }
 
     protected requestConfig(page: string): void
     {
         this.conn.invoke('RequestConfig', page, this.name);
-    }
-
-    protected enableLoading(debounce?: number): void
-    {
-        if (this.el.hasClass("tile-loading") || this.loadingDebouncer)
-        {
-            return;
-        }
-        if (!debounce && !this.debounceTimeMs)
-        {
-            this.el.addClass("tile-loading");
-        }
-        else
-        {
-            this.loadingDebouncer = window.setTimeout(() =>
-            {
-                this.el.addClass("tile-loading");
-            }, debounce || this.debounceTimeMs);
-        }
     }
 
     protected disableLoading(): void

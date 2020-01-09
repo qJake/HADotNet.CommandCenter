@@ -400,35 +400,17 @@ class Tile {
         return this.conn.invoke('OnTileClicked', this.page, this.name);
     }
     updateTile(tile) {
-        this.disableLoading();
         this.loaded = true;
+        this.disableLoading();
     }
     updateState(state) { }
-    updateCalendar(state, events) {
-        this.disableLoading();
-    }
-    updateDateTime(tile, ...args) {
-        this.disableLoading();
-    }
+    updateCalendar(state, events) { }
+    updateDateTime(tile, ...args) { }
     requestState(debounce) {
-        this.enableLoading(debounce);
         this.conn.invoke('RequestTileState', this.page, this.name);
     }
     requestConfig(page) {
         this.conn.invoke('RequestConfig', page, this.name);
-    }
-    enableLoading(debounce) {
-        if (this.el.hasClass("tile-loading") || this.loadingDebouncer) {
-            return;
-        }
-        if (!debounce && !this.debounceTimeMs) {
-            this.el.addClass("tile-loading");
-        }
-        else {
-            this.loadingDebouncer = window.setTimeout(() => {
-                this.el.addClass("tile-loading");
-            }, debounce || this.debounceTimeMs);
-        }
     }
     disableLoading() {
         if (this.loadingDebouncer) {
@@ -792,6 +774,7 @@ class CalendarTile extends Tile {
         }
     }
     refreshEvents(events) {
+        var _a;
         this.eventContainer.empty();
         if (!events.length) {
             this.eventContainer.append('<span class="no-events">No events!</span>');
@@ -806,16 +789,17 @@ class CalendarTile extends Tile {
                     this.eventContainer.append(`<h3>${thisGroup}</h3>`);
                     lastGroup = thisGroup;
                 }
-                this.eventContainer.append(`<p><span class="summary">${evt.summary}</span><span class="time">${moment(evt.start.dateTime).format('LT')}</span></p>`);
+                this.eventContainer.append(`<p><span class="summary">${evt.summary}</span><span class="time">${(!evt.start.dateTime ? 'All Day' : moment((_a = evt.start.dateTime, (_a !== null && _a !== void 0 ? _a : evt.start.date))).format('LT'))}</span></p>`);
             }
         }
     }
     getEventHeader(event) {
+        var _a;
         const today = moment();
         const tomorrow = moment().add(1, 'day');
         let todayHeader = this.formatHeader(today);
         let tomorrowHeader = this.formatHeader(tomorrow);
-        const mt = moment(event.start.dateTime);
+        const mt = moment((_a = event.start.dateTime, (_a !== null && _a !== void 0 ? _a : event.start.date)));
         let header = this.formatHeader(mt);
         if (header === todayHeader) {
             header += ' (Today)';

@@ -32,6 +32,7 @@ interface ICalendarPerson
 interface IDateTime
 {
     dateTime: string;
+    date: string;
     timeZone?: null;
 }
 interface IReminders
