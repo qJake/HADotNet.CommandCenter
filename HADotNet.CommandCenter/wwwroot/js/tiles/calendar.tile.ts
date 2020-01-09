@@ -65,7 +65,7 @@ class CalendarTile extends Tile
                     lastGroup = thisGroup;
                 }
 
-                this.eventContainer.append(`<p><span class="summary">${evt.summary}</span><span class="time">${moment(evt.start.dateTime).format('LT')}</span></p>`);
+                this.eventContainer.append(`<p><span class="summary">${evt.summary}</span><span class="time">${(!evt.start.dateTime ? 'All Day' : moment(evt.start.dateTime ?? evt.start.date).format('LT'))}</span></p>`);
             }
         }
     }
@@ -78,7 +78,7 @@ class CalendarTile extends Tile
         let todayHeader = this.formatHeader(today);
         let tomorrowHeader = this.formatHeader(tomorrow);
 
-        const mt = moment(event.start.dateTime);
+        const mt = moment(event.start.dateTime ?? event.start.date);
 
         let header = this.formatHeader(mt);
         if (header === todayHeader)
