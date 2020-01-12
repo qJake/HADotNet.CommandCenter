@@ -37,6 +37,7 @@ class CommandCenter
 
         this.initializeMdiPreview();
         this.initializeColorPreview();
+        this.initializeNightlyRefresh();
     }
 
     private initAdmin(): void
@@ -213,6 +214,21 @@ class CommandCenter
             let definedIds = t.getEntityIds();
             return definedIds.some(e => e.toLowerCase() === entityId.toLowerCase());
         });
+    }
+
+    protected initializeNightlyRefresh(): void
+    {
+        // Workaround to get around SignalR hub being kinda crappy :/
+        window.setInterval(() =>
+        {
+            if (new Date().getHours() == 2)
+            {
+                window.setTimeout(() =>
+                {
+                    window.location.reload();
+                }, 3600000); // 1 hour
+            }
+        }, 3500000) // ~58 minutes
     }
 
     protected initializeMdiPreview(): void

@@ -17,7 +17,7 @@ interface IConnectionEvent<T>
     off(handler: { (data?: T): void }): void;
 }
 
-class ConnectionEvent<T> implements IConnectionEvent<T>
+class ConnectionEvent<T> implements IConnectionEvent<T> 
 {
     private handlers: { (data?: T): void; }[] = [];
 

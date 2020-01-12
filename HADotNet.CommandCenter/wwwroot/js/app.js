@@ -862,6 +862,7 @@ class CommandCenter {
             : this.initUser();
         this.initializeMdiPreview();
         this.initializeColorPreview();
+        this.initializeNightlyRefresh();
     }
     initAdmin() {
         $(window).on('beforeunload', e => {
@@ -983,6 +984,16 @@ class CommandCenter {
             let definedIds = t.getEntityIds();
             return definedIds.some(e => e.toLowerCase() === entityId.toLowerCase());
         });
+    }
+    initializeNightlyRefresh() {
+        // Workaround to get around SignalR hub being kinda crappy :/
+        window.setInterval(() => {
+            if (new Date().getHours() == 2) {
+                window.setTimeout(() => {
+                    window.location.reload();
+                }, 3600000); // 1 hour
+            }
+        }, 3500000); // ~58 minutes
     }
     initializeMdiPreview() {
         $('.mdi-icon-placeholder + input').each((_, e) => {
