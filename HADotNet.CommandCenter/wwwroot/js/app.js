@@ -280,6 +280,18 @@ class Utils {
         } while (now - date < ms);
     }
     /**
+     * Resolves an asset URL to a fully-qualified path.
+     * @param primaryUrl The primary URL.
+     * @param overrideUrl An override URL. Can be null.
+     * @param relativePath The relative path to append at the end.
+     */
+    static resolveAssetUrl(primaryUrl, overrideUrl, relativePath) {
+        primaryUrl = !primaryUrl.endsWith('/') ? primaryUrl : primaryUrl.substr(0, primaryUrl.length - 1);
+        overrideUrl = overrideUrl && !overrideUrl.endsWith('/') ? overrideUrl : overrideUrl.substr(0, overrideUrl.length - 1);
+        relativePath = !relativePath.startsWith('/') ? relativePath : relativePath.substr(1, relativePath.length - 1);
+        return `${(overrideUrl && overrideUrl.length ? overrideUrl : primaryUrl)}/${relativePath}`;
+    }
+    /**
      * Resolves various icon options to display the correct one.
      * @param defaultIcon The icon defined in Home Assistant.
      * @param overrideIcon The user's override icon choice.
@@ -542,7 +554,7 @@ class PersonTile extends Tile {
         let isHome = location.toLowerCase() === 'home';
         // Adjust base URL
         if (!picture.toLowerCase().startsWith('http')) {
-            picture = window.ccOptions.baseUrl + picture;
+            picture = Utils.resolveAssetUrl(window.ccOptions.baseUrl, window.ccOptions.overrideAssetUrl, picture);
         }
         $(`#tile-${this.tile.name}`).find('span[value-name]').text(label);
         $(`#tile-${this.tile.name}`).find('span[value-location]').text(location);
@@ -844,6 +856,15 @@ TileMap.ClassMap = {
     'Navigation': NavigationTile,
     'Calendar': CalendarTile
 };
+class PageUtils {
+    static ConfirmDelete(e) {
+        if (!confirm('This item will be permanently deleted. This action cannot be undone.\n\nAre you sure?')) {
+            e.preventDefault();
+            return false;
+        }
+        return true;
+    }
+}
 /// <reference path="models/models.ts" />
 /// <reference path="typings/window-options.d.ts" />
 /// <reference path="typings/draggabilly.d.ts" />
@@ -851,6 +872,7 @@ TileMap.ClassMap = {
 /// <reference path="typings/packery.jquery.d.ts" />
 /// <reference path="../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
 /// <reference path="tiles/tilemap.ts" />
+/// <reference path="PageFunctions.ts" />
 class CommandCenter {
     constructor() {
         this.tiles = [];

@@ -5,6 +5,7 @@
 /// <reference path="typings/packery.jquery.d.ts" />
 /// <reference path="../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
 /// <reference path="tiles/tilemap.ts" />
+/// <reference path="PageFunctions.ts" />
 
 type TilePos = {
     x: number,

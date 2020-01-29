@@ -26,9 +26,9 @@ class PersonTile extends Tile
         // Adjust base URL
         if (!picture.toLowerCase().startsWith('http'))
         {
-            picture = window.ccOptions.baseUrl + picture;
+            picture = Utils.resolveAssetUrl(window.ccOptions.baseUrl, window.ccOptions.overrideAssetUrl, picture);
         }
-
+         
         $(`#tile-${this.tile.name}`).find('span[value-name]').text(label);
         $(`#tile-${this.tile.name}`).find('span[value-location]').text(location);
         $(`#tile-${this.tile.name}`).find('span[value-picture]').css('background-image', `url(${picture})`).removeClass('bw');

@@ -38,6 +38,9 @@ namespace HADotNet.CommandCenter.Controllers
         public IActionResult Index() => View();
 
         [HttpGet]
+        public IActionResult ThankYou() => View();
+
+        [HttpGet]
         public IActionResult PageMigration() => View("MigratedToPages");
 
         [HttpGet]

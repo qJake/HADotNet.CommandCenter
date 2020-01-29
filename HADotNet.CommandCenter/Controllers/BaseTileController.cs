@@ -31,7 +31,7 @@ namespace HADotNet.CommandCenter.Controllers
                 }
             });
 
-            TempData.AddSuccess($"Successfully saved {tile.Type} tile '{tile.Name}'.");
+            TempData.AddSuccess($"Successfully saved {tile.Type} tile '{tile.Name}'.<br /><br /><i class=\"info circle icon\"></i><strong>Tip:</strong> If you just added a new tile, you should proceed to <strong><a href=\"/admin/pages/{page}/layout\">edit this page's layout</a></strong>.");
 
             return RedirectToAction("Index", "AdminTile", new { page });
         }

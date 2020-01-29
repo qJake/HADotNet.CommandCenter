@@ -29,6 +29,22 @@ class Utils
     }
 
     /**
+     * Resolves an asset URL to a fully-qualified path.
+     * @param primaryUrl The primary URL.
+     * @param overrideUrl An override URL. Can be null.
+     * @param relativePath The relative path to append at the end.
+     */
+    public static resolveAssetUrl(primaryUrl: string, overrideUrl: string, relativePath: string)
+    {
+        primaryUrl = !primaryUrl.endsWith('/') ? primaryUrl : primaryUrl.substr(0, primaryUrl.length - 1);
+        overrideUrl = overrideUrl && !overrideUrl.endsWith('/') ? overrideUrl : overrideUrl.substr(0, overrideUrl.length - 1);
+
+        relativePath = !relativePath.startsWith('/') ? relativePath : relativePath.substr(1, relativePath.length - 1);
+
+        return `${(overrideUrl && overrideUrl.length ? overrideUrl : primaryUrl)}/${relativePath}`;
+    }
+
+    /**
      * Resolves various icon options to display the correct one.
      * @param defaultIcon The icon defined in Home Assistant.
      * @param overrideIcon The user's override icon choice.

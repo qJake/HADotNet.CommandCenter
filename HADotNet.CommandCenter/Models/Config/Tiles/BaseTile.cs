@@ -1,4 +1,5 @@
-﻿using HADotNet.Core.Models;
+﻿using HADotNet.CommandCenter.Utils;
+using HADotNet.Core.Models;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,7 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
         /// <summary>
         /// Gets or sets the tile's admin name.
         /// </summary>
+        [UniqueName(ErrorMessage = "Tile names must be unique on this page.")]
         [Display(Name = "Tile Name")]
         [Required(ErrorMessage = "Give it a name!")]
         [RegularExpression(@"^[a-zA-Z0-9_-]+$", ErrorMessage = "Only a-z, 0-9, dashes and underscores.")]

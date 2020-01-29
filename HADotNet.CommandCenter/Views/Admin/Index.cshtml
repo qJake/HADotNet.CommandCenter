@@ -16,39 +16,43 @@
 <div class="ui stackable grid">
     <div class="two column row">
         <div class="column">
-            <h2>Getting Started</h2>
-            <ul>
-                <li><a target="_blank" href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Initial-System-Setup">Initial System Setup</a></li>
-                <li><a target="_blank" href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Configuring-Layout-Settings">Configuring Layout Settings</a></li>
-            </ul>
+            <div class="ui segment">
+                <h2>Getting Started Guides</h2>
+                <ul>
+                    <li><a target="_blank" href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Initial-System-Setup">Initial System Setup</a></li>
+                    <li><a target="_blank" href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Configuring-Layout-Settings">Configuring Layout Settings</a></li>
+                </ul>
 
-            <h2>Resources</h2>
-            <ul>
-                <li>
-                    <i class="mdi mdi-web"></i> <a target="_blank" href="https://hacc.dev/">Website</a>
-                </li>
-                <li>
-                    <i class="mdi mdi-github-circle"></i> <a target="_blank" href="https://github.com/qJake/HADotNet.CommandCenter">Project on GitHub</a>
-                </li>
-            </ul>
+                <h2>Resources</h2>
+                <ul>
+                    <li>
+                        <i class="mdi mdi-web"></i> <a target="_blank" href="https://hacc.dev/">Website</a>
+                    </li>
+                    <li>
+                        <i class="mdi mdi-github-circle"></i> <a target="_blank" href="https://github.com/qJake/HADotNet.CommandCenter">Project on GitHub</a>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="column">
-            <h2>Configuration Control</h2>
-            <p>Import, export, or reset your master HACC configuration here.</p>
-            <p><em>Note: Exported settings do NOT contain connection information. When importing, if you are NOT running as a Hass.io addon, you will need to re-setup your connection to Home Assistant.</em></p>
-            <div class="ui buttons">
-                <button type="button" id="importConfig" class="ui grey icon labeled button">
-                    <i class="download icon"></i>
-                    Import...
-                </button>
-                <a class="ui grey icon labeled button" asp-action="ExportConfig">
-                    <i class="upload icon"></i>
-                    Export
-                </a>
-                <a class="ui red icon labeled button" id="resetConfig" asp-action="ResetConfig">
-                    <i class="remove icon"></i>
-                    Reset
-                </a>
+            <div class="ui segment">
+                <h2>Configuration Control</h2>
+                <p>Import, export, or reset your master HACC configuration here.</p>
+                <p><em>Note: Exported settings do NOT contain connection information. When importing, if you are NOT running as a Hass.io addon, you will need to re-setup your connection to Home Assistant.</em></p>
+                <div class="ui buttons">
+                    <button type="button" id="importConfig" class="ui grey icon labeled button">
+                        <i class="download icon"></i>
+                        Import...
+                    </button>
+                    <a class="ui grey icon labeled button" asp-action="ExportConfig">
+                        <i class="upload icon"></i>
+                        Export
+                    </a>
+                    <a class="ui red icon labeled button" id="resetConfig" asp-action="ResetConfig">
+                        <i class="remove icon"></i>
+                        Reset
+                    </a>
+                </div>
             </div>
         </div>
     </div>
