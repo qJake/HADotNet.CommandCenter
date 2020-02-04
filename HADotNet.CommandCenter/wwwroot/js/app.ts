@@ -37,6 +37,7 @@ class CommandCenter
 
         this.initializeMdiPreview();
         this.initializeColorPreview();
+        this.initializeNightlyRefresh();
     }
 
     private initAdmin(): void
@@ -146,6 +147,18 @@ class CommandCenter
             this.conn = new HAConnection(window.ccOptions.baseUrl);
         }
 
+        this.conn.OnConnectionStateChanged.on(state =>
+        {
+            if (state == HAConnectionState.Closed)
+            {
+                $('#alerts').show().find('.alert-message').text('[H] Connection lost, reconnecting...');
+            }
+            else if (state == HAConnectionState.Open)
+            {
+                $('#alerts').hide();
+            }
+        });
+
         this.conn.OnStateChanged.on(state =>
         {
             var tiles = this.findTilesByEntityId(state.data.entity_id);
@@ -159,6 +172,14 @@ class CommandCenter
         this.conn.initialize();
 
         this.tileConn = new signalR.HubConnectionBuilder().withUrl('/hubs/tile').build();
+        this.tileConn.onclose(e =>
+        {
+            $('#alerts').show().find('.alert-message').text('[S] Connection lost, reconnecting...');
+            window.setTimeout(() =>
+            {
+                window.location.reload();
+            }, 10000);
+        });
         this.tileConn.start().then(() =>
         {
             $('.tiles .tile').each((_, e) =>
@@ -213,6 +234,21 @@ class CommandCenter
             let definedIds = t.getEntityIds();
             return definedIds.some(e => e.toLowerCase() === entityId.toLowerCase());
         });
+    }
+
+    protected initializeNightlyRefresh(): void
+    {
+        // Workaround to get around SignalR hub being kinda crappy :/
+        window.setInterval(() =>
+        {
+            if (new Date().getHours() == 2)
+            {
+                window.setTimeout(() =>
+                {
+                    window.location.reload();
+                }, 3600000); // 1 hour
+            }
+        }, 3500000) // ~58 minutes
     }
 
     protected initializeMdiPreview(): void
