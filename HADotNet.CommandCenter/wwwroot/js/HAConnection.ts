@@ -55,9 +55,11 @@ class HAConnection
     private expectedPromises: IHAExpectedPromises;
 
     private readonly evStateChanged = new ConnectionEvent<IHAStateChangedEvent>();
+    private readonly evConnectionStateChanged = new ConnectionEvent<HAConnectionState>();
 
     // Events
     public get OnStateChanged() { return this.evStateChanged.event(); }
+    public get OnConnectionStateChanged() { return this.evConnectionStateChanged.event(); }
     public get ConnectionState() { return this.state; }
 
     constructor(private targetInstance: string)
@@ -70,6 +72,7 @@ class HAConnection
     public initialize(): void
     {
         this.state = HAConnectionState.Opening;
+        this.evConnectionStateChanged.invoke(this.state);
         this.msgId = 1;
 
         if (!this.ws || this.ws.readyState !== this.ws.OPEN)
@@ -159,6 +162,7 @@ class HAConnection
     private isReady(): void
     {
         this.state = HAConnectionState.Open;
+        this.evConnectionStateChanged.invoke(this.state);
 
         // Set up ping
         this.pingInterval = window.setInterval(() => this.sendPing(), this.PING_INTERVAL);
@@ -296,11 +300,13 @@ class HAConnection
     private handleOpen(): any
     {
         this.state = HAConnectionState.Auth;
+        this.evConnectionStateChanged.invoke(this.state);
     }
 
     private handleClose(): any
     {
         this.state = HAConnectionState.Closed;
+        this.evConnectionStateChanged.invoke(this.state);
         if (this.pingInterval)
         {
             window.clearInterval(this.pingInterval);

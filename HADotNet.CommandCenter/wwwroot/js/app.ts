@@ -147,6 +147,18 @@ class CommandCenter
             this.conn = new HAConnection(window.ccOptions.baseUrl);
         }
 
+        this.conn.OnConnectionStateChanged.on(state =>
+        {
+            if (state == HAConnectionState.Closed)
+            {
+                $('#alerts').show().find('.alert-message').text('[H] Connection lost, reconnecting...');
+            }
+            else if (state == HAConnectionState.Open)
+            {
+                $('#alerts').hide();
+            }
+        });
+
         this.conn.OnStateChanged.on(state =>
         {
             var tiles = this.findTilesByEntityId(state.data.entity_id);
@@ -160,6 +172,14 @@ class CommandCenter
         this.conn.initialize();
 
         this.tileConn = new signalR.HubConnectionBuilder().withUrl('/hubs/tile').build();
+        this.tileConn.onclose(e =>
+        {
+            $('#alerts').show().find('.alert-message').text('[S] Connection lost, reconnecting...');
+            window.setTimeout(() =>
+            {
+                window.location.reload();
+            }, 10000);
+        });
         this.tileConn.start().then(() =>
         {
             $('.tiles .tile').each((_, e) =>
