@@ -1,5 +1,6 @@
 ﻿/// <reference path="../../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
 /// <reference path="../utils.ts" />
+/// <reference path="tileoptions.ts" />
 
 abstract class Tile
 {
@@ -18,13 +19,19 @@ abstract class Tile
 
     public loaded: boolean;
 
-    constructor(protected page: string, protected name: string, protected conn: signalR.HubConnection, haConn: HAConnection, protected canLoad: boolean = true)
+    protected canLoad: boolean;
+    protected canClick: boolean;
+
+    constructor(protected page: string, protected name: string, protected conn: signalR.HubConnection, haConn: HAConnection, options: ITileOptions)
     {
+        this.canLoad = options.canLoad;
+        this.canClick = options.canClick;
+
         this.entityIds = [];
-        this.loaded = !canLoad;
+        this.loaded = !this.canLoad;
         this.el = $(`.tiles .tile[data-tile-name="${name}"]`);
 
-        if (canLoad)
+        if (this.canClick)
         {
             this.el.click(() =>
             {

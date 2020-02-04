@@ -26,5 +26,17 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
         /// </summary>
         [Display(Name = "Round Decimals")]
         public bool RoundDecimals { get; set; }
+
+        /// <summary>
+        /// Gets or sets a label that should be used when the entity is "on".
+        /// </summary>
+        [Display(Name = "Override 'On' Text")]
+        public string DisplayTextOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets a label that should be used when the entity is "off".
+        /// </summary>
+        [Display(Name = "Override 'Off' Text")]
+        public string DisplayTextOff { get; set; }
     }
 }

@@ -25,6 +25,7 @@ namespace HADotNet.CommandCenter.Controllers
             ViewBag.Entities = (await EntityClient.GetEntities("switch"))
                 .Union(await EntityClient.GetEntities("group"))
                 .Union(await EntityClient.GetEntities("cover"))
+                .Union(await EntityClient.GetEntities("remote"))
                 .Union(await EntityClient.GetEntities("input_boolean"))
                 .OrderBy(e => e)
                 .Select(e => new SelectListItem(e, e));

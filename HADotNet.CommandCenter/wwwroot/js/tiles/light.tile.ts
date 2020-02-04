@@ -4,6 +4,11 @@ class LightTile extends Tile
 {
     private tile: ILightTile;
 
+    constructor(page: string, name: string, conn: signalR.HubConnection, haConn: HAConnection)
+    {
+        super(page, name, conn, haConn, { canClick: true, canLoad: false });
+    }
+
     public updateTile(t: ITile)
     {
         this.tile = <ILightTile>t;

@@ -4,6 +4,11 @@ class NavigationTile extends Tile
 {
     private navTile: INavigationTile;
 
+    constructor(page: string, name: string, conn: signalR.HubConnection, haConn: HAConnection)
+    {
+        super(page, name, conn, haConn, { canClick: true, canLoad: false });
+    }
+
     public updateTile(tile: ITile): void
     {
         this.navTile = <INavigationTile>tile;

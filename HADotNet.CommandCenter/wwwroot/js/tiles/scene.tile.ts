@@ -4,6 +4,11 @@ class SceneTile extends Tile
 {
     private tile: ISceneTile;
 
+    constructor(page: string, name: string, conn: signalR.HubConnection, haConn: HAConnection)
+    {
+        super(page, name, conn, haConn, { canClick: true, canLoad: false });
+    }
+
     public updateTile(t: ITile)
     {
         this.tile = <ISceneTile>t;
