@@ -9,7 +9,7 @@ class CalendarTile extends Tile
 
     constructor(page: string, name: string, conn: signalR.HubConnection, haConn: HAConnection)
     {
-        super(page, name, conn, haConn, true);
+        super(page, name, conn, haConn, { canLoad: true, canClick: false });
 
         this.eventContainer = $(`#tile-${name} div.calendar-events`);
     }

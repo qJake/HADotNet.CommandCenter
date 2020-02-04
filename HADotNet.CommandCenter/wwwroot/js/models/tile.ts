@@ -23,6 +23,12 @@ interface IStateTile extends ITile
 {
     /** Gets or sets a value indicating if decimal values should be rounded. */
     roundDecimals: boolean;
+
+    /** Gets or sets a label that should be used when the entity is "on". */
+    displayTextOn: string;
+
+    /** Gets or sets a label that should be used when the entity is "off". */
+    displayTextOff: string;
 }
 
 interface ISwitchTile extends ITile

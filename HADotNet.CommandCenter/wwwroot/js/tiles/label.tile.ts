@@ -4,6 +4,6 @@ class LabelTile extends Tile
 {
     constructor(page: string, name: string, conn: signalR.HubConnection, haConn: HAConnection)
     {
-        super(page, name, conn, haConn, false);
+        super(page, name, conn, haConn, { canClick: false, canLoad: false });
     }
 }

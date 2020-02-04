@@ -49,6 +49,7 @@
     <TypeScriptCompile Remove="wwwroot\js\state.tile.ts" />
     <TypeScriptCompile Remove="wwwroot\js\tile.ts" />
     <TypeScriptCompile Remove="wwwroot\js\tilemap.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\tiles\tileoptions.ts" />
     <TypeScriptCompile Remove="wwwroot\js\tileType.ts" />
     <TypeScriptCompile Remove="wwwroot\js\typings\moment.d.ts" />
     <TypeScriptCompile Remove="wwwroot\js\typings\reconnecting-websocket.d.ts" />

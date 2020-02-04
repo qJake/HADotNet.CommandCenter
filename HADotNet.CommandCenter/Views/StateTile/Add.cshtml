@@ -50,6 +50,24 @@
                         <p><small>By default, the entity's <em>friendly name</em> will be used. Enter an override if desired.</small></p>
                     </div>
                     <div class="field">
+                        <label asp-for="DisplayTextOn"></label>
+                        <div class="ui left icon input">
+                            <i class="font icon"></i>
+                            <input asp-for="DisplayTextOn" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="DisplayTextOn"></span>
+                        <p><small>Optional. If set, and the entity's state is "on", this text will display instead.</small></p>
+                    </div>
+                    <div class="field">
+                        <label asp-for="DisplayTextOff"></label>
+                        <div class="ui left icon input">
+                            <i class="font icon"></i>
+                            <input asp-for="DisplayTextOff" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="DisplayTextOff"></span>
+                        <p><small>Optional. If set, and the entity's state is "off", this text will display instead.</small></p>
+                    </div>
+                    <div class="field">
                         <div class="ui checkbox">
                             <input asp-for="RoundDecimals" />
                             <label asp-for="RoundDecimals"></label>
