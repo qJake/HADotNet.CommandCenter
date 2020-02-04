@@ -23,14 +23,14 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
         /// Gets or sets the horizontal size multiplier.
         /// </summary>
         [Display(Name = "Tile Width")]
-        [Range(1, 4)]
+        [Range(1, 8)]
         public int SizeX { get; set; }
 
         /// <summary>
         /// Gets or sets the vertical size multiplier.
         /// </summary>
         [Display(Name = "Tile Height")]
-        [Range(1, 4)]
+        [Range(1, 8)]
         public int SizeY { get; set; }
 
         /// <summary>

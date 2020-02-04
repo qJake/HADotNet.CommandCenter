@@ -22,8 +22,15 @@ namespace HADotNet.CommandCenter.Controllers
                     }
 
                     var i = c[page].Tiles.IndexOf(existing);
-                    c[page].Tiles.RemoveAt(i);
-                    c[page].Tiles.Insert(i, tile);
+                    if (i > -1)
+                    {
+                        c[page].Tiles.RemoveAt(i);
+                        c[page].Tiles.Insert(i, tile);
+                    }
+                    else
+                    {
+                        c[page].Tiles.Add(tile);
+                    }
                 }
                 else
                 {

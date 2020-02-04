@@ -2,33 +2,50 @@
     ViewData["Title"] = "Admin Area";
 }
 
-    <div class="ui center aligned container">
-        <h1>HA Command Center &ndash; Project Supporters</h1>
-        <div class="ui raised secondary center aligned segment">
-            <h3>Interested in sponsoring the HA Command Center project?</h3>
-
-            <p>
-                <a href="https://github.com/sponsors/qJake" rel="nofollow" target="_blank" class="ui black icon labeled button">
-                    <i class="github icon"></i>
-                    Sponsor me on GitHub
+@section TopNav
+{
+    <div class="ui top attached mini menu">
+        <div class="item">
+            <div class="ui large breadcrumb">
+                <a class="section" asp-controller="Admin" asp-action="Index">
+                    <i class="home icon"></i> Home
                 </a>
-                <a href="https://www.buymeacoffee.com/qjake" rel="nofollow" target="_blank" class="ui orange icon labeled button">
-                    <i class="coffee icon"></i>
-                    Buy me a coffee
-                </a>
-            </p>
-        </div>
-
-        <p>&nbsp;</p>
-
-        <p><span class="ui large text">A huge <strong>THANK YOU</strong> to all of our project supporters listed below!</span></p>
-
-        <div class="ui huge horizontal list">
-            <div class="item">
-                <img src="https://www.gravatar.com/avatar/eed6ac4e64e6b1ecec8737201700a31e" alt="Gravatar image" class="ui avatar image" />
-                <div class="content">
-                    <div class="header">Tim Fisher</div>
+                <div class="divider"> / </div>
+                <div class="active section">
+                    <i class="heart icon"></i> Supporters
                 </div>
             </div>
         </div>
     </div>
+}
+
+<div class="ui center aligned container">
+    <h1>HA Command Center &ndash; Project Supporters</h1>
+    <div class="ui raised secondary center aligned segment">
+        <h3>Interested in sponsoring the HA Command Center project?</h3>
+
+        <p>
+            <a href="https://github.com/sponsors/qJake" rel="nofollow" target="_blank" class="ui black icon labeled button">
+                <i class="github icon"></i>
+                Sponsor me on GitHub
+            </a>
+            <a href="https://www.buymeacoffee.com/qjake" rel="nofollow" target="_blank" class="ui orange icon labeled button">
+                <i class="coffee icon"></i>
+                Buy me a coffee
+            </a>
+        </p>
+    </div>
+
+    <p>&nbsp;</p>
+
+    <p><span class="ui large text">A huge <strong>THANK YOU</strong> to all of our project supporters listed below!</span></p>
+
+    <div class="ui huge horizontal list">
+        <div class="item">
+            <img src="https://www.gravatar.com/avatar/eed6ac4e64e6b1ecec8737201700a31e" alt="Gravatar image" class="ui avatar image" />
+            <div class="content">
+                <div class="header">Tim Fisher</div>
+            </div>
+        </div>
+    </div>
+</div>

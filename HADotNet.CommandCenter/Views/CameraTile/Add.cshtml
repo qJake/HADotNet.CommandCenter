@@ -1,55 +1,29 @@
 ﻿@model CameraTile
 @{
     ViewData["Title"] = (Model == null ? "Add" : "Edit") + " Tile: Camera";
+
+    var header = @"<span class=""va-bottom " + new CameraTile().IconClassName + @"""></span> " + (Model == null ? "Add" : "Edit") + " Tile: Camera";
 }
 
-<h1><span class="va-top @(new CameraTile().IconClassName)"></span> @(Model == null ? "Add" : "Edit") Tile: Camera</h1>
+@section TopNav
+{
+    <partial name="BaseTileEditBreadcrumbs" model="header" />
+}
+
+<h1>
+    @Html.Raw(header)
+</h1>
 
 <form class="ui form" method="post" asp-action="Save" asp-route-page="@Context.Request.RouteValues["page"]">
     <input type="hidden" name="originalName" value="@Model?.Name" />
     <div class="ui grid">
         <div class="row">
-            <div class="six wide computer twelve wide tablet sixteen wide mobile column">
-                <h3>Basic Tile Info</h3>
-                <div class="ui segment">
-                    <div class="field">
-                        <label asp-for="Name"></label>
-                        <div class="ui left icon input">
-                            <i class="tag icon"></i>
-                            <input asp-for="Name" />
-                        </div>
-                        <span class="ui up pointing small red label" asp-validation-for="Name"></span>
-                        <p><small>An internal name to identify this tile, not shown on the dashboard.</small></p>
-                    </div>
-                    <div class="inline field">
-                        <label asp-for="SizeX"></label>
-                        <i class="arrows alternate horizontal icon"></i>
-                        <select class="ui dropdown" asp-for="SizeX">
-                            <option value="1">1x</option>
-                            <option value="2">2x</option>
-                            <option value="3">3x</option>
-                            <option value="4">4x</option>
-                        </select>
-                        <span class="ui up pointing small red label" asp-validation-for="SizeX"></span>
-                    </div>
-                    <div class="inline field">
-                        <label asp-for="SizeY"></label>
-                        <i class="arrows alternate vertical icon"></i>
-                        <select class="ui dropdown" asp-for="SizeY">
-                            <option value="1">1x</option>
-                            <option value="2">2x</option>
-                            <option value="3">3x</option>
-                            <option value="4">4x</option>
-                        </select>
-                        <span class="ui up pointing small red label" asp-validation-for="SizeY"></span>
-                    </div>
-                    <div class="field">
-                        <label asp-for="AdditionalCss"></label>
-                        <textarea asp-for="AdditionalCss"></textarea>
-                        <span class="ui up pointing small red label" asp-validation-for="AdditionalCss"></span>
-                        <p><small>Enter one or more CSS properties. Don't enclose them with <code>{ ... }</code>.</small></p>
-                    </div>
-                </div>
+
+            <div class="six wide widescreen eight wide large screen twelve wide computer fourteen wide tablet sixteen wide mobile column">
+                <partial name="BaseTileEditor" model="@Model" />
+            </div>
+
+            <div class="six wide widescreen eight wide large screen twelve wide computer fourteen wide tablet sixteen wide mobile column">
                 <h3>Camera Tile Details</h3>
                 <div class="ui segment">
                     <div class="field">
@@ -77,12 +51,14 @@
                         <p><small>Specify how the image should be displayed in the tile.</small></p>
                     </div>
                 </div>
-                <div class="field">
-                    <button type="submit" class="ui green icon labeled button">
-                        <i class="@(Model == null ? "plus" : "save") icon"></i>
-                        @(Model == null ? "Add" : "Edit") Tile
-                    </button>
-                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="sixteen wide column">
+                <button type="submit" class="ui green icon labeled button">
+                    <i class="@(Model == null ? "plus" : "save") icon"></i>
+                    @(Model == null ? "Add" : "Edit") Tile
+                </button>
             </div>
         </div>
     </div>

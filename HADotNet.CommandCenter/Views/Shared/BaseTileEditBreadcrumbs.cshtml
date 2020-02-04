@@ -1,0 +1,25 @@
+﻿@model string
+
+<div class="ui top attached mini menu">
+    <div class="item">
+        <div class="ui large breadcrumb">
+            <a class="section" asp-controller="Admin" asp-action="Index">
+                <i class="home icon"></i> Home
+            </a>
+            <div class="divider"> / </div>
+            <a class="section" asp-controller="AdminPages" asp-action="Index">
+                <i class="file icon"></i> Pages
+            </a>
+            <div class="divider"> / </div>
+            <div class="section">@Context.Request.RouteValues["page"]</div>
+            <div class="divider"> / </div>
+            <a class="section" asp-controller="AdminTile" asp-action="Index" asp-route-page="@Context.Request.RouteValues["page"]">
+                <i class="expand icon"></i> Edit Tiles
+            </a>
+            <div class="divider"> / </div>
+            <div class="section active">
+                @Html.Raw(Model)
+            </div>
+        </div>
+    </div>
+</div>

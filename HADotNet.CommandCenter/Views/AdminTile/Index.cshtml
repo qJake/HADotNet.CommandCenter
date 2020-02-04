@@ -2,49 +2,94 @@
 @{
     ViewData["Title"] = "Edit Tiles";
 }
+@section TopNav
+{
+    <div class="ui top attached mini menu">
+        <div class="item">
+            <div class="ui large breadcrumb">
+                <a class="section" asp-controller="Admin" asp-action="Index">
+                    <i class="home icon"></i> Home
+                </a>
+                <div class="divider"> / </div>
+                <a class="section" asp-controller="AdminPages" asp-action="Index">
+                    <i class="file icon"></i> Pages
+                </a>
+                <div class="divider"> / </div>
+                <div class="section">@Context.Request.RouteValues["page"]</div>
+                <div class="divider"> / </div>
+                <div class="section active">
+                    <i class="expand icon"></i> Edit Tiles
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
-<h1><i class="expand icon"></i> Edit Tiles</h1>
+<h2><i class="expand icon"></i> Edit Tiles</h2>
 
 <partial name="Alerts" />
 
-<a asp-action="AddTile" asp-route-page="@Context.Request.RouteValues["page"]" class="ui green icon labeled button">
-    <i class="add icon"></i>    
-    Add Tile
-</a>
+@if (Model == null || !Model.Any())
+{
+    <div class="ui grid">
+        <div class="doubling two column row">
+            <div class="column">
+                <div class="ui placeholder segment">
+                    <div class="ui icon header">
+                        <i class="expand icon"></i>
+                        You don't have any tiles defined yet. Let's change that!
+                    </div>
+                    <a asp-action="AddTile" asp-route-page="@Context.Request.RouteValues["page"]" class="ui icon labeled primary button">
+                        <i class="add icon"></i>
+                        Add your first tile!
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>
+        <a asp-action="AddTile" asp-route-page="@Context.Request.RouteValues["page"]" class="ui green icon labeled button">
+            <i class="add icon"></i>
+            Add Tile
+        </a>
+    </p>
+    <div class="ui grid">
+        <div class="doubling two column row">
+            <div class="column">
 
-<table class="ui compact striped celled collapsing definition table">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Entity ID</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model == null || !Model.Any())
-        {
-            <tr class="info"><td colspan="4"><em>No tiles. Go ahead and add your first one!</em></td></tr>
-        }
-        else
-        {
-            @foreach (var tile in Model)
-            {
-                var entityTile = tile as BaseEntityTile;
-                <tr>
-                    <td>
-                        <a class="ui mini yellow basic circular icon button" asp-action="EditTile" asp-route-name="@tile.Name" asp-route-page="@Context.Request.RouteValues["page"]" title="Delete this tile">
-                            <i class="pencil icon"></i>
-                        </a>
-                        <a class="ui mini red basic circular icon button" onclick="PageUtils.ConfirmDelete" asp-action="DeleteTile" asp-route-name="@tile.Name" asp-route-page="@Context.Request.RouteValues["page"]" title="Delete this tile">
-                            <i class="trash icon"></i>
-                        </a>
-                    </td>
-                    <td>@tile.Name</td>
-                    <td><span class="va-top @tile.IconClassName"></span> @tile.Type</td>
-                    <td><code>@entityTile?.EntityId</code></td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
+                <table class="ui compact striped celled definition table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Entity ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tile in Model)
+                        {
+                            var entityTile = tile as BaseEntityTile;
+                            <tr>
+                                <td class="collapsing">
+                                    <a class="ui mini yellow basic circular icon button" asp-action="EditTile" asp-route-name="@tile.Name" asp-route-page="@Context.Request.RouteValues["page"]" title="Delete this tile">
+                                        <i class="pencil icon"></i>
+                                    </a>
+                                    <a class="ui mini red basic circular icon button" onclick="PageUtils.ConfirmDelete" asp-action="DeleteTile" asp-route-name="@tile.Name" asp-route-page="@Context.Request.RouteValues["page"]" title="Delete this tile">
+                                        <i class="trash icon"></i>
+                                    </a>
+                                </td>
+                                <td>@tile.Name</td>
+                                <td><span class="va-top @tile.IconClassName"></span> @tile.Type</td>
+                                <td><code>@entityTile?.EntityId</code></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

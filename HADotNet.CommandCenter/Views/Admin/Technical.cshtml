@@ -2,6 +2,22 @@
 @{
     ViewData["Title"] = "Admin Area";
 }
+@section TopNav
+{
+    <div class="ui top attached mini menu">
+        <div class="item">
+            <div class="ui large breadcrumb">
+                <a class="section" asp-controller="Admin" asp-action="Index">
+                    <i class="home icon"></i> Home
+                </a>
+                <div class="divider"> / </div>
+                <div class="active section">
+                    <i class="server icon"></i> Technical Info
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 <h1>HA Command Center &ndash; Technical Info</h1>
 
@@ -37,16 +53,13 @@
 
             <h2>Environment Info</h2>
             <dl>
-                <dt>Process Architecture</dt>
-                <dd>@System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture</dd>
-                <dt>Process Bit-ness</dt>
+                <dt>CPU Architecture</dt>
+                <dd><em>Processor:</em> @System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture</dd>
+                <dd><em>OS:</em> @System.Runtime.InteropServices.RuntimeInformation.OSArchitecture</dd>
+                <dt>Process Bitness</dt>
                 <dd>@(Environment.Is64BitProcess ? "64-bit" : "32-bit")</dd>
                 <dt>OS</dt>
-                <dd>@System.Runtime.InteropServices.RuntimeInformation.OSDescription</dd>
-                <dt>OS Architecture</dt>
-                <dd>@System.Runtime.InteropServices.RuntimeInformation.OSArchitecture</dd>
-                <dt>OS Bit-ness</dt>
-                <dd>@(Environment.Is64BitOperatingSystem ? "64-bit" : "32-bit")</dd>
+                <dd>@System.Runtime.InteropServices.RuntimeInformation.OSDescription (@(Environment.Is64BitOperatingSystem ? "64-bit" : "32-bit"))</dd>
                 <dt>Hostname</dt>
                 <dd>@(System.Net.Dns.GetHostName())</dd>
                 <dt>Local IP(s)</dt>

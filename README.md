@@ -102,8 +102,9 @@ Download, build, and publish the project. Then deploy it to a server or into IIS
 
 Proudly made with the following software:
 
-* [Semantic UI](https://semantic-ui.com/)
+* [Fomantic UI](https://fomantic-ui.com/)
 * [Packery](https://packery.metafizzy.co/)
 * [JSColor](http://jscolor.com/)
 * [Material Design Icons](https://materialdesignicons.com/)
 * [Font Awesome](https://fontawesome.com/)
+* [reconnecting-websocket](https://github.com/joewalnes/reconnecting-websocket) by [@joewalnes](https://github.com/joewalnes/)

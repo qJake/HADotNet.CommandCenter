@@ -24,6 +24,7 @@
         <partial name="AdminNavigation" />
     </div>
     <div class="admin-contents">
+        @RenderSection("TopNav", false)
         <div class="ui basic segment fluid container">
             @RenderBody()
         </div>
