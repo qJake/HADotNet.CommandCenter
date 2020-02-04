@@ -5,8 +5,8 @@
 
 # Custom additions for HADotNet.CommandCenter
 # Ignore any js/css files, as these are generated during build time.
-wwwroot/**/*.js
-wwwroot/**/*.css
+wwwroot/js/*.js
+wwwroot/css/*.css
 
 # User-specific files
 *.rsuser
