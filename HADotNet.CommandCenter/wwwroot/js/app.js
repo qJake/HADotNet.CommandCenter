@@ -58,15 +58,18 @@ class HAConnection {
         this.targetInstance = targetInstance;
         this.PING_INTERVAL = 30 * 1000; // 30 seconds
         this.evStateChanged = new ConnectionEvent();
+        this.evConnectionStateChanged = new ConnectionEvent();
         this.expectedResults = {};
         this.expectedPromises = {};
         this.state = HAConnectionState.Closed;
     }
     // Events
     get OnStateChanged() { return this.evStateChanged.event(); }
+    get OnConnectionStateChanged() { return this.evConnectionStateChanged.event(); }
     get ConnectionState() { return this.state; }
     initialize() {
         this.state = HAConnectionState.Opening;
+        this.evConnectionStateChanged.invoke(this.state);
         this.msgId = 1;
         if (!this.ws || this.ws.readyState !== this.ws.OPEN) {
             this.ws = new ReconnectingWebSocket(this.parseSocketUrl(this.targetInstance), null, { automaticOpen: false });
@@ -132,6 +135,7 @@ class HAConnection {
     }
     isReady() {
         this.state = HAConnectionState.Open;
+        this.evConnectionStateChanged.invoke(this.state);
         // Set up ping
         this.pingInterval = window.setInterval(() => this.sendPing(), this.PING_INTERVAL);
         // Set up state change subscription
@@ -230,9 +234,11 @@ class HAConnection {
     }
     handleOpen() {
         this.state = HAConnectionState.Auth;
+        this.evConnectionStateChanged.invoke(this.state);
     }
     handleClose() {
         this.state = HAConnectionState.Closed;
+        this.evConnectionStateChanged.invoke(this.state);
         if (this.pingInterval) {
             window.clearInterval(this.pingInterval);
             this.pingInterval = 0;
@@ -884,6 +890,7 @@ class CommandCenter {
             : this.initUser();
         this.initializeMdiPreview();
         this.initializeColorPreview();
+        this.initializeNightlyRefresh();
     }
     initAdmin() {
         $(window).on('beforeunload', e => {
@@ -964,6 +971,14 @@ class CommandCenter {
         if (window.ccOptions.baseUrl) {
             this.conn = new HAConnection(window.ccOptions.baseUrl);
         }
+        this.conn.OnConnectionStateChanged.on(state => {
+            if (state == HAConnectionState.Closed) {
+                $('#alerts').show().find('.alert-message').text('[H] Connection lost, reconnecting...');
+            }
+            else if (state == HAConnectionState.Open) {
+                $('#alerts').hide();
+            }
+        });
         this.conn.OnStateChanged.on(state => {
             var tiles = this.findTilesByEntityId(state.data.entity_id);
             for (var t of tiles) {
@@ -973,6 +988,12 @@ class CommandCenter {
         });
         this.conn.initialize();
         this.tileConn = new signalR.HubConnectionBuilder().withUrl('/hubs/tile').build();
+        this.tileConn.onclose(e => {
+            $('#alerts').show().find('.alert-message').text('[S] Connection lost, reconnecting...');
+            window.setTimeout(() => {
+                window.location.reload();
+            }, 10000);
+        });
         this.tileConn.start().then(() => {
             $('.tiles .tile').each((_, e) => {
                 try {
@@ -1009,6 +1030,16 @@ class CommandCenter {
             let definedIds = t.getEntityIds();
             return definedIds.some(e => e.toLowerCase() === entityId.toLowerCase());
         });
+    }
+    initializeNightlyRefresh() {
+        // Workaround to get around SignalR hub being kinda crappy :/
+        window.setInterval(() => {
+            if (new Date().getHours() == 2) {
+                window.setTimeout(() => {
+                    window.location.reload();
+                }, 3600000); // 1 hour
+            }
+        }, 3500000); // ~58 minutes
     }
     initializeMdiPreview() {
         $('.mdi-icon-placeholder + input').each((_, e) => {
