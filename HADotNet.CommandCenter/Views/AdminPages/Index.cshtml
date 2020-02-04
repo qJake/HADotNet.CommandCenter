@@ -2,7 +2,22 @@
 @{
     ViewData["Title"] = "Pages";
 }
-
+@section TopNav
+{
+    <div class="ui top attached mini menu">
+        <div class="item">
+            <div class="ui large breadcrumb">
+                <a class="section" asp-controller="Admin" asp-action="Index">
+                    <i class="home icon"></i> Home
+                </a>
+                <div class="divider"> / </div>
+                <div class="section active">
+                    <i class="file icon"></i> Pages
+                </div>
+            </div>
+        </div>
+    </div>
+}
 <h1>Dashboard Pages</h1>
 
 <partial name="Alerts" />
@@ -21,7 +36,6 @@
             <th></th>
             <th>Name</th>
             <th>Description</th>
-            <th>Default Page</th>
             <th>URL</th>
             <th>Actions</th>
         </tr>
@@ -44,13 +58,12 @@
                             <i class="trash icon"></i>
                         </a>
                     </td>
-                    <td>@p.Name</td>
+                    <td><strong>@p.Name @(Html.Raw(p.IsDefaultPage ? "<i class=\"blue check circle icon\" title=\"This is the default page.\"></i>" : ""))</strong></td>
                     <td>@p.Description</td>
-                    <td class="center aligned">@(Html.Raw(p.IsDefaultPage ? "<i class=\"large green check icon\"></i>" : ""))</td>
                     <td><a target="_blank" href="/d/@(p.Name)"><i class="small external link icon"></i> /d/@(p.Name)</a></td>
                     <td>
-                        <a asp-action="Layout" asp-route-page="@p.Name" class="ui mini icon labeled blue button"><i class="th large icon"></i> Layout</a>
-                        <a asp-action="Index" asp-controller="AdminTile" asp-route-page="@p.Name" class="ui mini icon labeled green button"><i class="expand icon"></i> Tiles</a>
+                        <a asp-action="Index" asp-controller="AdminTile" asp-route-page="@p.Name" class="ui icon labeled green button"><i class="expand icon"></i> Manage @(p.Tiles.Count) Tiles</a>
+                        <a asp-action="Layout" asp-route-page="@p.Name" class="ui icon labeled blue button"><i class="layer group icon"></i> Edit Layout</a>
                     </td>
                 </tr>
             }

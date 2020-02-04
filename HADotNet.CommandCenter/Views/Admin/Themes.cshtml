@@ -3,6 +3,22 @@
 @{
     ViewData["Title"] = "Themes";
 }
+@section TopNav
+{
+    <div class="ui top attached mini menu">
+        <div class="item">
+            <div class="ui large breadcrumb">
+                <a class="section" asp-controller="Admin" asp-action="Index">
+                    <i class="home icon"></i> Home
+                </a>
+                <div class="divider"> / </div>
+                <div class="section active">
+                    <i class="paint brush icon"></i> Themes
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @section Header
 {

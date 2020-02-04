@@ -1,12 +1,13 @@
 ﻿@model LayoutSettings
 
-    <form class="ui form" asp-action="UpdateLayoutSettings" asp-route-page="@Context.Request.RouteValues["page"]" method="post">
-        <div class="field">
-            <button type="submit" class="ui small green icon labeled button">
-                <i class="check icon"></i>
-                Save Layout Settings
-            </button>
-        </div>
+<form class="ui form" asp-action="UpdateLayoutSettings" asp-route-page="@Context.Request.RouteValues["page"]" method="post">
+    <div class="field">
+        <button type="submit" class="ui small green icon labeled button">
+            <i class="check icon"></i>
+            Save Layout Settings
+        </button>
+    </div>
+    <div class="ui segments">
         <div class="ui segment">
             <div class="field">
                 <label asp-for="DeviceWidthPx"></label>
@@ -15,7 +16,7 @@
                     <input asp-for="DeviceWidthPx" />
                 </div>
                 <span class="ui up pointing small red label" asp-validation-for="DeviceWidthPx"></span>
-                <div><small><b>Tip:</b> Set this to the width in pixels of your table or other device.</small></div>
+                <div><small><b>Tip:</b> Set this to the width in pixels of your tablet or other device.</small></div>
             </div>
             <div class="field">
                 <label asp-for="DeviceHeightPx"></label>
@@ -24,7 +25,7 @@
                     <input asp-for="DeviceHeightPx" />
                 </div>
                 <span class="ui up pointing small red label" asp-validation-for="DeviceHeightPx"></span>
-                <div><small><b>Tip:</b> Set this to the height in pixels of your table or other device.</small></div>
+                <div><small><b>Tip:</b> Set this to the height in pixels of your tablet or other device.</small></div>
             </div>
             <div class="field">
                 <label asp-for="BaseTileSizePx"></label>
@@ -45,4 +46,9 @@
                 <div><small><b>Tip:</b> This sets how much spacing is between each tile, and around the edges of the screen.</small></div>
             </div>
         </div>
-    </form>
+        <div class="ui bottom attached visible warning message">
+            <i class="yellow triangle exclamation icon"></i>
+            <b>Note:</b> If the values above are not divisible by 2, the preview may not render with pixel-perfect accuracy.
+        </div>
+    </div>
+</form>

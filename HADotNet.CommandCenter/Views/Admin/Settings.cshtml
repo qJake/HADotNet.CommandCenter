@@ -2,6 +2,22 @@
 @{
     ViewData["Title"] = "Settings";
 }
+@section TopNav
+{
+    <div class="ui top attached mini menu">
+        <div class="item">
+            <div class="ui large breadcrumb">
+                <a class="section" asp-controller="Admin" asp-action="Index">
+                    <i class="home icon"></i> Home
+                </a>
+                <div class="divider"> / </div>
+                <div class="section active">
+                    <i class="cog icon"></i> Settings
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 <h1><i class="cog icon"></i> Settings</h1>
 
@@ -32,19 +48,44 @@
     </div>
 }
 
-@if (Model?.IsHassIo ?? false)
-{
-    <div class="ui icon labeled info message">
-        <i class="info circle icon"></i>
-        <div class="content">
-            <div class="ui large header">Managed by Hass.io</div>
-            <p>Your installation of HACC is managed by your Hass.io installation. Please refer to the add-on page for configuration details.</p>
+<form class="ui form" asp-action="Settings" method="post">
+    @if (Model?.IsHassIo ?? false)
+    {
+        <div class="ui icon labeled info message">
+            <i class="info circle icon"></i>
+            <div class="content">
+                <div class="ui large header">Managed by Hass.io</div>
+                <p>Your installation of HACC is managed by your Hass.io installation. Please refer to the add-on page for configuration details.</p>
+            </div>
         </div>
-    </div>
-}
-else
-{
-    <form class="ui form" asp-action="Settings" method="post">
+
+        <div class="ui grid">
+            <div class="row">
+                <div class="six wide computer twelve wide tablet sixteen wide mobile column">
+                    <div class="ui segment">
+                        <div class="field">
+                            <label asp-for="OverrideAssetUri"></label>
+                            <div class="ui left icon input">
+                                <i class="globe icon"></i>
+                                <input asp-for="OverrideAssetUri" />
+                            </div>
+                            <small>If your image assets are not showing up correctly, you can enter a base URL to use. This URL must start with http(s):// and be accessible from your HACC device.</small>
+                            <span class="ui up pointing small red label" asp-validation-for="OverrideAssetUri"></span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <button type="submit" class="ui green icon labeled button">
+                            <i class="check icon"></i>
+                            Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+    else
+    {
         <div class="ui grid">
             <div class="row">
                 <div class="six wide computer twelve wide tablet sixteen wide mobile column">
@@ -63,15 +104,25 @@ else
                             <textarea asp-for="AccessToken" rows="3" class="no-resize"></textarea>
                             <span class="ui up pointing small red label" asp-validation-for="AccessToken"></span>
                         </div>
-                    </div>
-                    <div class="field">
-                        <button type="submit" class="ui green icon labeled button">
-                            <i class="check icon"></i>
-                            Save Settings
-                        </button>
+                        <div class="ui separator"></div>
+                        <div class="field">
+                            <label asp-for="OverrideAssetUri"></label>
+                            <div class="ui left icon input">
+                                <i class="globe icon"></i>
+                                <input asp-for="OverrideAssetUri" />
+                            </div>
+                            <small>If your image assets are not showing up correctly, you can enter a base URL to use. This URL must start with http(s):// and be accessible from your HACC device.</small>
+                            <span class="ui up pointing small red label" asp-validation-for="OverrideAssetUri"></span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
-}
+    }
+    <div class="ui basic segment">
+        <button type="submit" class="ui green icon labeled button">
+            <i class="check icon"></i>
+            Save Settings
+        </button>
+    </div>
+</form>

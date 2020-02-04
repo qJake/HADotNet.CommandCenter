@@ -5,6 +5,7 @@
 /// <reference path="typings/packery.jquery.d.ts" />
 /// <reference path="../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
 /// <reference path="tiles/tilemap.ts" />
+/// <reference path="PageFunctions.ts" />
 
 type TilePos = {
     x: number,
@@ -87,7 +88,13 @@ class CommandCenter
         // Only init Packery stuff if we detect we have the preview grid on the page
         if ($('.preview-layout-grid').length)
         {
-            $('#auto-layout').click(() => this.pk.layout());
+            $('#auto-layout').click(() =>
+            {
+                if (confirm('This will reset the layout for this page and attempt to automatically arrange all tiles evenly.\n\nYour tiles will all probably change locations. You have been warned. :)\n\nAre you sure you want to reset the layout?'))
+                {
+                    this.pk.layout();
+                }
+            });
 
             // For some reason Draggabilly takes the first element as the grid size, so inject a temporary invisible "fake" one
             $('.preview-layout-grid').prepend(`<div class="preview-layout-item" style="opacity: 0; position: absolute; top: ${window.ccOptions.tilePreviewPadding}px; left: ${window.ccOptions.tilePreviewPadding}px; width: ${window.ccOptions.tilePreviewSize}px; height: ${window.ccOptions.tilePreviewSize}px;" id="grid__tmp"></div>`);
@@ -217,10 +224,10 @@ class CommandCenter
 
         if (this.conn.ConnectionState !== HAConnectionState.Open)
             return;
-        
+
         if (this.tiles.filter(t => t.loaded).length !== this.tiles.length)
             return;
-        
+
         // Now, refresh all of them at once
         this.conn.refreshAllStates();
 

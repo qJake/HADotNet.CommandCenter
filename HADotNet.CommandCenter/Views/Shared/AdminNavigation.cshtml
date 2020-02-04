@@ -19,10 +19,13 @@
 <div class="item">
     <a class="title">
         <i class="dropdown icon"></i>
-        Support
+        HACC Project
     </a>
     <div class="content">
-        <a class="item" href="https://github.com/qJake/HADotNet.CommandCenter" rel="nofollow" target="_blank">Project on GitHub <i class="github icon"></i></a>
+        <a class="item @(Context.Request.Path.ToString().ToLower().StartsWith("/admin/thankyou") ? "active" : "")" href="/admin/thankyou">
+            <i class="heart icon"></i> Supporters
+        </a>
+        <a class="item" href="https://github.com/qJake/HADotNet.CommandCenter" rel="nofollow" target="_blank">View on GitHub <i class="github icon"></i></a>
         <a class="item" href="https://github.com/qJake/HADotNet.CommandCenter/issues/new" rel="nofollow" target="_blank">Open an Issue <i class="hashtag icon"></i></a>
         <a class="item" href="https://www.buymeacoffee.com/qJake" rel="nofollow" target="_blank">Buy Me a Coffee <i class="coffee icon"></i></a>
     </div>

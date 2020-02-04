@@ -8,6 +8,18 @@ i.icon[class*="th large"]
     font-size: 1em;
 }
 
+// Semantic>Fomantic fix
+.ui.menu > .ui.header.item > .big.icons
+{
+    margin-top: -0.55rem;
+}
+
+// Weird combination:
+.ui.top.attached.menu + .ui.segment.container
+{
+    margin-top: 0;
+}
+
 div.admin-contents
 {
     margin-left: 260px;
@@ -47,6 +59,11 @@ textarea.code
 dl > dd
 {
     word-break: break-word;
+}
+
+.scroll-overflow
+{
+    overflow: auto;
 }
 
 /* Preview Grid */
@@ -121,6 +138,14 @@ dl > dd
     {
         vertical-align: top;
         vertical-align: text-top;
+    }
+}
+
+.va-bottom
+{
+    &, &:before
+    {
+        vertical-align: bottom;
     }
 }
 

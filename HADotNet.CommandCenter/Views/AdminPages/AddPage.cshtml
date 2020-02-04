@@ -2,8 +2,28 @@
 @{
     ViewData["Title"] = "Add Page";
 }
+@section TopNav
+{
+    <div class="ui top attached mini menu">
+        <div class="item">
+            <div class="ui large breadcrumb">
+                <a class="section" asp-controller="Admin" asp-action="Index">
+                    <i class="home icon"></i> Home
+                </a>
+                <div class="divider"> / </div>
+                <a class="section" asp-controller="AdminPages" asp-action="Index">
+                    <i class="file icon"></i> Pages
+                </a>
+                <div class="divider"> / </div>
+                <div class="active section">
+                    <i class="plus square icon"></i> Add Page
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
-<h1>Add Page</h1>
+<h1><i class="plus square icon"></i> Add Page</h1>
 
 <partial name="Alerts" />
 

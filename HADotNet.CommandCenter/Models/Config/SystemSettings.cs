@@ -14,6 +14,13 @@ namespace HADotNet.CommandCenter.Models.Config
         /// </summary>
         public string ExternalBaseUri { get; set; }
 
+        /// <summary>
+        /// If set, overrides the base URL for assets (images, video feeds, etc) on the frontend.
+        /// </summary>
+        [Url(ErrorMessage = "Enter a URL beginning with http:// or https://")]
+        [Display(Name = "Override Asset Base URL")]
+        public string OverrideAssetUri { get; set; }
+
         [Required]
         [MinLength(100, ErrorMessage = "This doesn't look like a long-lived access token.")]
         [MaxLength(200, ErrorMessage = "This doesn't look like a long-lived access token.")]

@@ -4,6 +4,12 @@
 i.icon[class*="th large"] {
   font-size: 1em;
 }
+.ui.menu > .ui.header.item > .big.icons {
+  margin-top: -0.55rem;
+}
+.ui.top.attached.menu + .ui.segment.container {
+  margin-top: 0;
+}
 div.admin-contents {
   margin-left: 260px;
 }
@@ -30,6 +36,9 @@ textarea.code {
 }
 dl > dd {
   word-break: break-word;
+}
+.scroll-overflow {
+  overflow: auto;
 }
 /* Preview Grid */
 .preview-layout-grid {
@@ -80,6 +89,10 @@ dl > dd {
 .va-top:before {
   vertical-align: top;
   vertical-align: text-top;
+}
+.va-bottom,
+.va-bottom:before {
+  vertical-align: bottom;
 }
 .icon.large.mdi {
   width: 1.67em !important;

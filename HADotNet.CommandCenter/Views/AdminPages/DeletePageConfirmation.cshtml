@@ -2,8 +2,27 @@
 @{
     ViewData["Title"] = "Delete Page";
 }
-
-<h1>Delete Page: @Model.Description (@Model.Name)</h1>
+@section TopNav
+{
+    <div class="ui top attached mini menu">
+        <div class="item">
+            <div class="ui large breadcrumb">
+                <a class="section" asp-controller="Admin" asp-action="Index">
+                    <i class="home icon"></i> Home
+                </a>
+                <div class="divider"> / </div>
+                <a class="section" asp-controller="AdminPages" asp-action="Index">
+                    <i class="file icon"></i> Pages
+                </a>
+                <div class="divider"> / </div>
+                <div class="active section">
+                    <i class="trash alternate icon"></i> Delete Page: @Model.Name
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<h1><i class="trash alternate icon"></i> Delete Page: @Model.Description (@Model.Name)</h1>
 
 <p><b>WARNING:</b> If you delete this page, you will also delete:</p>
 <ul>

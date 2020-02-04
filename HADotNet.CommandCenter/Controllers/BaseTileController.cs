@@ -22,8 +22,15 @@ namespace HADotNet.CommandCenter.Controllers
                     }
 
                     var i = c[page].Tiles.IndexOf(existing);
-                    c[page].Tiles.RemoveAt(i);
-                    c[page].Tiles.Insert(i, tile);
+                    if (i > -1)
+                    {
+                        c[page].Tiles.RemoveAt(i);
+                        c[page].Tiles.Insert(i, tile);
+                    }
+                    else
+                    {
+                        c[page].Tiles.Add(tile);
+                    }
                 }
                 else
                 {
@@ -31,7 +38,7 @@ namespace HADotNet.CommandCenter.Controllers
                 }
             });
 
-            TempData.AddSuccess($"Successfully saved {tile.Type} tile '{tile.Name}'.");
+            TempData.AddSuccess($"Successfully saved {tile.Type} tile '{tile.Name}'.<br /><br /><i class=\"info circle icon\"></i><strong>Tip:</strong> If you just added a new tile, you should proceed to <strong><a href=\"/admin/pages/{page}/layout\">edit this page's layout</a></strong>.");
 
             return RedirectToAction("Index", "AdminTile", new { page });
         }
