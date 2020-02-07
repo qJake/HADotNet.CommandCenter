@@ -1,9 +1,9 @@
 # ASP.NET Core 3.x Runtime
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-bionic AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.1-bionic AS base
 WORKDIR /app
 
 # ASP.NET Core 3.x SDK and Build
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-bionic AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1.101-bionic AS build
 ARG TAG
 
 ENV HACC_VERSION $TAG

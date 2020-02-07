@@ -1,9 +1,9 @@
 # ASP.NET Core 3.x Runtime
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-buster-slim-arm64v8 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.1-buster-slim-arm64v8 AS base
 WORKDIR /app
 
 # ASP.NET Core 3.x SDK and Build
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster-arm64v8 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1.101-buster-arm64v8 AS build
 ARG TAG
 
 ENV HACC_VERSION $TAG

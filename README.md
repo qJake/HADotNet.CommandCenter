@@ -6,7 +6,7 @@
 
 [![docker-pulls](https://img.shields.io/docker/pulls/qjake/hacc?logo=docker)](https://hub.docker.com/r/qjake/hacc) [![docker-stars](https://img.shields.io/docker/stars/qjake/hacc?logo=docker)](https://hub.docker.com/r/qjake/hacc)
 
-[![Buy me a coffee](https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png?1)](https://www.buymeacoffee.com/qJake)
+[![Buy me a coffee](https://raw.githubusercontent.com/qJake/HADotNet.CommandCenter/master/Assets/bmac.png)](https://www.buymeacoffee.com/qJake)
 
 A web-based, wall-mountable command center for Home Assistant.
 

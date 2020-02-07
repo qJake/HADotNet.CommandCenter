@@ -1,9 +1,9 @@
 # ASP.NET Core 3.x Runtime
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-alpine3.9 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.1-alpine3.10 AS base
 WORKDIR /app
 
 # ASP.NET Core 3.x SDK and Build
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-alpine3.9 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1.101-alpine3.10 AS build
 ARG TAG
 
 ENV HACC_VERSION $TAG
