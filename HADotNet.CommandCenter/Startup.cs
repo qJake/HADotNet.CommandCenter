@@ -64,6 +64,7 @@ namespace HADotNet.CommandCenter
             }
 
             services.AddAntiforgery();
+            services.AddHttpContextAccessor();
 
             services.AddSingleton<IConfigStore, JsonConfigStore>();
             services.AddScoped(_ => ClientFactory.GetClient<EntityClient>());
