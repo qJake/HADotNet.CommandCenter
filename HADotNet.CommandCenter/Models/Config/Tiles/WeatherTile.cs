@@ -1,6 +1,4 @@
-﻿using HADotNet.Core.Models;
-using Newtonsoft.Json;
-using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
