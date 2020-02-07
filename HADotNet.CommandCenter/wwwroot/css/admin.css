@@ -1,0 +1,105 @@
+﻿.valign-middle {
+  vertical-align: middle;
+}
+i.icon[class*="th large"] {
+  font-size: 1em;
+}
+.ui.menu > .ui.header.item > .big.icons {
+  margin-top: -0.55rem;
+}
+.ui.top.attached.menu + .ui.segment.container {
+  margin-top: 0;
+}
+div.admin-contents {
+  margin-left: 260px;
+}
+span.ui.label.field-validation-valid,
+span.ui.label.field-validation-valid,
+span.ui.label.field-validation-valid:before,
+span.ui.label.field-validation-valid:before {
+  display: none;
+}
+.ui.form .field input[readonly] {
+  opacity: 0.45;
+  pointer-events: none;
+  user-select: none;
+}
+textarea.no-resize {
+  resize: none !important;
+}
+textarea.code {
+  font-family: Consolas, monospace;
+  font-size: 12px;
+}
+.no-display {
+  display: none !important;
+}
+dl > dd {
+  word-break: break-word;
+}
+.scroll-overflow {
+  overflow: auto;
+}
+/* Preview Grid */
+.preview-layout-grid {
+  background: #DDD;
+  overflow: auto;
+  user-select: none;
+}
+.preview-layout-grid:active {
+  cursor: grabbing;
+}
+.preview-layout-grid .preview-layout-item {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  flex: 1 0 auto;
+  background: #b9c8cf;
+  border: 2px solid #999;
+  padding: 2px 5px;
+  cursor: grab;
+  text-align: center;
+  font-size: 0.73rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.preview-layout-grid .preview-layout-item span.mdi {
+  font-size: 24px;
+}
+.preview-layout-grid .preview-layout-item:active {
+  cursor: grabbing;
+}
+.preview-layout-grid .preview-layout-item.tile-type-blank {
+  opacity: 0.4;
+  background: #BBB;
+}
+.packery-drop-placeholder {
+  border: 2px dashed #666;
+}
+.va-middle,
+.va-middle:before {
+  vertical-align: middle;
+}
+.va-bottom,
+.va-bottom:before {
+  vertical-align: bottom;
+}
+.va-top,
+.va-top:before {
+  vertical-align: top;
+  vertical-align: text-top;
+}
+.va-bottom,
+.va-bottom:before {
+  vertical-align: bottom;
+}
+.icon.large.mdi {
+  width: 1.67em !important;
+}
+.mdi-icon-placeholder.icon.large {
+  opacity: 1 !important;
+}
+.color-preview {
+  opacity: 1 !important;
+}

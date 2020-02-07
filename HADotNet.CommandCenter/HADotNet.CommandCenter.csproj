@@ -5,60 +5,29 @@
     <RuntimeIdentifiers>win10;alpine.3.10-x64;debian.10-arm</RuntimeIdentifiers>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <AssemblyVersion>0.7.0.0</AssemblyVersion>
-    <FileVersion>0.7.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Deterministic>false</Deterministic>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <Configurations>Debug;Release;VersionBuild</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
     <Content Remove="compilerconfig.json" />
-    <Content Remove="wwwroot\js\tiles\calendar.tile.ts" />
-    <Content Remove="wwwroot\js\tiles\camera.tile.ts" />
-    <Content Remove="wwwroot\js\tiles\label.tile.ts" />
-    <Content Remove="wwwroot\js\tiles\media.tile.ts" />
-    <Content Remove="wwwroot\js\tiles\navigation.tile.ts" />
-    <Content Remove="wwwroot\js\tiles\person.tile.ts" />
-    <Content Remove="wwwroot\js\tiles\scene.tile.ts" />
-    <Content Remove="wwwroot\js\tiles\switch.tile.ts" />
-    <Content Remove="wwwroot\js\tiles\weather.tile.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot/**/*.ts" />
+    <Content Include="wwwroot/**/*.ts" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="HADotNet.CommandCenter-armhf.tar" />
     <None Remove="HADotNet.CommandCenter-armhf.tar.gz" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Remove="wwwroot\js\blank.tile.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\date.tile.ts.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\draggabilly.d.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\entityState.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\HAConnection.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\light.tile.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\models.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\models\eventData.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\models\skycons.d.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\packery.d.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\packery.jquery.d.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\packeryEx.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\PageFunctions.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\state.tile.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\tile.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\tilemap.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\tiles\tileoptions.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\tileType.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\typings\moment.d.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\typings\reconnecting-websocket.d.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\utils.ts" />
-    <TypeScriptCompile Remove="wwwroot\js\window-options.d.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\css\dashboard.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -71,19 +40,19 @@
     <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="BuildWebCompiler" Version="1.12.405" />
     <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="BuildBundlerMinifier" Version="3.2.435" />
     <PackageReference Include="HADotNet.Core" Version="1.2.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.0" />
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.7.4">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.1" />
+    <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="Microsoft.TypeScript.MSBuild" Version="3.7.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Quartz" Version="3.0.7" />
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+  <PropertyGroup>
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptModuleKind>System</TypeScriptModuleKind>
@@ -105,12 +74,16 @@
     <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(Configuration)' == 'Release' and '$(HACC_PUB_ADDTL)' == 'true'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VersionBuild|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(Configuration)' == 'VersionBuild'">
     <Exec Command="powershell -nologo -noprofile -command rm -force -recurse $(TargetDir)..\*" />
   </Target>
 
-  <Target Name="PostBuild" AfterTargets="AfterPublish" Condition="'$(Configuration)' == 'Release' and '$(HACC_PUB_ADDTL)' == 'true'">
-    <!--<Exec Command="powershell -nologo -noprofile -command write-host 'Building .tar.gz release...'; cd $(ProjectDir); Copy-Item .\bin\Release\netcoreapp3.0\publish\wwwroot .\bin\Release\netcoreapp3.0\debian.10-arm\ -Recurse -Force; cd .\bin\Release\netcoreapp3.0\debian.10-arm\; 7z a -ttar HADotNet.CommandCenter-armhf.tar *; 7z a -tgzip HADotNet.CommandCenter-armhf.tar.gz HADotNet.CommandCenter-armhf.tar; Copy-Item HADotNet.CommandCenter-armhf.tar.gz ../../; " />-->
+  <Target Name="PostBuild" AfterTargets="AfterPublish" Condition="'$(Configuration)' == 'VersionBuild'">
+    <Exec Command="powershell -nologo -noprofile -command write-host 'Building .tar.gz release...'; cd $(ProjectDir); Copy-Item .\bin\Release\netcoreapp3.1\publish\wwwroot .\bin\Release\netcoreapp3.1\debian.10-arm\ -Recurse -Force; cd .\bin\Release\netcoreapp3.1\debian.10-arm\; 7z a -ttar HADotNet.CommandCenter-armhf.tar *; 7z a -tgzip HADotNet.CommandCenter-armhf.tar.gz HADotNet.CommandCenter-armhf.tar; Copy-Item HADotNet.CommandCenter-armhf.tar.gz ../../; " />
   </Target>
 
 </Project>

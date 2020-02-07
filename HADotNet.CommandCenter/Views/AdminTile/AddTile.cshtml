@@ -56,11 +56,11 @@
     </a>
     <a asp-action="Add" asp-controller="SwitchTile" asp-route-page="@Context.Request.RouteValues["page"]" class="green card">
         <div class="content">
-            <div class="header"><span class="va-bottom @(new SwitchTile().IconClassName)"></span> Switch  Tile</div>
+            <div class="header"><span class="va-bottom @(new SwitchTile().IconClassName)"></span> Switch Tile</div>
             <div class="description">A tile to represent the state of a switch, and to turn the switch on and off when clicked.</div>
         </div>
         <div class="extra content">
-            <p>Entity types: <code>switch, group, cover, remote, input_boolean</code></p>
+            <p>Entity types: <code>switch, group, cover, fan, remote, input_boolean</code></p>
         </div>
     </a>
     <a asp-action="Add" asp-controller="LightTile" asp-route-page="@Context.Request.RouteValues["page"]" class="yellow card">

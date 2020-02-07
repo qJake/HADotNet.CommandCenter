@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F4EBD22A-AF75-424D-A6CA-6D37F083DBC7}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		Dockerfile = Dockerfile
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -15,12 +16,15 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		VersionBuild|Any CPU = VersionBuild|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6A05F107-2E43-4C92-8441-F10F36D2CF50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A05F107-2E43-4C92-8441-F10F36D2CF50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A05F107-2E43-4C92-8441-F10F36D2CF50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A05F107-2E43-4C92-8441-F10F36D2CF50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A05F107-2E43-4C92-8441-F10F36D2CF50}.VersionBuild|Any CPU.ActiveCfg = VersionBuild|Any CPU
+		{6A05F107-2E43-4C92-8441-F10F36D2CF50}.VersionBuild|Any CPU.Build.0 = VersionBuild|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

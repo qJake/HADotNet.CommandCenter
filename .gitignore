@@ -3,10 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# Custom additions for HADotNet.CommandCenter
-# Ignore any js/css files, as these are generated during build time.
-**/wwwroot/**/*.js
-**/wwwroot/**/*.css
+# Ignore the built release file
+HADotNet.CommandCenter-armhf.tar.gz
 
 # User-specific files
 *.rsuser
