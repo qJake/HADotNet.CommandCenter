@@ -32,5 +32,10 @@ namespace HADotNet.CommandCenter.Models.Config
         /// Gets or sets whether or not this is a Hass.io addon environment. Set automatically when initialized from a Hass.io addon container.
         /// </summary>
         public bool IsHassIo { get; set; }
+
+        /// <summary>
+        /// Gets the Websocket URL.
+        /// </summary>
+        public string WebsocketUri => !string.IsNullOrWhiteSpace(OverrideAssetUri) ? OverrideAssetUri : IsHassIo && !string.IsNullOrWhiteSpace(ExternalBaseUri) ? ExternalBaseUri : BaseUri;
     }
 }

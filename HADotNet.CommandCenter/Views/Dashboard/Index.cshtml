@@ -129,8 +129,8 @@
     <script>
         window.ccOptions.autoReturn = @Model.CurrentPage.AutoReturnSeconds;
         window.ccOptions.pageId = '@Model.CurrentPage.Name';
-        window.ccOptions.baseUrl = '@Model.SystemSettings.BaseUri';
-        window.ccOptions.socketUrl = '@(Model.SystemSettings.IsHassIo ? "http://hassio/homeassistant/websocket" : Model.SystemSettings.BaseUri)';
+        window.ccOptions.baseUrl = '@(Model.SystemSettings.ExternalBaseUri ?? Model.SystemSettings.BaseUri)';
+        window.ccOptions.socketUrl = '@Model.SystemSettings.WebsocketUri';
         window.ccOptions.overrideAssetUrl = '@Model.SystemSettings.OverrideAssetUri';
         window.ccOptions.token = '@Model.SystemSettings.AccessToken';
     </script>
