@@ -149,9 +149,9 @@ class CommandCenter
 
     private initUser(): void
     {
-        if (window.ccOptions.baseUrl)
+        if (window.ccOptions.socketUrl)
         {
-            this.conn = new HAConnection(window.ccOptions.baseUrl);
+            this.conn = new HAConnection(window.ccOptions.socketUrl);
         }
 
         this.conn.OnConnectionStateChanged.on(state =>

@@ -90,12 +90,14 @@ namespace HADotNet.CommandCenter.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Settings(SystemSettings newSettings)
+        public async Task<IActionResult> Settings([FromForm] SystemSettings newSettings)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    newSettings ??= new SystemSettings();
+
                     if (newSettings.IsHassIo)
                     {
                         newSettings.BaseUri = "http://hassio/homeassistant";
