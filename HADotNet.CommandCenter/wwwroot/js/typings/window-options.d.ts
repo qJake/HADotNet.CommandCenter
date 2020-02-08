@@ -4,6 +4,7 @@ declare interface ICcOptions
 {
     baseUrl: string;
     overrideAssetUrl: string;
+    socketUrl: string;
     token: string;
     tilePadding: number;
     tilePreviewPadding: number;

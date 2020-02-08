@@ -49,6 +49,9 @@
 }
 
 <form class="ui form" asp-action="Settings" method="post">
+
+    <input type="hidden" asp-for="IsHassIo" />
+
     @if (Model?.IsHassIo ?? false)
     {
         <div class="ui icon labeled info message">
@@ -58,6 +61,9 @@
                 <p>Your installation of HACC is managed by your Hass.io installation. Please refer to the add-on page for configuration details.</p>
             </div>
         </div>
+
+        <input type="hidden" asp-for="BaseUri" />
+        <input type="hidden" asp-for="AccessToken" />
 
         <div class="ui grid">
             <div class="row">

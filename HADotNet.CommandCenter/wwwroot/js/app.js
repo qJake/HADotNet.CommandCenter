@@ -997,8 +997,8 @@ class CommandCenter {
         }
     }
     initUser() {
-        if (window.ccOptions.baseUrl) {
-            this.conn = new HAConnection(window.ccOptions.baseUrl);
+        if (window.ccOptions.socketUrl) {
+            this.conn = new HAConnection(window.ccOptions.socketUrl);
         }
         this.conn.OnConnectionStateChanged.on(state => {
             if (state == HAConnectionState.Closed) {
