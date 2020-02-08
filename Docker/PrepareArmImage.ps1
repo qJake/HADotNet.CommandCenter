@@ -40,6 +40,7 @@ Write-Host 'Packaging .tar.gz release...'
 cd "HADotNet.CommandCenter\bin\Release\netcoreapp3.1\debian.10-arm\publish\"
 7z a -ttar HADotNet.CommandCenter-armhf.tar *
 7z a -tgzip HADotNet.CommandCenter-armhf.tar.gz HADotNet.CommandCenter-armhf.tar
+rm -Force ../../../../../../HADotNet.CommandCenter-armhf.tar.gz -ErrorAction SilentlyContinue
 Move-Item HADotNet.CommandCenter-armhf.tar.gz ../../../../../../
 cd ../../../../../../Docker
 

@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HADotNet.CommandCenter.Utils;
+using System.ComponentModel.DataAnnotations;
 
 namespace HADotNet.CommandCenter.Models.Config
 {
     public class SystemSettings
     {
-        [Required]
+        [RequiredStandalone]
         [Url(ErrorMessage = "Enter the full URL starting with http:// or https://.")]
         [Display(Name = "Home Assistant Base URL")]
         public string BaseUri { get; set; }
@@ -21,7 +22,7 @@ namespace HADotNet.CommandCenter.Models.Config
         [Display(Name = "Override Asset Base URL")]
         public string OverrideAssetUri { get; set; }
 
-        [Required]
+        [RequiredStandalone]
         [MinLength(100, ErrorMessage = "This doesn't look like a long-lived access token.")]
         [MaxLength(200, ErrorMessage = "This doesn't look like a long-lived access token.")]
         [Display(Name = "Long-Lived Access Token")]
