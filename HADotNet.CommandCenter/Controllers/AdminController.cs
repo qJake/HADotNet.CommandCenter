@@ -96,7 +96,14 @@ namespace HADotNet.CommandCenter.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    newSettings.BaseUri = newSettings.BaseUri.TrimEnd('/');
+                    if (newSettings.IsHassIo)
+                    {
+                        newSettings.BaseUri = "http://hassio/homeassistant";
+                    }
+                    else
+                    {
+                        newSettings.BaseUri = newSettings.BaseUri.TrimEnd('/');
+                    }
                     await ConfigStore.ManipulateConfig(c => c.Settings = newSettings);
 
                     TempData["check-settings"] = true;
