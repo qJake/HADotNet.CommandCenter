@@ -14,6 +14,8 @@ namespace HADotNet.CommandCenter
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(wb =>
                 {
+                    wb.ConfigureKestrel(k => k.AddServerHeader = false);
+                    wb.CaptureStartupErrors(true);
                     wb.UseStartup<Startup>();
                 });
     }
