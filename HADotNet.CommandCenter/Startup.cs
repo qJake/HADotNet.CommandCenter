@@ -76,7 +76,14 @@ namespace HADotNet.CommandCenter
             services.AddSignalR()
                     .AddNewtonsoftJsonProtocol();
 
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            if (Environment.IsDevelopment())
+            {
+                services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            }
+            else
+            {
+                services.AddControllersWithViews();
+            }
 
             services.AddMvc()
                     .AddNewtonsoftJson();

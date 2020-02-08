@@ -52,3 +52,19 @@ ENV HACC_VERSION $TAG
 EXPOSE 8095
 
 ENTRYPOINT ["dotnet", "HADotNet.CommandCenter.dll"]
+
+# Labels
+LABEL \
+    io.hass.name="HACC" \
+    io.hass.description="Wall-mountable tablet interface for Home Assistant." \
+    io.hass.arch="aarch64" \
+    io.hass.type="addon" \
+    io.hass.version=${HACC_VERSION} \
+    maintainer="qJake <https://github.com/qJake/>" \
+    org.label-schema.description="Wall-mountable tablet interface for Home Assistant." \
+    org.label-schema.name="HACC" \
+    org.label-schema.schema-version="1.0" \    
+    org.label-schema.url="https://github.com/qJake/HADotNet.CommandCenter/" \
+    org.label-schema.usage="https://github.com/qJake/HADotNet.CommandCenter/README.md" \
+    org.label-schema.vcs-url="https://github.com/qJake/HADotNet.CommandCenter/" \
+    org.label-schema.vendor="qJake"
