@@ -40,7 +40,7 @@ namespace HADotNet.CommandCenter.Services
         public JsonConfigStore(IOptions<HaccOptions> haccOptions)
         {
             Options = haccOptions.Value;
-            var isHassio = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("HASSIO_TOKEN"));
+            var isHassio = !string.IsNullOrWhiteSpace(SupervisorEnvironment.GetSupervisorToken());
             ConfigDirectory = isHassio ? HASSIO_CONFIG_LOC : Environment.ExpandEnvironmentVariables(Options.ConfigLocation);
         }
 
