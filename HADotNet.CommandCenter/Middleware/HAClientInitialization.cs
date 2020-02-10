@@ -2,6 +2,7 @@
 using HADotNet.CommandCenter.Models.Config.Pages;
 using HADotNet.CommandCenter.Models.Config.Tiles;
 using HADotNet.CommandCenter.Services.Interfaces;
+using HADotNet.CommandCenter.Utils;
 using HADotNet.Core;
 using HADotNet.Core.Clients;
 using Microsoft.AspNetCore.Http;
@@ -30,14 +31,14 @@ namespace HADotNet.CommandCenter.Middleware
         {
             var config = await ConfigStore.GetConfigAsync();
 
-            if (!string.IsNullOrWhiteSpace(config?.Settings?.BaseUri) && (!string.IsNullOrWhiteSpace(config?.Settings?.AccessToken) || !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("HASSIO_TOKEN"))))
+            if (!string.IsNullOrWhiteSpace(config?.Settings?.BaseUri) && (!string.IsNullOrWhiteSpace(config?.Settings?.AccessToken) || !string.IsNullOrWhiteSpace(SupervisorEnvironment.GetSupervisorToken())))
             {
                 if (!ClientFactory.IsInitialized)
                 {
                     if (config.Settings.IsHassIo)
                     {
                         Log.LogInformation($"Auto-initializing HACC via Hass.io addon.");
-                        ClientFactory.Initialize(config.Settings.BaseUri, Environment.GetEnvironmentVariable("HASSIO_TOKEN"));
+                        ClientFactory.Initialize(config.Settings.BaseUri, SupervisorEnvironment.GetSupervisorToken());
 
                         var discovery = ClientFactory.GetClient<DiscoveryClient>();
                         var discInfo = await discovery.GetDiscoveryInfo();
@@ -58,7 +59,7 @@ namespace HADotNet.CommandCenter.Middleware
             if (!ClientFactory.IsInitialized)
             {
                 // If we're in Hass.io mode, set the base URI and redirect to the admin homepage.
-                if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("HASSIO_TOKEN")))
+                if (!string.IsNullOrWhiteSpace(SupervisorEnvironment.GetSupervisorToken()))
                 {
                     await ConfigStore.ManipulateConfig(c =>
                     {

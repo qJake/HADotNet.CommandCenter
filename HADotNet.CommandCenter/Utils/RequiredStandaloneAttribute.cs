@@ -7,7 +7,7 @@ namespace HADotNet.CommandCenter.Utils
     {       
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("HASSIO_TOKEN")))
+            if (!string.IsNullOrWhiteSpace(SupervisorEnvironment.GetSupervisorToken()))
             {
                 return ValidationResult.Success;
             }

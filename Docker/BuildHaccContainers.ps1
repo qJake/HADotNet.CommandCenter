@@ -1,4 +1,4 @@
-﻿$version = '1.0.6'
+﻿$version = '1.0.7'
 
 function Test-ExitCode ([int] $Expected = 0)
 {
@@ -15,20 +15,20 @@ $prgStat = 'Building'
 
 # Build Raw Images
 
-Write-Progress -Activity $prgAct -Status $prgStat -PercentComplete 15 -CurrentOperation 'Alpine-AMD64'
-docker build --build-arg TAG=$version --no-cache -t qjake/hacc:$version-linux-alpine-amd64 -f linux-alpine-amd64/Dockerfile . ; Test-ExitCode
-
-Write-Progress -Activity $prgAct -Status $prgStat -PercentComplete 30 -CurrentOperation 'Debian-AMD64'
-docker build --build-arg TAG=$version --no-cache -t qjake/hacc:$version-linux-debian-amd64 -f linux-debian-amd64/Dockerfile . ; Test-ExitCode
-
-Write-Progress -Activity $prgAct -Status $prgStat -PercentComplete 50 -CurrentOperation 'Ubuntu-AMD64'
-docker build --build-arg TAG=$version --no-cache -t qjake/hacc:$version-linux-ubuntu-amd64 -f linux-ubuntu-amd64/Dockerfile . ; Test-ExitCode
-
-Write-Progress -Activity $prgAct -Status $prgStat -PercentComplete 75 -CurrentOperation 'Debian-ARM32v7'
+Write-Progress -Activity $prgAct -Status $prgStat -PercentComplete 1 -CurrentOperation 'Debian-ARM32v7'
 docker build --build-arg TAG=$version --no-cache -t qjake/hacc:$version-linux-debian-arm32v7 -f linux-debian-arm32v7/Dockerfile . ; Test-ExitCode
 
-Write-Progress -Activity $prgAct -Status $prgStat -PercentComplete 90 -CurrentOperation 'Debian-ARM64v8'
+Write-Progress -Activity $prgAct -Status $prgStat -PercentComplete 50 -CurrentOperation 'Debian-ARM64v8'
 docker build --build-arg TAG=$version --no-cache -t qjake/hacc:$version-linux-debian-arm64v8 -f linux-debian-arm64v8/Dockerfile . ; Test-ExitCode
+
+Write-Progress -Activity $prgAct -Status $prgStat -PercentComplete 70 -CurrentOperation 'Ubuntu-AMD64'
+docker build --build-arg TAG=$version --no-cache -t qjake/hacc:$version-linux-ubuntu-amd64 -f linux-ubuntu-amd64/Dockerfile . ; Test-ExitCode
+
+Write-Progress -Activity $prgAct -Status $prgStat -PercentComplete 80 -CurrentOperation 'Debian-AMD64'
+docker build --build-arg TAG=$version --no-cache -t qjake/hacc:$version-linux-debian-amd64 -f linux-debian-amd64/Dockerfile . ; Test-ExitCode
+
+Write-Progress -Activity $prgAct -Status $prgStat -PercentComplete 90 -CurrentOperation 'Alpine-AMD64'
+docker build --build-arg TAG=$version --no-cache -t qjake/hacc:$version-linux-alpine-amd64 -f linux-alpine-amd64/Dockerfile . ; Test-ExitCode
 
 Write-Progress -Activity $prgAct -Completed
 
@@ -99,5 +99,8 @@ docker push qjake/hacc-hassio-armhf:latest
 docker push qjake/hacc-hassio-armv7:latest
 docker push qjake/hacc:$version
 docker push qjake/hacc:latest
+
+# Clean up... because you can get a "no space left on disk" error on some containers otherwise
+docker images prune --force
 
 Write-Host "Completed: $((Get-Date))"

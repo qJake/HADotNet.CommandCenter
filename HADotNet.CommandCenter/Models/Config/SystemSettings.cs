@@ -36,6 +36,6 @@ namespace HADotNet.CommandCenter.Models.Config
         /// <summary>
         /// Gets the Websocket URL.
         /// </summary>
-        public string WebsocketUri => !string.IsNullOrWhiteSpace(OverrideAssetUri) ? OverrideAssetUri : IsHassIo && !string.IsNullOrWhiteSpace(ExternalBaseUri) ? ExternalBaseUri : BaseUri;
+        public string WebsocketUri => IsHassIo ? SupervisorEnvironment.SUPERVISOR_WEBSOCKET_URL : !string.IsNullOrWhiteSpace(OverrideAssetUri) ? OverrideAssetUri : BaseUri;
     }
 }
