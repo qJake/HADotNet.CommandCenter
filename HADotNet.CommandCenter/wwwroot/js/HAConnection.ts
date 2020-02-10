@@ -316,6 +316,11 @@ class HAConnection
 
     private parseSocketUrl(baseUrl: string): string
     {
+        if (/core\/websocket/i.test(baseUrl))
+        {
+            return baseUrl;
+        }
+
         let aTag = document.createElement('a');
         aTag.href = baseUrl;
 

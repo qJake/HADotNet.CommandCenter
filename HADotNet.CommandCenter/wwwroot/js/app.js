@@ -245,6 +245,9 @@ class HAConnection {
         }
     }
     parseSocketUrl(baseUrl) {
+        if (/core\/websocket/i.test(baseUrl)) {
+            return baseUrl;
+        }
         let aTag = document.createElement('a');
         aTag.href = baseUrl;
         return `${(aTag.protocol.toLowerCase() === 'https:' ? 'wss' : 'ws')}://${aTag.host}/api/websocket`;
