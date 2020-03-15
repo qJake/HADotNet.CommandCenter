@@ -47,7 +47,7 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
                 var stateClient = ClientFactory.GetClient<StatesClient>();
                 var state = await stateClient.GetState(EntityId);
                 var serviceName = state.State.ToUpper() == "ON" ? "turn_off" : "turn_on";
-                await serviceClient.CallService("switch", serviceName, new { entity_id = EntityId });
+                await serviceClient.CallService("homeassistant", serviceName, new { entity_id = EntityId });
             }
             else
             {
