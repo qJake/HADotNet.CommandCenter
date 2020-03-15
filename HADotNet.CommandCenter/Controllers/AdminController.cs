@@ -299,14 +299,16 @@ namespace HADotNet.CommandCenter.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> HttpDebugger() => View();
+        public IActionResult HttpDebugger() => View();
 
         [HttpPost]
         public async Task<IActionResult> HttpDebugger([FromForm] HttpDebugRequest dbgReq)
         {
             var client = new RestClient(dbgReq.Url);
-            var req = new RestRequest();
-            req.Method = Enum.Parse<Method>(dbgReq.Method);
+            var req = new RestRequest
+            {
+                Method = Enum.Parse<Method>(dbgReq.Method)
+            };
             foreach (var h in dbgReq.Headers?.Split('\n') ?? new string[] { })
             {
                 var parts = h.Trim().Split(':');
