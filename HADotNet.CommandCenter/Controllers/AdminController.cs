@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -295,6 +296,47 @@ namespace HADotNet.CommandCenter.Controllers
             TempData.AddSuccess("Successfully reset HACC configuration.");
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> HttpDebugger() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> HttpDebugger([FromForm] HttpDebugRequest dbgReq)
+        {
+            var client = new RestClient(dbgReq.Url);
+            var req = new RestRequest();
+            req.Method = Enum.Parse<Method>(dbgReq.Method);
+            foreach (var h in dbgReq.Headers?.Split('\n') ?? new string[] { })
+            {
+                var parts = h.Trim().Split(':');
+                if (parts.Length >= 2)
+                {
+                    req.AddHeader(parts[0].Trim(), string.Join(':', parts.Skip(1)));
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(dbgReq.Body))
+            {
+                req.AddParameter("", dbgReq.Body, ParameterType.RequestBody);
+            }
+
+            var resp = await client.ExecuteTaskAsync(req);
+            var r = new HttpDebugResponse();
+
+            if (resp.ResponseStatus != ResponseStatus.Completed)
+            {
+                r.NetworkStatus = $"{resp.ResponseStatus.ToString()}: {resp.StatusDescription}";
+            }
+            else
+            {
+                r.Headers = string.Join('\n', resp.Headers.Select(h => $"<strong>{h.Name}:</strong> <code>{h.Value}</code>"));
+                r.Status = (int)resp.StatusCode;
+                r.Body = resp.Content;
+            }
+
+            dbgReq.Response = r;
+
+            return View(dbgReq);
         }
     }
 }

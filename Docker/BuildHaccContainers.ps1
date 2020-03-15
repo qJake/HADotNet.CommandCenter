@@ -100,7 +100,8 @@ docker push qjake/hacc-hassio-armv7:latest
 docker push qjake/hacc:$version
 docker push qjake/hacc:latest
 
+Write-Host "Cleaning up, this may take a moment..."
 # Clean up... because you can get a "no space left on disk" error on some containers otherwise
-docker images prune --force
+docker image prune --force
 
 Write-Host "Completed: $((Get-Date))"
