@@ -41,7 +41,7 @@ namespace HADotNet.CommandCenter.Middleware
                         {
                             Log.LogInformation($"Attempting auto-initializaion of HACC via Supervisor interface...");
 
-                            var llat = await LlatHelper.ProvisionAccessToken(SupervisorEnvironment.GetBaseUrl(), SupervisorEnvironment.GetSupervisorToken());
+                            var llat = await LlatHelper.ProvisionAccessToken(SupervisorEnvironment.GetWebsocketUrl(), SupervisorEnvironment.GetSupervisorToken());
 
                             if (string.IsNullOrWhiteSpace(llat) || llat.StartsWith("ERROR"))
                             {

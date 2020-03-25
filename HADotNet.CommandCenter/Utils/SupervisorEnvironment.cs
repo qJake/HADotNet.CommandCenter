@@ -14,5 +14,9 @@ namespace HADotNet.CommandCenter.Utils
         public static string GetBaseUrl() => !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(TOKEN_ENV_NAME))
             ? "http://supervisor"
             : "http://hassio";
+
+        public static Uri GetWebsocketUrl() => new Uri(!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(TOKEN_ENV_NAME))
+            ? "ws://supervisor/core/websocket"
+            : "ws://hassio/core/websocket");
     }
 }
