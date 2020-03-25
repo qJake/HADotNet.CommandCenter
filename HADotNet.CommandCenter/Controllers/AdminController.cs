@@ -299,46 +299,14 @@ namespace HADotNet.CommandCenter.Controllers
         }
 
         [HttpGet]
-        public IActionResult HttpDebugger() => View();
-
-        [HttpPost]
-        public async Task<IActionResult> HttpDebugger([FromForm] HttpDebugRequest dbgReq)
+        public async Task<IActionResult> ResetToken()
         {
-            var client = new RestClient(dbgReq.Url);
-            var req = new RestRequest
-            {
-                Method = Enum.Parse<Method>(dbgReq.Method)
-            };
-            foreach (var h in dbgReq.Headers?.Split('\n') ?? new string[] { })
-            {
-                var parts = h.Trim().Split(':');
-                if (parts.Length >= 2)
-                {
-                    req.AddHeader(parts[0].Trim(), string.Join(':', parts.Skip(1)));
-                }
-            }
-            if (!string.IsNullOrWhiteSpace(dbgReq.Body))
-            {
-                req.AddParameter("", dbgReq.Body, ParameterType.RequestBody);
-            }
+            // This will reset defaults and initialize collections, even if no actions are passed in.
+            await ConfigStore.ManipulateConfig(c => c.Settings.AccessToken = null);
 
-            var resp = await client.ExecuteTaskAsync(req);
-            var r = new HttpDebugResponse();
+            TempData.AddSuccess("Successfully reset Home Assistant access token for HACC. A new one should automatically generate.");
 
-            if (resp.ResponseStatus != ResponseStatus.Completed)
-            {
-                r.NetworkStatus = $"{resp.ResponseStatus.ToString()}: {resp.StatusDescription}";
-            }
-            else
-            {
-                r.Headers = string.Join('\n', resp.Headers.Select(h => $"<strong>{h.Name}:</strong> <code>{h.Value}</code>"));
-                r.Status = (int)resp.StatusCode;
-                r.Body = resp.Content;
-            }
-
-            dbgReq.Response = r;
-
-            return View(dbgReq);
+            return RedirectToAction("Settings");
         }
     }
 }
