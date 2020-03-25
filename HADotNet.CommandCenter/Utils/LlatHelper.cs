@@ -10,7 +10,7 @@ namespace HADotNet.CommandCenter.Utils
 {
     public static class LlatHelper
     {
-        public static async Task<string> ProvisionAccessToken(string url, string supervisorToken)
+        public static async Task<string> ProvisionAccessToken(Uri url, string supervisorToken)
         {
             var cancel = new CancellationToken();
 
@@ -20,7 +20,7 @@ namespace HADotNet.CommandCenter.Utils
 
                 client.Options.RemoteCertificateValidationCallback = (_, __, ___, ____) => true;
 
-                await client.ConnectAsync(new Uri(url), cancel);
+                await client.ConnectAsync(url, cancel);
 
                 dynamic authMsgToCheck;
 
