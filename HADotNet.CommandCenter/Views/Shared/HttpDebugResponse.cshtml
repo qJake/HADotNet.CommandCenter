@@ -1,0 +1,29 @@
+﻿@model HttpDebugResponse
+
+<h3>
+    @if (!string.IsNullOrWhiteSpace(Model.NetworkStatus))
+    {
+        <span class="ui red text">@Model.NetworkStatus</span>
+    }
+    else
+    {
+        if (Model.Status < 400)
+        {
+            <span class="ui green text">@Model.Status @Model.StatusName</span>
+        }
+        else if (Model.Status < 500)
+        {
+            <span class="ui orange text">@Model.Status @Model.StatusName</span>
+        }
+        else
+        {
+            <span class="ui red text">@Model.Status @Model.StatusName</span>
+        }
+    }
+</h3>
+<h4>Headers</h4>
+<p>
+    @Html.Raw(Model.Headers.Replace("\r", "").Replace("\n", "<br />"))
+</p>
+<h4>Body</h4>
+<pre style="white-space: pre-wrap;" class="code">@Html.Raw(HtmlEncoder.Encode(Model.Body))</pre>
