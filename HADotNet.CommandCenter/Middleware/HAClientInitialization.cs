@@ -37,8 +37,30 @@ namespace HADotNet.CommandCenter.Middleware
                 {
                     if (config.Settings.IsHassIo)
                     {
-                        Log.LogInformation($"Auto-initializing HACC via Hass.io addon.");
-                        ClientFactory.Initialize(config.Settings.BaseUri, SupervisorEnvironment.GetSupervisorToken());
+                        if (string.IsNullOrWhiteSpace(config?.Settings?.AccessToken) || !JwtHelper.IsTokenValid(config.Settings.AccessToken))
+                        {
+                            Log.LogInformation($"Attempting auto-initializaion of HACC via Supervisor interface...");
+
+                            var llat = await LlatHelper.ProvisionAccessToken(SupervisorEnvironment.GetBaseUrl(), SupervisorEnvironment.GetSupervisorToken());
+
+                            if (string.IsNullOrWhiteSpace(llat) || llat.StartsWith("ERROR"))
+                            {
+                                Log.LogError("Unable to generate LLAT via Home Assistant WebSocket API. " + llat);
+                                
+                                context.Response.Redirect("/admin/settings?spverr=1");
+                                return;
+                            }
+                            else
+                            {
+                                await ConfigStore.ManipulateConfig(c => c.Settings.AccessToken = llat);
+                                config = await ConfigStore.GetConfigAsync();
+
+                                Log.LogInformation($"Successfully provisioned and saved LLAT for Home Assistant.");
+                            }
+                        }
+
+                        Log.LogInformation($"Initializing HACC API with pre-stored LLAT (via Supervisor).");
+                        ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
 
                         var discovery = ClientFactory.GetClient<DiscoveryClient>();
                         var discInfo = await discovery.GetDiscoveryInfo();
@@ -65,14 +87,15 @@ namespace HADotNet.CommandCenter.Middleware
                     {
                         c.Settings = new SystemSettings
                         {
-                            BaseUri = "http://hassio/homeassistant",
-                            AccessToken = null,
+                            BaseUri = $"{SupervisorEnvironment.GetBaseUrl()}/homeassistant",
                             IsHassIo = true
                         };
 
-                        context.Response.StatusCode = 303;
-                        context.Response.Redirect("/admin");
                     });
+
+                    context.Response.StatusCode = 303;
+                    context.Response.Redirect("/admin");
+                    return;
                 }
 
                 // Otherwise, if we aren't on one of the approved pages, redirect to the settings page and prompt for setup.

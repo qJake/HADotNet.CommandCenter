@@ -36,6 +36,17 @@
     </div>
 }
 
+@if (Context.Request.Query["spverr"] == "1")
+{
+    <div class="ui icon labeled error message">
+        <i class="times circle icon"></i>
+        <div class="content">
+            <div class="ui large header">Unable to Provision Auth Token via Supervisor</div>
+            <p>Please check the addon logs for a more detailed error, and <b><a href="https://github.com/qJake/HADotNet.CommandCenter/issues/new/choose" target="_blank" rel="nofollow">file a bug here</a></b>.</p>
+        </div>
+    </div>
+}
+
 @if (ViewBag.Instance is string instance)
 {
     <div class="ui icon labeled success message">
@@ -77,6 +88,13 @@
                             </div>
                             <small>If your image assets are not showing up correctly, you can enter a base URL to use. This URL must start with http(s):// and be accessible from your HACC device.</small>
                             <span class="ui up pointing small red label" asp-validation-for="OverrideAssetUri"></span>
+                        </div>
+                        <div class="field">
+                            <label>Reset Access Token</label>
+                            <p>If the Home Assistant token was deleted, you restored Home Assistant from a backup, or the token was unexpectedly revoked, you can reset it here and HACC will generate a new one for you.</p>
+                            <p>
+                                <a asp-action="ResetToken" class="ui tiny red button">Reset Access Token</a>
+                            </p>
                         </div>
                     </div>
                 </div>
