@@ -11,11 +11,6 @@ namespace HADotNet.CommandCenter.Models.Config
         public string BaseUri { get; set; }
 
         /// <summary>
-        /// Set automatically if running in Hass.io mode. Contains the discovered external URL of Home Assistant, for retrieving image assets (camera feeds, etc).
-        /// </summary>
-        public string ExternalBaseUri { get; set; }
-
-        /// <summary>
         /// If set, overrides the base URL for assets (images, video feeds, etc) on the frontend.
         /// </summary>
         [Url(ErrorMessage = "Enter a URL beginning with http:// or https://")]
