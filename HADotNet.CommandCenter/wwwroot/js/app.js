@@ -552,9 +552,10 @@ class SwitchTile extends Tile {
         super.updateTile(t);
     }
     updateState(state) {
+        var _a;
         //console.log("State received for: " + tile.name, state);
         let label = state.new_state.attributes["friendly_name"].toString();
-        if (this.tile.overrideLabel) {
+        if ((_a = this.tile) === null || _a === void 0 ? void 0 : _a.overrideLabel) {
             label = this.tile.overrideLabel;
         }
         $(`#tile-${this.tile.name}`).find('span[value-name]').text(label);
