@@ -35,20 +35,8 @@ namespace HADotNet.CommandCenter.Middleware
             {
                 if (!string.IsNullOrWhiteSpace(config?.Settings?.BaseUri) && !string.IsNullOrWhiteSpace(config?.Settings?.AccessToken))
                 {
-                    if (config.Settings.IsHassIo)
-                    {
-                        Log.LogInformation($"Initializing HACC API with pre-stored LLAT (via Supervisor).");
-                        ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
-
-                        var discovery = ClientFactory.GetClient<DiscoveryClient>();
-                        var discInfo = await discovery.GetDiscoveryInfo();
-                        await ConfigStore.ManipulateConfig(c => c.Settings.ExternalBaseUri = discInfo.BaseUrl);
-                    }
-                    else
-                    {
-                        Log.LogInformation($"Initializing HACC API with URL {config?.Settings?.BaseUri ?? "[NULL]"} and access token [{new string(config?.Settings?.AccessToken.Take(6).ToArray())}•••••••••••{new string(config?.Settings?.AccessToken.TakeLast(6).ToArray())}].");
-                        ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
-                    }
+                    Log.LogInformation($"Initializing HACC API with URL {config?.Settings?.BaseUri ?? "[NULL]"} and access token [{new string(config?.Settings?.AccessToken.Take(6).ToArray())}•••••••••••{new string(config?.Settings?.AccessToken.TakeLast(6).ToArray())}].");
+                    ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
                 }
                 else
                 {
@@ -61,18 +49,26 @@ namespace HADotNet.CommandCenter.Middleware
                 // If we're in Hass.io mode, set the base URI and redirect to the admin homepage.
                 if (!string.IsNullOrWhiteSpace(SupervisorEnvironment.GetSupervisorToken()))
                 {
+                    // Temporary while we fetch some stuff...
+                    ClientFactory.Initialize(SupervisorEnvironment.GetBaseUrl(), SupervisorEnvironment.GetSupervisorToken());
+
+                    var discovery = ClientFactory.GetClient<DiscoveryClient>();
+                    var discInfo = await discovery.GetDiscoveryInfo();
+
                     await ConfigStore.ManipulateConfig(c =>
                     {
                         c.Settings = new SystemSettings
                         {
-                            BaseUri = $"{SupervisorEnvironment.GetBaseUrl()}/homeassistant",
+                            BaseUri = discInfo.BaseUrl,
                             IsHassIo = true
                         };
                     });
+
+                    ClientFactory.Reset();
                 }
 
-                // Otherwise, if we aren't on one of the approved pages, redirect to the settings page and prompt for setup.
-                if (context.Request.Path.ToString().ToLower() != "/admin/settings" && context.Request.Path.ToString().ToLower() != "/admin")
+                // If we aren't on one of the approved pages, redirect to the settings page and prompt for setup.
+                if (context.Request.Method.ToUpper() != "GET" && context.Request.Path.ToString().ToLower() != "/admin/settings" && context.Request.Path.ToString().ToLower() != "/admin")
                 {
                     Log.LogInformation($"HA connection is not initialized, redirecting user to settings area...");
 
