@@ -31,34 +31,12 @@ namespace HADotNet.CommandCenter.Middleware
         {
             var config = await ConfigStore.GetConfigAsync();
 
-            if (!string.IsNullOrWhiteSpace(config?.Settings?.BaseUri) && (!string.IsNullOrWhiteSpace(config?.Settings?.AccessToken) || !string.IsNullOrWhiteSpace(SupervisorEnvironment.GetSupervisorToken())))
+            if (!ClientFactory.IsInitialized)
             {
-                if (!ClientFactory.IsInitialized)
+                if (!string.IsNullOrWhiteSpace(config?.Settings?.BaseUri) && !string.IsNullOrWhiteSpace(config?.Settings?.AccessToken))
                 {
                     if (config.Settings.IsHassIo)
                     {
-                        if (string.IsNullOrWhiteSpace(config?.Settings?.AccessToken) || !JwtHelper.IsTokenValid(config.Settings.AccessToken))
-                        {
-                            Log.LogInformation($"Attempting auto-initializaion of HACC via Supervisor interface...");
-
-                            var llat = await LlatHelper.ProvisionAccessToken(SupervisorEnvironment.GetWebsocketUrl(), SupervisorEnvironment.GetSupervisorToken());
-
-                            if (string.IsNullOrWhiteSpace(llat) || llat.StartsWith("ERROR"))
-                            {
-                                Log.LogError("Unable to generate LLAT via Home Assistant WebSocket API. " + llat);
-                                
-                                context.Response.Redirect("/admin/settings?spverr=1");
-                                return;
-                            }
-                            else
-                            {
-                                await ConfigStore.ManipulateConfig(c => c.Settings.AccessToken = llat);
-                                config = await ConfigStore.GetConfigAsync();
-
-                                Log.LogInformation($"Successfully provisioned and saved LLAT for Home Assistant.");
-                            }
-                        }
-
                         Log.LogInformation($"Initializing HACC API with pre-stored LLAT (via Supervisor).");
                         ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
 
@@ -72,10 +50,10 @@ namespace HADotNet.CommandCenter.Middleware
                         ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
                     }
                 }
-            }
-            else
-            {
-                ClientFactory.Reset();
+                else
+                {
+                    ClientFactory.Reset();
+                }
             }
 
             if (!ClientFactory.IsInitialized)
@@ -90,18 +68,13 @@ namespace HADotNet.CommandCenter.Middleware
                             BaseUri = $"{SupervisorEnvironment.GetBaseUrl()}/homeassistant",
                             IsHassIo = true
                         };
-
                     });
-
-                    context.Response.StatusCode = 303;
-                    context.Response.Redirect("/admin");
-                    return;
                 }
 
                 // Otherwise, if we aren't on one of the approved pages, redirect to the settings page and prompt for setup.
                 if (context.Request.Path.ToString().ToLower() != "/admin/settings" && context.Request.Path.ToString().ToLower() != "/admin")
                 {
-                    Log.LogInformation($"Client factory is not initialized, redirecting user to settings area...");
+                    Log.LogInformation($"HA connection is not initialized, redirecting user to settings area...");
 
                     context.Response.Redirect("/admin/settings?setup=1");
                     return;

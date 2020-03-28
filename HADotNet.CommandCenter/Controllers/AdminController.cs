@@ -297,16 +297,5 @@ namespace HADotNet.CommandCenter.Controllers
 
             return RedirectToAction("Index");
         }
-
-        [HttpGet]
-        public async Task<IActionResult> ResetToken()
-        {
-            // This will reset defaults and initialize collections, even if no actions are passed in.
-            await ConfigStore.ManipulateConfig(c => c.Settings.AccessToken = null);
-
-            TempData.AddSuccess("Successfully reset Home Assistant access token for HACC. A new one should automatically generate.");
-
-            return RedirectToAction("Settings");
-        }
     }
 }

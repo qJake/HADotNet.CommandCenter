@@ -74,12 +74,27 @@
         </div>
 
         <input type="hidden" asp-for="BaseUri" />
-        <input type="hidden" asp-for="AccessToken" />
 
         <div class="ui grid">
             <div class="row">
                 <div class="six wide computer twelve wide tablet sixteen wide mobile column">
                     <div class="ui segment">
+                        <div class="field">
+                            <label asp-for="BaseUri"></label>
+                            <div class="ui left icon input">
+                                <i class="globe icon"></i>
+                                <input type="text" disabled value="&lt; Set automatically via Supervisor &gt;" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label asp-for="AccessToken"></label>
+                            <textarea asp-for="AccessToken" rows="3" class="no-resize"></textarea>
+                            <span class="ui up pointing small red label" asp-validation-for="AccessToken"></span>
+                            <p>
+                                <a href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Initial-System-Setup" rel="nofollow" target="_blank">How do I generate an Access Token?</a>
+                            </p>
+                        </div>
+                        <div class="ui separator"></div>
                         <div class="field">
                             <label asp-for="OverrideAssetUri"></label>
                             <div class="ui left icon input">
@@ -89,18 +104,10 @@
                             <small>If your image assets are not showing up correctly, you can enter a base URL to use. This URL must start with http(s):// and be accessible from your HACC device.</small>
                             <span class="ui up pointing small red label" asp-validation-for="OverrideAssetUri"></span>
                         </div>
-                        <div class="field">
-                            <label>Reset Access Token</label>
-                            <p>If the Home Assistant token was deleted, you restored Home Assistant from a backup, or the token was unexpectedly revoked, you can reset it here and HACC will generate a new one for you.</p>
-                            <p>
-                                <a asp-action="ResetToken" class="ui tiny red button">Reset Access Token</a>
-                            </p>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
     }
     else
     {
@@ -122,6 +129,9 @@
                             <label asp-for="AccessToken"></label>
                             <textarea asp-for="AccessToken" rows="3" class="no-resize"></textarea>
                             <span class="ui up pointing small red label" asp-validation-for="AccessToken"></span>
+                            <p>
+                                <a href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Initial-System-Setup" rel="nofollow" target="_blank">How do I generate an Access Token?</a>
+                            </p>
                         </div>
                         <div class="ui separator"></div>
                         <div class="field">
