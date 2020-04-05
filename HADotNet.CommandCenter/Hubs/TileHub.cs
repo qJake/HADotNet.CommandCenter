@@ -36,10 +36,12 @@ namespace HADotNet.CommandCenter.Hubs
         public async Task RequestConfig(string page, string tileName)
         {
             var config = await ConfigStore.GetConfigAsync();
-            await Clients.All.SendSystemConfig(tileName, new { BaseUrl = config.Settings.BaseUri });
+            await Clients.Caller.SendSystemConfig(tileName, new { BaseUrl = config.Settings.BaseUri });
+
+            await Task.Delay(10);
 
             var tile = config[page].Tiles.FirstOrDefault(t => t.Name == tileName);
-            await Clients.All.SendTile(tile);
+            await Clients.Caller.SendTile(tile);
         }
 
         public async Task OnTileClicked(string page, string tileName)
@@ -64,7 +66,7 @@ namespace HADotNet.CommandCenter.Hubs
             {
                 // Calendars use a special API that isn't (might not be?) exposed via the WebSocket API.
                 case CalendarTile ct:
-                    await Clients.All.SendCalendarInfo(ct, await StatesClient.GetState(ct.EntityId), await CalendarClient.GetEvents(ct.EntityId));
+                    await Clients.Caller.SendCalendarInfo(ct, await StatesClient.GetState(ct.EntityId), await CalendarClient.GetEvents(ct.EntityId));
                     break;
 
                 // Date and time are rendered server-side to verify server connection, and to enforce timezone and date format selection.
@@ -72,7 +74,7 @@ namespace HADotNet.CommandCenter.Hubs
                     var date = !string.IsNullOrWhiteSpace(dt.TimeZoneId)
                         ? TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(dt.TimeZoneId))
                         : DateTime.Now;
-                    await Clients.All.SendDateTime(dt, date.ToString(dt.DateFormatString ?? "dddd MMMM d"), date.ToString(dt.TimeFormatString ?? "h:mm tt"));
+                    await Clients.Caller.SendDateTime(dt, date.ToString(dt.DateFormatString ?? "dddd MMMM d"), date.ToString(dt.TimeFormatString ?? "h:mm tt"));
                     break;
 
             }

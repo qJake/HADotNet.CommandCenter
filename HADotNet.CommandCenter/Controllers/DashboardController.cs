@@ -1,7 +1,7 @@
 ﻿using HADotNet.CommandCenter.Services.Interfaces;
+using HADotNet.CommandCenter.Utils;
 using HADotNet.CommandCenter.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,6 +29,18 @@ namespace HADotNet.CommandCenter.Controllers
             if (string.IsNullOrWhiteSpace(page))
             {
                 return NotFound();
+            }
+
+            if (string.IsNullOrWhiteSpace(config?.Settings?.AccessToken))
+            {
+                TempData.AddError("Unable to load dashboard - missing the access token. Visit Settings to fix.");
+                return RedirectToAction("Admin", "Index");
+            }
+
+            if (string.IsNullOrWhiteSpace(config?.Settings?.BaseUri))
+            {
+                TempData.AddError("Unable to load dashboard - missing the system's Base URL. Visit Settings to fix.");
+                return RedirectToAction("Admin", "Index");
             }
 
             return View(new TileDisplayViewModel
