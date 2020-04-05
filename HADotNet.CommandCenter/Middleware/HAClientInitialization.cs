@@ -33,55 +33,72 @@ namespace HADotNet.CommandCenter.Middleware
 
             if (!ClientFactory.IsInitialized)
             {
-                if (!string.IsNullOrWhiteSpace(config?.Settings?.BaseUri) && !string.IsNullOrWhiteSpace(config?.Settings?.AccessToken))
-                {
-                    Log.LogInformation($"Initializing HACC API with URL {config?.Settings?.BaseUri ?? "[NULL]"} and access token [{new string(config?.Settings?.AccessToken.Take(6).ToArray())}•••••••••••{new string(config?.Settings?.AccessToken.TakeLast(6).ToArray())}].");
-                    ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
-                }
-                else
-                {
-                    ClientFactory.Reset();
-                }
-            }
+                InitializeOrReset(config);
 
-            if (!ClientFactory.IsInitialized)
-            {
-                // If we're in Hass.io mode, set the base URI and redirect to the admin homepage.
-                if (SupervisorEnvironment.IsSupervisorAddon)
+                if (!ClientFactory.IsInitialized)
                 {
-                    // Temporary while we fetch some stuff...
-                    ClientFactory.Initialize(SupervisorEnvironment.GetBaseUrl(), SupervisorEnvironment.GetSupervisorToken());
-
-                    var discovery = ClientFactory.GetClient<DiscoveryClient>();
-                    var discInfo = await discovery.GetDiscoveryInfo();
-
-                    await ConfigStore.ManipulateConfig(c =>
+                    // If we're in Hass.io mode, set the base URI and redirect to the admin homepage.
+                    if (SupervisorEnvironment.IsSupervisorAddon)
                     {
-                        c.Settings = new SystemSettings
-                        {
-                            BaseUri = discInfo.BaseUrl
-                        };
-                    });
+                        await AttemptBaseUrlDiscovery();
 
-                    ClientFactory.Reset();
+                        InitializeOrReset(config, true);
+                    }
 
-                    Log.LogInformation($"Obtained discovery info successfully. Initializing with URL {config?.Settings?.BaseUri ?? "[NULL]"} and access token [{new string(config?.Settings?.AccessToken.Take(6).ToArray())}•••••••••••{new string(config?.Settings?.AccessToken.TakeLast(6).ToArray())}].");
-                    ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
-                }
+                    // If we aren't on one of the approved pages, redirect to the settings page and prompt for setup.
+                    if (context.Request.Path.ToString().ToLower() != "/admin/settings" && context.Request.Path.ToString().ToLower() != "/admin")
+                    {
+                        Log.LogInformation($"HA connection is not initialized, redirecting user to settings area...");
 
-                // If we aren't on one of the approved pages, redirect to the settings page and prompt for setup.
-                if (context.Request.Path.ToString().ToLower() != "/admin/settings" && context.Request.Path.ToString().ToLower() != "/admin")
-                {
-                    Log.LogInformation($"HA connection is not initialized, redirecting user to settings area...");
-
-                    context.Response.Redirect("/admin/settings?setup=1");
-                    return;
+                        context.Response.Redirect("/admin/settings?setup=1");
+                        return;
+                    }
                 }
             }
 
             // Pages Migration
+            await MigrateLegacyPagesConfig(context, config);
+
+            await Next(context);
+        }
+
+        private async Task AttemptBaseUrlDiscovery()
+        {
+            // Temporary while we fetch some stuff...
+            ClientFactory.Initialize(SupervisorEnvironment.GetBaseUrl(), SupervisorEnvironment.GetSupervisorToken());
+
+            var discovery = ClientFactory.GetClient<DiscoveryClient>();
+            var discInfo = await discovery.GetDiscoveryInfo();
+
+            await ConfigStore.ManipulateConfig(c =>
+            {
+                c.Settings = new SystemSettings
+                {
+                    BaseUri = discInfo.BaseUrl
+                };
+            });
+        }
+
+        private void InitializeOrReset(ConfigRoot config, bool resetFirst = false)
+        {
+            if (resetFirst) ClientFactory.Reset();
+
+            if (!string.IsNullOrWhiteSpace(config?.Settings?.BaseUri) && !string.IsNullOrWhiteSpace(config?.Settings?.AccessToken))
+            {
+                Log.LogInformation($"Initializing HACC API with URL {config?.Settings?.BaseUri ?? "[NULL]"} and access token [{new string(config?.Settings?.AccessToken.Take(6).ToArray())}•••••••••••{new string(config?.Settings?.AccessToken.TakeLast(6).ToArray())}].");
+                ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
+            }
+            else
+            {
+                ClientFactory.Reset();
+            }
+        }
+
+        private async Task MigrateLegacyPagesConfig(HttpContext context, ConfigRoot config)
+        {
 
 #pragma warning disable CS0612
+
             if ((config.TileLayout?.Count > 0 || config.Tiles?.Count > 0) && (config.Pages?.Count ?? 0) == 0)
             {
                 await ConfigStore.ManipulateConfig(config =>
@@ -126,9 +143,9 @@ namespace HADotNet.CommandCenter.Middleware
                     };
                 });
             }
+
 #pragma warning restore CS0612
 
-            await Next(context);
         }
     }
 }
