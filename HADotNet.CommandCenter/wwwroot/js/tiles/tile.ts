@@ -115,7 +115,7 @@ abstract class Tile
 
     protected updateDateTime(tile?: ITile, ...args: any): void { }
 
-    protected requestState(debounce?: number): void
+    protected requestState(): void
     {
         this.conn.invoke('RequestTileState', this.page, this.name);
     }

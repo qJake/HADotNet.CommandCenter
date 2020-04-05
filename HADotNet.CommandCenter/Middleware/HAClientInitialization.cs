@@ -47,7 +47,7 @@ namespace HADotNet.CommandCenter.Middleware
             if (!ClientFactory.IsInitialized)
             {
                 // If we're in Hass.io mode, set the base URI and redirect to the admin homepage.
-                if (!string.IsNullOrWhiteSpace(SupervisorEnvironment.GetSupervisorToken()))
+                if (SupervisorEnvironment.IsSupervisorAddon)
                 {
                     // Temporary while we fetch some stuff...
                     ClientFactory.Initialize(SupervisorEnvironment.GetBaseUrl(), SupervisorEnvironment.GetSupervisorToken());
@@ -59,16 +59,18 @@ namespace HADotNet.CommandCenter.Middleware
                     {
                         c.Settings = new SystemSettings
                         {
-                            BaseUri = discInfo.BaseUrl,
-                            IsHassIo = true
+                            BaseUri = discInfo.BaseUrl
                         };
                     });
 
                     ClientFactory.Reset();
+
+                    Log.LogInformation($"Obtained discovery info successfully. Initializing with URL {config?.Settings?.BaseUri ?? "[NULL]"} and access token [{new string(config?.Settings?.AccessToken.Take(6).ToArray())}•••••••••••{new string(config?.Settings?.AccessToken.TakeLast(6).ToArray())}].");
+                    ClientFactory.Initialize(config.Settings.BaseUri, config.Settings.AccessToken);
                 }
 
                 // If we aren't on one of the approved pages, redirect to the settings page and prompt for setup.
-                if (context.Request.Method.ToUpper() != "GET" && context.Request.Path.ToString().ToLower() != "/admin/settings" && context.Request.Path.ToString().ToLower() != "/admin")
+                if (context.Request.Path.ToString().ToLower() != "/admin/settings" && context.Request.Path.ToString().ToLower() != "/admin")
                 {
                     Log.LogInformation($"HA connection is not initialized, redirecting user to settings area...");
 
@@ -100,7 +102,7 @@ namespace HADotNet.CommandCenter.Middleware
                 });
                 context.Response.Redirect("/admin/pageMigration");
             }
-            else if (config.Pages.Count == 0)
+            else if ((config.Pages?.Count ?? 0) == 0)
             {
                 await ConfigStore.ManipulateConfig(config =>
                 {

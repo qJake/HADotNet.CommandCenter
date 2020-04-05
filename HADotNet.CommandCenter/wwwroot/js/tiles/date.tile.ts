@@ -2,9 +2,12 @@
 
 class DateTile extends Tile
 {
+    private refreshTimer: number;
+
     constructor(page: string, name: string, conn: signalR.HubConnection, haConn: HAConnection)
     {
         super(page, name, conn, haConn, { canClick: false, canLoad: true });
+        this.refreshTimer = null;
     }
 
     protected updateDateTime(tile: ITile, date: string, time: string): void
@@ -14,9 +17,13 @@ class DateTile extends Tile
 
         super.updateDateTime();
 
-        setTimeout(() =>
+        if (!this.refreshTimer)
         {
-            this.requestState(9500);
-        }, 10000);
+            this.refreshTimer = window.setTimeout((t: DateTile) =>
+            {
+                t.refreshTimer = null;
+                this.requestState();
+            }, 30 * 1000, this);
+        }
     }
 }

@@ -6,6 +6,7 @@ class CalendarTile extends Tile
 {
     private eventContainer: JQuery
     private tile: ITile;
+    private refreshTimer: number;
 
     constructor(page: string, name: string, conn: signalR.HubConnection, haConn: HAConnection)
     {
@@ -35,10 +36,14 @@ class CalendarTile extends Tile
 
         if (this.tile.refreshRate > 0)
         {
-            setTimeout(() =>
+            if (!this.refreshTimer)
             {
-                this.requestState(1000);
-            }, this.tile.refreshRate * 1000);
+                this.refreshTimer = window.setTimeout((t: CalendarTile) =>
+                {
+                    t.refreshTimer = null;
+                    this.requestState();
+                }, 30 * 1000, this);
+            }
         }
     }
 

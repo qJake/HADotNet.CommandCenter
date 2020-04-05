@@ -24,13 +24,8 @@ namespace HADotNet.CommandCenter.Models.Config
         public string AccessToken { get; set; }
 
         /// <summary>
-        /// Gets or sets whether or not this is a Hass.io addon environment. Set automatically when initialized from a Hass.io addon container.
-        /// </summary>
-        public bool IsHassIo { get; set; }
-
-        /// <summary>
         /// Gets the Websocket URL.
         /// </summary>
-        public string WebsocketUri => IsHassIo ? SupervisorEnvironment.SUPERVISOR_WEBSOCKET_URL : !string.IsNullOrWhiteSpace(OverrideAssetUri) ? OverrideAssetUri : BaseUri;
+        public string WebsocketUri => SupervisorEnvironment.IsSupervisorAddon ? SupervisorEnvironment.SUPERVISOR_WEBSOCKET_URL : !string.IsNullOrWhiteSpace(OverrideAssetUri) ? OverrideAssetUri : BaseUri;
     }
 }

@@ -23,7 +23,7 @@
 
 <partial name="Alerts" />
 
-@if (Context.Request.Query["setup"] == "1" && (!Model?.IsHassIo ?? true))
+@if (Context.Request.Query["setup"] == "1" && !SupervisorEnvironment.IsSupervisorAddon)
 {
     <div class="ui icon labeled info message">
         <i class="info circle icon"></i>
@@ -32,17 +32,6 @@
             <p>Before you begin, please set up your instance information below, and then you can configure your dashboard!</p>
             <div class="ui header">Need help?</div>
             <p>Not sure how to set up HACC? Refer to our <b><a href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Initial-System-Setup" target="_blank" rel="nofollow">initial system setup</a></b> article, or expand the <b>HACC Project</b> menu to open an issue!</p>
-        </div>
-    </div>
-}
-
-@if (Context.Request.Query["spverr"] == "1")
-{
-    <div class="ui icon labeled error message">
-        <i class="times circle icon"></i>
-        <div class="content">
-            <div class="ui large header">Unable to Provision Auth Token via Supervisor</div>
-            <p>Please check the addon logs for a more detailed error, and <b><a href="https://github.com/qJake/HADotNet.CommandCenter/issues/new/choose" target="_blank" rel="nofollow">file a bug here</a></b>.</p>
         </div>
     </div>
 }
@@ -61,15 +50,14 @@
 
 <form class="ui form" asp-action="Settings" method="post">
 
-    <input type="hidden" asp-for="IsHassIo" />
-
-    @if (Model?.IsHassIo ?? false)
+    @if (SupervisorEnvironment.IsSupervisorAddon)
     {
         <div class="ui icon labeled info message">
             <i class="info circle icon"></i>
             <div class="content">
                 <div class="ui large header">Managed by Hass.io</div>
-                <p>Your installation of HACC is managed by your Hass.io installation. Please refer to the add-on page for configuration details.</p>
+                <p>Your installation of HACC is managed by your Hass.io installation.</p>
+                <p>The only thing we need from you is a long-lived access token to get started.</p>
             </div>
         </div>
 

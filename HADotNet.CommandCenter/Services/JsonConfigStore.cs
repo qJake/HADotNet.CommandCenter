@@ -41,7 +41,11 @@ namespace HADotNet.CommandCenter.Services
         {
             Options = haccOptions.Value;
             var isHassio = !string.IsNullOrWhiteSpace(SupervisorEnvironment.GetSupervisorToken());
+#if DEBUG
+            ConfigDirectory = Environment.ExpandEnvironmentVariables(Options.ConfigLocation);
+#else
             ConfigDirectory = isHassio ? HASSIO_CONFIG_LOC : Environment.ExpandEnvironmentVariables(Options.ConfigLocation);
+#endif
         }
 
         public async Task ManipulateConfig(params Action<ConfigRoot>[] changes)

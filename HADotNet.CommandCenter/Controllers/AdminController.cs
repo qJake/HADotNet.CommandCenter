@@ -9,10 +9,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using RestSharp;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -70,7 +68,7 @@ namespace HADotNet.CommandCenter.Controllers
                     // ... but this does.
                     var entities = await EntityClient.GetEntities();
 
-                    ViewBag.Instance = $"Home Assistant instance: <b>{inst.LocationName} (Version {inst.Version}) [{inst.BaseUrl}]</b>";
+                    ViewBag.Instance = $"Home Assistant instance: <b>{inst.LocationName} (Version {inst.Version}) [{ inst.BaseUrl}]</b>";
                 }
             }
             catch (Exception ex)
@@ -224,7 +222,7 @@ namespace HADotNet.CommandCenter.Controllers
 
                 try
                 {
-                    var newConfig = JsonConvert.DeserializeObject<ConfigRoot>(contents);
+                    var newConfig = JsonConvert.DeserializeObject<ConfigRoot>(contents, JsonConfigStore.SerializerSettings);
                     newConfig.Settings = null;
 
                     var config = await ConfigStore.GetConfigAsync();
@@ -239,10 +237,10 @@ namespace HADotNet.CommandCenter.Controllers
 
                     TempData.AddSuccess($"Successfully imported system configuration file '{file.FileName}'!");
                 }
-                catch
+                catch (Exception dex)
                 {
-                    Logger.LogWarning("File selected was not able to be parsed into a config object. Check file contents and try again.");
-                    TempData.AddError("Import file was not a configuration file or could not otherwise be imported. Check that the file is not malformed and try again.");
+                    Logger.LogError(dex, "File selected was not able to be parsed into a config object. Check file contents and try again.");
+                    TempData.AddError("Import file was not a configuration file or could not otherwise be imported. Check that the file is not malformed and try again. See log output for more information.");
                 }
             }
             catch (Exception ex)

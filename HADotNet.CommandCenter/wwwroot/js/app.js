@@ -438,7 +438,7 @@ class Tile {
     updateState(state) { }
     updateCalendar(state, events) { }
     updateDateTime(tile, ...args) { }
-    requestState(debounce) {
+    requestState() {
         this.conn.invoke('RequestTileState', this.page, this.name);
     }
     requestConfig(page) {
@@ -471,14 +471,18 @@ class LabelTile extends Tile {
 class DateTile extends Tile {
     constructor(page, name, conn, haConn) {
         super(page, name, conn, haConn, { canClick: false, canLoad: true });
+        this.refreshTimer = null;
     }
     updateDateTime(tile, date, time) {
         $(`#tile-${tile.name}`).find('span[value-date]').text(date);
         $(`#tile-${tile.name}`).find('span[value-time]').text(time);
         super.updateDateTime();
-        setTimeout(() => {
-            this.requestState(9500);
-        }, 10000);
+        if (!this.refreshTimer) {
+            this.refreshTimer = window.setTimeout((t) => {
+                t.refreshTimer = null;
+                this.requestState();
+            }, 30 * 1000, this);
+        }
     }
 }
 /// <reference path="tile.ts" />
@@ -553,6 +557,8 @@ class SwitchTile extends Tile {
     }
     updateState(state) {
         var _a;
+        if (this.tile == null)
+            return;
         //console.log("State received for: " + tile.name, state);
         let label = state.new_state.attributes["friendly_name"].toString();
         if ((_a = this.tile) === null || _a === void 0 ? void 0 : _a.overrideLabel) {
@@ -828,9 +834,12 @@ class CalendarTile extends Tile {
         this.refreshEvents(events);
         super.updateCalendar();
         if (this.tile.refreshRate > 0) {
-            setTimeout(() => {
-                this.requestState(1000);
-            }, this.tile.refreshRate * 1000);
+            if (!this.refreshTimer) {
+                this.refreshTimer = window.setTimeout((t) => {
+                    t.refreshTimer = null;
+                    this.requestState();
+                }, 30 * 1000, this);
+            }
         }
     }
     refreshEvents(events) {

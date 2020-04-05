@@ -17,6 +17,8 @@ class SwitchTile extends Tile
 
     public updateState(state: IHAStateChangedData): void
     {
+        if (this.tile == null) return;
+
         //console.log("State received for: " + tile.name, state);
         let label = state.new_state.attributes["friendly_name"].toString();
         if (this.tile?.overrideLabel)
