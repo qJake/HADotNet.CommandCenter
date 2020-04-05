@@ -31,18 +31,6 @@ namespace HADotNet.CommandCenter.Controllers
                 return NotFound();
             }
 
-            if (string.IsNullOrWhiteSpace(config?.Settings?.AccessToken))
-            {
-                TempData.AddError("Unable to load dashboard - missing the access token. Visit Settings to fix.");
-                return RedirectToAction("Admin", "Index");
-            }
-
-            if (string.IsNullOrWhiteSpace(config?.Settings?.BaseUri))
-            {
-                TempData.AddError("Unable to load dashboard - missing the system's Base URL. Visit Settings to fix.");
-                return RedirectToAction("Admin", "Index");
-            }
-
             return View(new TileDisplayViewModel
             {
                 SystemSettings = config.Settings,
