@@ -26,6 +26,6 @@ namespace HADotNet.CommandCenter.Models.Config
         /// <summary>
         /// Gets the Websocket URL.
         /// </summary>
-        public string WebsocketUri => SupervisorEnvironment.IsSupervisorAddon ? SupervisorEnvironment.SUPERVISOR_WEBSOCKET_URL : !string.IsNullOrWhiteSpace(OverrideAssetUri) ? OverrideAssetUri : BaseUri;
+        public string WebsocketUri => ((!string.IsNullOrWhiteSpace(OverrideAssetUri) ? OverrideAssetUri : BaseUri) ?? "http://undefined").TrimEnd('/').ToLower().Replace("https://", "wss://").Replace("http://", "ws://") + "/api/websocket";
     }
 }
