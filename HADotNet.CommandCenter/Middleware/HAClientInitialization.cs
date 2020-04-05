@@ -102,7 +102,7 @@ namespace HADotNet.CommandCenter.Middleware
                 });
                 context.Response.Redirect("/admin/pageMigration");
             }
-            else if (config.Pages.Count == 0)
+            else if ((config.Pages?.Count ?? 0) == 0)
             {
                 await ConfigStore.ManipulateConfig(config =>
                 {
