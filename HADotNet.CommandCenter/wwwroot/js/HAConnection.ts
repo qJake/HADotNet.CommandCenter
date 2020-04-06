@@ -77,7 +77,7 @@ class HAConnection
 
         if (!this.ws || this.ws.readyState !== this.ws.OPEN)
         {
-            this.ws = new ReconnectingWebSocket(this.parseSocketUrl(this.targetInstance), null, { automaticOpen: false });
+            this.ws = new ReconnectingWebSocket(this.targetInstance, null, { automaticOpen: false });
         }
 
         this.ws.addEventListener('open', () => this.handleOpen());
@@ -312,19 +312,6 @@ class HAConnection
             window.clearInterval(this.pingInterval);
             this.pingInterval = 0;
         }
-    }
-
-    private parseSocketUrl(baseUrl: string): string
-    {
-        if (/core\/websocket/i.test(baseUrl))
-        {
-            return baseUrl;
-        }
-
-        let aTag = document.createElement('a');
-        aTag.href = baseUrl;
-
-        return `${(aTag.protocol.toLowerCase() === 'https:' ? 'wss' : 'ws')}://${aTag.host}/api/websocket`;
     }
 
     private isHAMessage(msg: any): msg is IHAMessage
