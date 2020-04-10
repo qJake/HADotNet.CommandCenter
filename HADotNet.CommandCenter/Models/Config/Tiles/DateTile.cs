@@ -12,7 +12,7 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
         [Display(Name = "Time Format String")]
         public string TimeFormatString { get; set; }
 
-        [Display(Name = "Time Zone")]
-        public string TimeZoneId { get; set; }
+        [Display(Name = "Time Zone Offset")]
+        public double TimeZoneId { get; set; }
     }
 }

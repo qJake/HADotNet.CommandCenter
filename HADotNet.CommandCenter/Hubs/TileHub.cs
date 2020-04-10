@@ -71,9 +71,7 @@ namespace HADotNet.CommandCenter.Hubs
 
                 // Date and time are rendered server-side to verify server connection, and to enforce timezone and date format selection.
                 case DateTile dt:
-                    var date = !string.IsNullOrWhiteSpace(dt.TimeZoneId)
-                        ? TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(dt.TimeZoneId))
-                        : DateTime.Now;
+                    var date = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(dt.TimeZoneId));
                     await Clients.Caller.SendDateTime(dt, date.ToString(dt.DateFormatString ?? "dddd MMMM d"), date.ToString(dt.TimeFormatString ?? "h:mm tt"));
                     break;
 
