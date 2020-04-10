@@ -14,7 +14,7 @@ class WeatherTile extends Tile
 
     constructor(protected page: string, protected name: string, protected conn: signalR.HubConnection, haConn: HAConnection)
     {
-        super(page, name, conn, haConn, { canLoad: true, canClick: false });
+        super(page, name, conn, haConn, { canLoad: true, canClick: true });
 
         this.iconEl = this.el.find('.condition-icon')[0];
 

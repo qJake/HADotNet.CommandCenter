@@ -480,7 +480,7 @@ class DateTile extends Tile {
 /// <reference path="tile.ts" />
 class StateTile extends Tile {
     constructor(page, name, conn, haConn) {
-        super(page, name, conn, haConn, { canClick: false, canLoad: false });
+        super(page, name, conn, haConn, { canClick: false, canLoad: true });
     }
     updateTile(t) {
         this.tile = t;
@@ -509,7 +509,7 @@ class StateTile extends Tile {
 /// <reference path="tile.ts" />
 class LightTile extends Tile {
     constructor(page, name, conn, haConn) {
-        super(page, name, conn, haConn, { canClick: true, canLoad: false });
+        super(page, name, conn, haConn, { canClick: true, canLoad: true });
     }
     updateTile(t) {
         this.tile = t;
@@ -541,7 +541,7 @@ class LightTile extends Tile {
 /// <reference path="tile.ts" />
 class SwitchTile extends Tile {
     constructor(page, name, conn, haConn) {
-        super(page, name, conn, haConn, { canClick: true, canLoad: false });
+        super(page, name, conn, haConn, { canClick: true, canLoad: true });
     }
     updateTile(t) {
         this.tile = t;
@@ -574,13 +574,17 @@ class SwitchTile extends Tile {
         super.updateState(state);
     }
     isOnState(state) {
-        return state.toLowerCase() === 'on' || state.toLowerCase() === 'open' || state.toLowerCase() === 'detected';
+        return state.toLowerCase() === 'on'
+            || state.toLowerCase() === 'open'
+            || state.toLowerCase() === 'detected'
+            || state.toLowerCase() === 'playing'
+            || state.toLowerCase() === 'idle';
     }
 }
 /// <reference path="tile.ts" />
 class PersonTile extends Tile {
     constructor(page, name, conn, haConn) {
-        super(page, name, conn, haConn, { canClick: false, canLoad: false });
+        super(page, name, conn, haConn, { canClick: false, canLoad: true });
     }
     updateTile(t) {
         this.tile = t;
@@ -611,7 +615,7 @@ class PersonTile extends Tile {
 /// <reference path="../models/skycons.d.ts" />
 class WeatherTile extends Tile {
     constructor(page, name, conn, haConn) {
-        super(page, name, conn, haConn, { canLoad: true, canClick: false });
+        super(page, name, conn, haConn, { canLoad: true, canClick: true });
         this.page = page;
         this.name = name;
         this.conn = conn;
@@ -687,7 +691,7 @@ class WeatherTile extends Tile {
 /// <reference path="tile.ts" />
 class CameraTile extends Tile {
     constructor(page, name, conn, haConn) {
-        super(page, name, conn, haConn, { canClick: false, canLoad: true });
+        super(page, name, conn, haConn, { canClick: false, canLoad: false });
         this.haConn = haConn;
     }
     updateTile(t) {
@@ -717,7 +721,7 @@ class CameraTile extends Tile {
 /// <reference path="tile.ts" />
 class SceneTile extends Tile {
     constructor(page, name, conn, haConn) {
-        super(page, name, conn, haConn, { canClick: true, canLoad: false });
+        super(page, name, conn, haConn, { canClick: true, canLoad: true });
     }
     updateTile(t) {
         this.tile = t;
@@ -736,7 +740,7 @@ class SceneTile extends Tile {
 /// <reference path="tile.ts" />
 class MediaTile extends Tile {
     constructor(page, name, conn, haConn) {
-        super(page, name, conn, haConn, { canClick: true, canLoad: false });
+        super(page, name, conn, haConn, { canClick: true, canLoad: true });
         this.haConn = haConn;
     }
     updateTile(t) {
@@ -1005,8 +1009,12 @@ class CommandCenter {
         }
     }
     initUser() {
+        // Websocket setup and events
         if (window.ccOptions.socketUrl) {
             this.conn = new HAConnection(window.ccOptions.socketUrl);
+        }
+        else {
+            $('#alerts').show().find('.alert-message').text('[E] HA connection not defined...');
         }
         this.conn.OnConnectionStateChanged.on(state => {
             if (state == HAConnectionState.Closed) {
@@ -1014,6 +1022,8 @@ class CommandCenter {
             }
             else if (state == HAConnectionState.Open) {
                 $('#alerts').hide();
+                // Request a refresh of state data
+                this.conn.refreshAllStates();
             }
         });
         this.conn.OnStateChanged.on(state => {
@@ -1023,7 +1033,7 @@ class CommandCenter {
                 console.info(`Updating tile for entity "${state.data.entity_id}" to state "${state.data.new_state.state}".`);
             }
         });
-        this.conn.initialize();
+        // SignalR Hub Connection
         this.tileConn = new signalR.HubConnectionBuilder().withUrl('/hubs/tile').build();
         this.tileConn.onclose(e => {
             $('#alerts').show().find('.alert-message').text('[S] Connection lost, reconnecting...');
@@ -1050,16 +1060,11 @@ class CommandCenter {
         });
     }
     waitAndPerformInit() {
-        if (!this.conn) {
-            console.warn('Cancelling tile initialization - connection is not set up.');
-            window.clearInterval(this.initHandle);
-        }
-        if (this.conn.ConnectionState !== HAConnectionState.Open)
-            return;
+        // Only connect to HA once our tiles are all initialized
         if (this.tiles.filter(t => t.loaded).length !== this.tiles.length)
             return;
-        // Now, refresh all of them at once
-        this.conn.refreshAllStates();
+        // And now fire up the websocket connection
+        this.conn.initialize();
         window.clearInterval(this.initHandle);
     }
     findTilesByEntityId(entityId) {

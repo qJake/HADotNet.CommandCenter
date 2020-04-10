@@ -6,7 +6,7 @@ class PersonTile extends Tile
 
     constructor(page: string, name: string, conn: signalR.HubConnection, haConn: HAConnection)
     {
-        super(page, name, conn, haConn, { canClick: false, canLoad: false });
+        super(page, name, conn, haConn, { canClick: false, canLoad: true });
     }
 
     public updateTile(t: ITile)

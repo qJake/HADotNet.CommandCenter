@@ -6,7 +6,7 @@ class SwitchTile extends Tile
 
     constructor(page: string, name: string, conn: signalR.HubConnection, haConn: HAConnection)
     {
-        super(page, name, conn, haConn, { canClick: true, canLoad: false });
+        super(page, name, conn, haConn, { canClick: true, canLoad: true });
     }
 
     public updateTile(t: ITile)
@@ -50,6 +50,10 @@ class SwitchTile extends Tile
 
     private isOnState(state: string): boolean
     {
-        return state.toLowerCase() === 'on' || state.toLowerCase() === 'open' || state.toLowerCase() === 'detected';
+        return state.toLowerCase() === 'on'
+            || state.toLowerCase() === 'open'
+            || state.toLowerCase() === 'detected'
+            || state.toLowerCase() === 'playing'
+            || state.toLowerCase() === 'idle';
     }
 }

@@ -149,9 +149,14 @@ class CommandCenter
 
     private initUser(): void
     {
+        // Websocket setup and events
         if (window.ccOptions.socketUrl)
         {
             this.conn = new HAConnection(window.ccOptions.socketUrl);
+        }
+        else
+        {
+            $('#alerts').show().find('.alert-message').text('[E] HA connection not defined...');
         }
 
         this.conn.OnConnectionStateChanged.on(state =>
@@ -163,6 +168,9 @@ class CommandCenter
             else if (state == HAConnectionState.Open)
             {
                 $('#alerts').hide();
+
+                // Request a refresh of state data
+                this.conn.refreshAllStates();
             }
         });
 
@@ -176,8 +184,7 @@ class CommandCenter
             }
         });
 
-        this.conn.initialize();
-
+        // SignalR Hub Connection
         this.tileConn = new signalR.HubConnectionBuilder().withUrl('/hubs/tile').build();
         this.tileConn.onclose(e =>
         {
@@ -216,20 +223,12 @@ class CommandCenter
 
     private waitAndPerformInit()
     {
-        if (!this.conn)
-        {
-            console.warn('Cancelling tile initialization - connection is not set up.');
-            window.clearInterval(this.initHandle);
-        }
-
-        if (this.conn.ConnectionState !== HAConnectionState.Open)
-            return;
-
+        // Only connect to HA once our tiles are all initialized
         if (this.tiles.filter(t => t.loaded).length !== this.tiles.length)
             return;
 
-        // Now, refresh all of them at once
-        this.conn.refreshAllStates();
+        // And now fire up the websocket connection
+        this.conn.initialize();
 
         window.clearInterval(this.initHandle);
     }

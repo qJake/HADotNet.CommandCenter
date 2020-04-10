@@ -28,6 +28,7 @@ namespace HADotNet.CommandCenter.Controllers
                 .Union(await EntityClient.GetEntities("remote"))
                 .Union(await EntityClient.GetEntities("fan"))
                 .Union(await EntityClient.GetEntities("input_boolean"))
+                .Union(await EntityClient.GetEntities("media_player"))
                 .OrderBy(e => e)
                 .Select(e => new SelectListItem(e, e));
         }
