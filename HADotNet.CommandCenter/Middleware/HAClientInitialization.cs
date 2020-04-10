@@ -46,7 +46,9 @@ namespace HADotNet.CommandCenter.Middleware
                     }
 
                     // If we aren't on one of the approved pages, redirect to the settings page and prompt for setup.
-                    if (context.Request.Path.ToString().ToLower() != "/admin/settings" && context.Request.Path.ToString().ToLower() != "/admin")
+                    if (context.Request.Path.ToString().ToLower() != "/admin/settings" 
+                        && context.Request.Path.ToString().ToLower() != "/admin/pagemigration"
+                        && context.Request.Path.ToString().ToLower() != "/admin")
                     {
                         Log.LogInformation($"HA connection is not initialized, redirecting user to settings area...");
 
@@ -70,13 +72,21 @@ namespace HADotNet.CommandCenter.Middleware
             var discovery = ClientFactory.GetClient<DiscoveryClient>();
             var discInfo = await discovery.GetDiscoveryInfo();
 
-            await ConfigStore.ManipulateConfig(c =>
+            if (string.IsNullOrWhiteSpace(discInfo?.BaseUrl))
             {
-                c.Settings = new SystemSettings
+                Log.LogError("Unable to read discovery info from Home Assistant. Do you have the HTTP component configured in Home Assistant with a \"base_url\" set?");
+                ClientFactory.Reset();
+            }
+            else
+            {
+                await ConfigStore.ManipulateConfig(c =>
                 {
-                    BaseUri = discInfo.BaseUrl
-                };
-            });
+                    c.Settings = new SystemSettings
+                    {
+                        BaseUri = discInfo.BaseUrl
+                    };
+                });
+            }
         }
 
         private void InitializeOrReset(ConfigRoot config, bool resetFirst = false)
@@ -90,6 +100,7 @@ namespace HADotNet.CommandCenter.Middleware
             }
             else
             {
+                Log.LogWarning($"Can't initialize HACC API, missing the {(string.IsNullOrWhiteSpace(config?.Settings?.BaseUri) ? "base URL" : string.IsNullOrWhiteSpace(config?.Settings?.AccessToken) ? "access token" : "[unknown]")}.");
                 ClientFactory.Reset();
             }
         }
