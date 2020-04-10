@@ -39,20 +39,22 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
         [Display(Name = "Off Color")]
         public string OffColor { get; set; }
 
+        /// <summary>
+        /// Handle the click event differently for switches.
+        /// </summary>
+        /// <remarks>Switches are weird... some of them don't like the homeassistant.toggle service. So we do our own logic.</remarks>
         public override async Task OnClick(ServiceClient serviceClient)
         {
-            // If this is a group, we can't use the toggle service, we have to know if it's on/off and call the opposite.
-            if (EntityId.Split('.')[0].ToUpper() == "GROUP")
-            {
-                var stateClient = ClientFactory.GetClient<StatesClient>();
-                var state = await stateClient.GetState(EntityId);
-                var serviceName = state.State.ToUpper() == "ON" ? "turn_off" : "turn_on";
-                await serviceClient.CallService("homeassistant", serviceName, new { entity_id = EntityId });
-            }
-            else
-            {
-                await base.OnClick(serviceClient);
-            }
+            var stateClient = ClientFactory.GetClient<StatesClient>();
+            var state = await stateClient.GetState(EntityId);
+            var serviceName = 
+                    state.State.ToUpper() == "OFF"
+                || state.State.ToUpper() == "UNAVAILABLE"
+                || state.State.ToUpper() == "NONE"
+                || state.State.ToUpper() == "STANDBY"
+                || state.State.ToUpper() == "IDLE"
+                ? "turn_on" : "turn_off";
+            await serviceClient.CallService(EntityId.Split('.')[0].ToLower(), serviceName, new { entity_id = EntityId });
         }
     }
 }

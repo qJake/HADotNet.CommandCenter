@@ -17,7 +17,7 @@ namespace HADotNet.CommandCenter.Models.Config
         [Display(Name = "Override Asset Base URL")]
         public string OverrideAssetUri { get; set; }
 
-        [RequiredStandalone]
+        [Required]
         [MinLength(100, ErrorMessage = "This doesn't look like a long-lived access token.")]
         [MaxLength(200, ErrorMessage = "This doesn't look like a long-lived access token.")]
         [Display(Name = "Long-Lived Access Token")]

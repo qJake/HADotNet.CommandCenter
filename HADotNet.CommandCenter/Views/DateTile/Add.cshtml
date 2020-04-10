@@ -30,13 +30,13 @@
                         <label asp-for="TimeZoneId"></label>
                         <select asp-for="TimeZoneId" class="ui search dropdown">
                             <option value="">Current System Time Zone</option>
-                            @foreach (var tz in TimeZoneInfo.GetSystemTimeZones())
+                            @for (var i = -12.0; i <= 12.0; i += 0.5)
                             {
-                                <option value="@tz.Id">@tz.DisplayName</option>
+                                <option value="@i">GMT@(i.ToString("+0.#;-0.#"))</option>
                             }
                         </select>
                         <span class="ui up pointing small red label" asp-validation-for="TimeZoneId"></span>
-                        <p><small>An internal name to identify this tile, not shown on the dashboard.</small></p>
+                        <p><small>Select your timezone offset. <b>Note:</b> At this time, daylight savings time automatic changes are not supported.</small></p>
                     </div>
                     <div class="inline field">
                         <label asp-for="DateFormatString"></label>

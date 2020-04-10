@@ -6,7 +6,7 @@ class CameraTile extends Tile
 
     constructor(page: string, name: string, conn: signalR.HubConnection, private haConn: HAConnection)
     {
-        super(page, name, conn, haConn, { canClick: false, canLoad: true });
+        super(page, name, conn, haConn, { canClick: false, canLoad: false });
     }
 
     public updateTile(t: ITile)

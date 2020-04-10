@@ -6,7 +6,7 @@ class SceneTile extends Tile
 
     constructor(page: string, name: string, conn: signalR.HubConnection, haConn: HAConnection)
     {
-        super(page, name, conn, haConn, { canClick: true, canLoad: false });
+        super(page, name, conn, haConn, { canClick: true, canLoad: true });
     }
 
     public updateTile(t: ITile)
