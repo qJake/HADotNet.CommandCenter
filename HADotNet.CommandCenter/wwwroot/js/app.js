@@ -559,19 +559,22 @@ class SwitchTile extends Tile {
         $(`#tile-${this.tile.name}`).find('span[value-name]').text(label);
         $(`#tile-${this.tile.name}`).find('span[value-icon]')
             .removeClass(`mdi-${this.tile.displayIcon} mdi-${this.tile.displayOffIcon}`)
-            .addClass(`mdi mdi-${state.new_state.state.toLowerCase() === "on" ? Utils.resolveIcon(state.new_state.attributes["icon"], this.tile.displayIcon) : Utils.resolveIcon(state.new_state.attributes["icon"], this.tile.displayOffIcon || this.tile.displayIcon)}`);
+            .addClass(`mdi mdi-${this.isOnState(state.new_state.state) ? Utils.resolveIcon(state.new_state.attributes["icon"], this.tile.displayIcon) : Utils.resolveIcon(state.new_state.attributes["icon"], this.tile.displayOffIcon || this.tile.displayIcon)}`);
         // TODO: Add custom on/off state keywords
         $(`#tile-${this.tile.name}`)
             .find('span[value-icon]')
             .removeClass("state-off state-on")
-            .addClass(state.new_state.state.toLowerCase() === "on" ? "state-on" : "state-off");
-        if (this.tile.onColor && state.new_state.state.toLowerCase() === "on") {
+            .addClass(this.isOnState(state.new_state.state) ? "state-on" : "state-off");
+        if (this.tile.onColor && this.isOnState(state.new_state.state)) {
             $(`#tile-${this.tile.name} .value`).css('color', this.tile.onColor);
         }
-        if (this.tile.offColor && state.new_state.state.toLowerCase() !== "on") {
+        if (this.tile.offColor && !this.isOnState(state.new_state.state)) {
             $(`#tile-${this.tile.name} .value`).css('color', this.tile.offColor);
         }
         super.updateState(state);
+    }
+    isOnState(state) {
+        return state.toLowerCase() === 'on' || state.toLowerCase() === 'open' || state.toLowerCase() === 'detected';
     }
 }
 /// <reference path="tile.ts" />
