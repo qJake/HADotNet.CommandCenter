@@ -4,6 +4,7 @@ using HADotNet.CommandCenter.Services;
 using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.CommandCenter.Utils;
 using HADotNet.CommandCenter.ViewModels;
+using HADotNet.Core;
 using HADotNet.Core.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -75,6 +76,8 @@ namespace HADotNet.CommandCenter.Controllers
             {
                 await ConfigStore.ManipulateConfig(c => c.Settings.AccessToken = c.Settings.BaseUri = null);
 
+                ClientFactory.Reset();
+
                 config = await ConfigStore.GetConfigAsync();
 
                 TempData.Remove(AlertManager.GRP_SUCCESS);
@@ -96,8 +99,10 @@ namespace HADotNet.CommandCenter.Controllers
                 if (ModelState.IsValid)
                 {
                     newSettings ??= new SystemSettings();
-                    newSettings.BaseUri = newSettings.BaseUri.TrimEnd('/');
+                    newSettings.BaseUri = newSettings.BaseUri?.TrimEnd('/');
                     await ConfigStore.ManipulateConfig(c => c.Settings = newSettings);
+
+                    ClientFactory.Reset();
 
                     TempData["check-settings"] = true;
 
