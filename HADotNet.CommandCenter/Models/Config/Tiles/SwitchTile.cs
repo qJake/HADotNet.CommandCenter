@@ -45,6 +45,12 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
         /// <remarks>Switches are weird... some of them don't like the homeassistant.toggle service. So we do our own logic.</remarks>
         public override async Task OnClick(ServiceClient serviceClient)
         {
+            var serviceDomain = EntityId.Split('.')[0].ToLower();
+            if (serviceDomain.ToUpper() == "GROUP")
+            {
+                serviceDomain = "homeassistant";
+            }
+
             var stateClient = ClientFactory.GetClient<StatesClient>();
             var state = await stateClient.GetState(EntityId);
             var serviceName = 
@@ -54,7 +60,8 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
                 || state.State.ToUpper() == "STANDBY"
                 || state.State.ToUpper() == "IDLE"
                 ? "turn_on" : "turn_off";
-            await serviceClient.CallService(EntityId.Split('.')[0].ToLower(), serviceName, new { entity_id = EntityId });
+
+            await serviceClient.CallService(serviceDomain, serviceName, new { entity_id = EntityId });
         }
     }
 }
