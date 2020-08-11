@@ -49,6 +49,8 @@ namespace HADotNet.CommandCenter
                     l.SetMinimumLevel(LogLevel.Information);
                     l.AddFilter("Microsoft", LogLevel.Error);
                     l.AddFilter("System", LogLevel.Warning);
+                    // This complains about the antiforgery token once on EVERY app startup, not sure why
+                    l.AddFilter("Microsoft.AspNetCore.Antiforgery", LogLevel.None);
                 }
             });
             services.AddOptions();

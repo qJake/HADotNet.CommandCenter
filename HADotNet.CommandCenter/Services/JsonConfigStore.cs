@@ -4,6 +4,7 @@ using HADotNet.CommandCenter.Models.Config.Pages;
 using HADotNet.CommandCenter.Models.Config.Themes;
 using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.CommandCenter.Utils;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -34,13 +35,18 @@ namespace HADotNet.CommandCenter.Services
 
         private bool IsValid { get; set; }
         private string ConfigDirectory { get; set; }
+        private string OldLinuxConfigPath => Path.Combine(".", CONFIG_FILE);
         private string ConfigPath => Path.Combine(ConfigDirectory, CONFIG_FILE);
-        public HaccOptions Options { get; }
+        private HaccOptions Options { get; }
+        private ILogger Log { get; }
 
-        public JsonConfigStore(IOptions<HaccOptions> haccOptions)
+        public JsonConfigStore(IOptions<HaccOptions> haccOptions, ILogger log)
         {
             Options = haccOptions.Value;
-            ConfigDirectory = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && Options.ConfigLocation == "." ? LINUX_DATA_LOCATION : Environment.ExpandEnvironmentVariables(Options.ConfigLocation);
+            ConfigDirectory = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && Options.ConfigLocation == "."
+                ? LINUX_DATA_LOCATION
+                : Environment.ExpandEnvironmentVariables(Options.ConfigLocation);
+            Log = log;
         }
 
         public async Task ManipulateConfig(params Action<ConfigRoot>[] changes)
@@ -63,6 +69,30 @@ namespace HADotNet.CommandCenter.Services
         {
             if (CheckPermissions())
             {
+                // One-time config Linux platform migration
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && File.Exists(OldLinuxConfigPath) && !File.Exists(ConfigPath))
+                {
+                    try
+                    {
+                        var oldContents = await File.ReadAllTextAsync(ConfigPath);
+                        var oldCfg = JsonConvert.DeserializeObject<ConfigRoot>(oldContents, SerializerSettings);
+                        try
+                        {
+                            File.Delete(OldLinuxConfigPath);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.LogWarning(ex, "Unable to delete old configuration store location. Subsequent app runs may cause issues.");
+                        }
+                        Log.LogInformation("Successfully loaded legacy configuration path for migration.");
+                        return oldCfg;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.LogWarning(ex, "Unable to read old configuration store for migration. Configuration will be blank.");
+                    }
+                }
+
                 if (!File.Exists(ConfigPath))
                 {
                     return new ConfigRoot();
