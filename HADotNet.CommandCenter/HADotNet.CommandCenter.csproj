@@ -5,8 +5,8 @@
     <RuntimeIdentifiers>win10;alpine.3.10-x64;debian.10-arm</RuntimeIdentifiers>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <AssemblyVersion>1.0.18.0</AssemblyVersion>
-    <FileVersion>1.0.18.0</FileVersion>
+    <AssemblyVersion>1.0.20.0</AssemblyVersion>
+    <FileVersion>1.0.20.0</FileVersion>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Deterministic>false</Deterministic>
@@ -39,18 +39,17 @@
     <!-- Web Compiler is Windows-only. -->
     <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="BuildWebCompiler" Version="1.12.405" />
     <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="BuildBundlerMinifier" Version="3.2.449" />
-    <PackageReference Include="HADotNet.Core" Version="1.3.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.1" />
-    <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="Microsoft.TypeScript.MSBuild" Version="3.7.4">
+    <PackageReference Include="HADotNet.Core" Version="1.3.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.6" />
+    <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="Microsoft.TypeScript.MSBuild" Version="3.9.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Quartz" Version="3.0.7" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
   </ItemGroup>
 
   <PropertyGroup>

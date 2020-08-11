@@ -103,6 +103,10 @@ namespace HADotNet.CommandCenter.Services
         {
             if (IsValid) return true;
 
+            var di = new DirectoryInfo(ConfigDirectory);
+
+            if (!di.Exists) di.Create();
+
             var tmpFile = Path.Combine(ConfigDirectory, ".tmp-write");
 
             try

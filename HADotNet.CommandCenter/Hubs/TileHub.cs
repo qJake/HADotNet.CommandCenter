@@ -66,7 +66,9 @@ namespace HADotNet.CommandCenter.Hubs
             {
                 // Calendars use a special API that isn't (might not be?) exposed via the WebSocket API.
                 case CalendarTile ct:
-                    await Clients.Caller.SendCalendarInfo(ct, await StatesClient.GetState(ct.EntityId), await CalendarClient.GetEvents(ct.EntityId));
+                    var state = await StatesClient.GetState(ct.EntityId);
+                    var calItems = await CalendarClient.GetEvents(ct.EntityId);
+                    await Clients.Caller.SendCalendarInfo(ct, state, calItems);
                     break;
 
                 // Date and time are rendered server-side to verify server connection, and to enforce timezone and date format selection.

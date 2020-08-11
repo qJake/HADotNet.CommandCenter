@@ -6,7 +6,6 @@
     "@types/jquery": "3.3.31",
     "@types/semantic-ui": "2.2.7",
     "@aspnet/signalr": "1.1.4",
-    "@types/node": "12.7.1",
-    "@types/moment": "2.13.0"
+    "@types/node": "12.7.1"
   }
 }
