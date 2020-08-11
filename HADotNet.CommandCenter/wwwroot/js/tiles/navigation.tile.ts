@@ -32,6 +32,11 @@ class NavigationTile extends Tile
             case 'nav':
                 window.location.href = `/d/${this.navTile.target}`;
                 return;
+            case 'debug':
+                Utils.displayDebugInfo();
+                return;
         }
     }
+
+
 }

@@ -38,9 +38,9 @@ namespace HADotNet.CommandCenter.Services
         private string OldLinuxConfigPath => Path.Combine(".", CONFIG_FILE);
         private string ConfigPath => Path.Combine(ConfigDirectory, CONFIG_FILE);
         private HaccOptions Options { get; }
-        private ILogger Log { get; }
+        private ILogger<JsonConfigStore> Log { get; }
 
-        public JsonConfigStore(IOptions<HaccOptions> haccOptions, ILogger log)
+        public JsonConfigStore(IOptions<HaccOptions> haccOptions, ILogger<JsonConfigStore> log)
         {
             Options = haccOptions.Value;
             ConfigDirectory = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && Options.ConfigLocation == "."

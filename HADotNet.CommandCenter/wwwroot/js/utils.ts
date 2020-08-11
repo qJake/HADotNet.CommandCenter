@@ -113,4 +113,55 @@ class Utils
             NNW: 'arrow-up-thick'
         })[dir];
     }
+
+    /**
+     * Displays the debug dialog window.
+     */
+    public static displayDebugInfo(): void
+    {
+        $('body').append(`<div class="debug-window">Home Assistant Command Center (HACC)
+Debug Information:
+
+HTML Area Resolution: ${window.innerWidth} x ${window.innerHeight}
+Device pixel ratio: ${window.devicePixelRatio}
+Browser Resolution: ${window.outerWidth} x ${window.outerHeight}
+Platform: ${navigator.platform}
+
+Touch points: ${navigator.maxTouchPoints}
+Supports ES6: ${Utils.es5check() ? "Yes" : "NO"}
+Supports ES2016: ${Utils.es2016Check() ? "Yes" : "NO"}
+</div>`);
+        $('.debug-window').click(() => $('.debug-window').remove());
+    }
+
+    private static es5check(): boolean {
+        if (typeof Symbol == "undefined") {
+            return false;
+        }
+
+        try {
+            eval("class Foo {}");
+            eval("var bar = (x) => x+1");
+        }
+        catch (_) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static es2016Check(): boolean {
+        if (typeof Array.prototype.includes !== 'function') {
+            return false;
+        }
+
+        try {
+            eval("2**2");
+        }
+        catch (_) {
+            return false;
+        }
+
+        return true;
+    }
 }

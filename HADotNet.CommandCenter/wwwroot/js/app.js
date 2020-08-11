@@ -358,6 +358,49 @@ class Utils {
             NNW: 'arrow-up-thick'
         }[dir];
     }
+    /**
+     * Displays the debug dialog window.
+     */
+    static displayDebugInfo() {
+        $('body').append(`<div class="debug-window">Home Assistant Command Center (HACC)
+Debug Information:
+
+HTML Area Resolution: ${window.innerWidth} x ${window.innerHeight}
+Device pixel ratio: ${window.devicePixelRatio}
+Browser Resolution: ${window.outerWidth} x ${window.outerHeight}
+Platform: ${navigator.platform}
+
+Touch points: ${navigator.maxTouchPoints}
+Supports ES6: ${Utils.es5check() ? "Yes" : "NO"}
+Supports ES2016: ${Utils.es2016Check() ? "Yes" : "NO"}
+</div>`);
+        $('.debug-window').click(() => $('.debug-window').remove());
+    }
+    static es5check() {
+        if (typeof Symbol == "undefined") {
+            return false;
+        }
+        try {
+            eval("class Foo {}");
+            eval("var bar = (x) => x+1");
+        }
+        catch (_) {
+            return false;
+        }
+        return true;
+    }
+    static es2016Check() {
+        if (typeof Array.prototype.includes !== 'function') {
+            return false;
+        }
+        try {
+            eval("2**2");
+        }
+        catch (_) {
+            return false;
+        }
+        return true;
+    }
 }
 /// <reference path="../../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
 /// <reference path="../utils.ts" />
@@ -808,6 +851,9 @@ class NavigationTile extends Tile {
             case 'nav':
                 window.location.href = `/d/${this.navTile.target}`;
                 return;
+            case 'debug':
+                Utils.displayDebugInfo();
+                return;
         }
     }
 }
@@ -919,6 +965,10 @@ TileMap.ClassMap = {
 /// <reference path="../../node_modules/@aspnet/signalr/dist/esm/index.d.ts" />
 /// <reference path="tiles/tilemap.ts" />
 /// <reference path="PageFunctions.ts" />
+// Debug info - has to be one of the first things because if we fail on "class" then this won't display
+if (window.location.search.toUpperCase().indexOf("DEBUG=1") > -1 && !window.location.pathname.toUpperCase().startsWith('/ADMIN')) {
+    Utils.displayDebugInfo();
+}
 class CommandCenter {
     constructor() {
         this.tiles = [];

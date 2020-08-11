@@ -14,6 +14,12 @@ type TilePos = {
     name: string
 };
 
+// Debug info - has to be one of the first things because if we fail on "class" then this won't display
+if (window.location.search.toUpperCase().indexOf("DEBUG=1") > -1 && !window.location.pathname.toUpperCase().startsWith('/ADMIN'))
+{
+    Utils.displayDebugInfo();
+}
+
 class CommandCenter
 {
     private conn: HAConnection;
