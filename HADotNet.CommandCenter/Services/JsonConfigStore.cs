@@ -2,7 +2,6 @@
 using HADotNet.CommandCenter.Models.Config;
 using HADotNet.CommandCenter.Models.Config.Pages;
 using HADotNet.CommandCenter.Models.Config.Themes;
-using HADotNet.CommandCenter.Models.Config.Tiles;
 using HADotNet.CommandCenter.Services.Interfaces;
 using HADotNet.CommandCenter.Utils;
 using Microsoft.Extensions.Options;
@@ -11,6 +10,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace HADotNet.CommandCenter.Services
@@ -19,7 +19,7 @@ namespace HADotNet.CommandCenter.Services
     {
         private const string CONFIG_FILE = "config.json";
 
-        private const string HASSIO_CONFIG_LOC = "/data/";
+        private const string LINUX_DATA_LOCATION = "/app/data/";
 
         public static JsonSerializerSettings SerializerSettings { get; } = new JsonSerializerSettings
         {
@@ -40,12 +40,7 @@ namespace HADotNet.CommandCenter.Services
         public JsonConfigStore(IOptions<HaccOptions> haccOptions)
         {
             Options = haccOptions.Value;
-            var isHassio = !string.IsNullOrWhiteSpace(SupervisorEnvironment.GetSupervisorToken());
-#if DEBUG
-            ConfigDirectory = Environment.ExpandEnvironmentVariables(Options.ConfigLocation);
-#else
-            ConfigDirectory = isHassio ? HASSIO_CONFIG_LOC : Environment.ExpandEnvironmentVariables(Options.ConfigLocation);
-#endif
+            ConfigDirectory = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && Options.ConfigLocation == "." ? LINUX_DATA_LOCATION : Environment.ExpandEnvironmentVariables(Options.ConfigLocation);
         }
 
         public async Task ManipulateConfig(params Action<ConfigRoot>[] changes)
@@ -107,6 +102,10 @@ namespace HADotNet.CommandCenter.Services
         private bool CheckPermissions()
         {
             if (IsValid) return true;
+
+            var di = new DirectoryInfo(ConfigDirectory);
+
+            if (!di.Exists) di.Create();
 
             var tmpFile = Path.Combine(ConfigDirectory, ".tmp-write");
 

@@ -182,7 +182,7 @@ class HAConnection {
     }
     eventStateChanged(ev) {
         var _a, _b;
-        console.info(`HA State Changed [${ev.data.entity_id}] ${(_b = (_a = ev.data.old_state) === null || _a === void 0 ? void 0 : _a.state, (_b !== null && _b !== void 0 ? _b : '<NULL>'))} -> ${ev.data.new_state.state}`);
+        console.info(`HA State Changed [${ev.data.entity_id}] ${((_b = (_a = ev.data.old_state) === null || _a === void 0 ? void 0 : _a.state) !== null && _b !== void 0 ? _b : '<NULL>')} -> ${ev.data.new_state.state}`);
         this.evStateChanged.invoke(ev);
     }
     sendAuth() {
@@ -364,7 +364,6 @@ class Utils {
 /// <reference path="tileoptions.ts" />
 class Tile {
     constructor(page, name, conn, haConn, options) {
-        var _a;
         this.page = page;
         this.name = name;
         this.conn = conn;
@@ -383,7 +382,7 @@ class Tile {
             this.entityIds = entityList;
         }
         else {
-            this.entityIds.push((_a = entityList) === null || _a === void 0 ? void 0 : _a.toString());
+            this.entityIds.push(entityList === null || entityList === void 0 ? void 0 : entityList.toString());
         }
         conn.on('SendSystemConfig', (tname, cfg) => {
             if (name == tname) {
@@ -857,7 +856,7 @@ class CalendarTile extends Tile {
                     this.eventContainer.append(`<h3>${thisGroup}</h3>`);
                     lastGroup = thisGroup;
                 }
-                this.eventContainer.append(`<p><span class="summary">${evt.summary}</span><span class="time">${(!evt.start.dateTime ? 'All Day' : moment((_a = evt.start.dateTime, (_a !== null && _a !== void 0 ? _a : evt.start.date))).format('LT'))}</span></p>`);
+                this.eventContainer.append(`<p><span class="summary">${evt.summary}</span><span class="time">${(!evt.start.dateTime ? 'All Day' : moment((_a = evt.start.dateTime) !== null && _a !== void 0 ? _a : evt.start.date).format('LT'))}</span></p>`);
             }
         }
     }
@@ -867,7 +866,7 @@ class CalendarTile extends Tile {
         const tomorrow = moment().add(1, 'day');
         let todayHeader = this.formatHeader(today);
         let tomorrowHeader = this.formatHeader(tomorrow);
-        const mt = moment((_a = event.start.dateTime, (_a !== null && _a !== void 0 ? _a : event.start.date)));
+        const mt = moment((_a = event.start.dateTime) !== null && _a !== void 0 ? _a : event.start.date);
         let header = this.formatHeader(mt);
         if (header === todayHeader) {
             header += ' (Today)';

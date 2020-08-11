@@ -174,7 +174,7 @@ namespace HADotNet.CommandCenter.Controllers
 
                     await ConfigStore.ManipulateConfig(c => c.CurrentTheme = newTheme);
 
-                    TempData.AddSuccess($"Successfully imported theme file '{file.FileName}' successfully! <a href=\"/\">Go check out your dashboard!</a>");
+                    TempData.AddSuccess($"Successfully imported theme file '{file.FileName}' successfully! <a href=\"/d\" target=\"_blank\">Go check out your dashboard!</a>");
                 }
                 catch
                 {
