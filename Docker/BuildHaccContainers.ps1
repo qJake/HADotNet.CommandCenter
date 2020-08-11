@@ -1,4 +1,4 @@
-﻿$version = '1.0.19'
+﻿$version = '1.0.21'
 
 function Test-ExitCode ([int] $Expected = 0)
 {
