@@ -15,6 +15,12 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
         public string OverrideLabel { get; set; }
 
         /// <summary>
+        /// Gets or sets the override unit for this tile.
+        /// </summary>
+        [Display(Name = "Override Unit")]
+        public string OverrideUnit { get; set; }
+
+        /// <summary>
         /// Gets or sets if the state should be displayed as a whole number, if appropriate.
         /// </summary>
         [Display(Name = "Round Decimals")]

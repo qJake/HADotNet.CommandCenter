@@ -24,6 +24,9 @@ interface IStateTile extends ITile
     /** Gets or sets a value indicating if decimal values should be rounded. */
     roundDecimals: boolean;
 
+    /** Gets or sets the unit suffix text. */
+    overrideUnit: string;
+
     /** Gets or sets a label that should be used when the entity is "on". */
     displayTextOn: string;
 
