@@ -41,6 +41,15 @@
                         <p><small>By default, the entity's <em>friendly name</em> will be used. Enter an override if desired.</small></p>
                     </div>
                     <div class="field">
+                        <label asp-for="OverrideUnit"></label>
+                        <div class="ui left icon input">
+                            <i class="font icon"></i>
+                            <input asp-for="OverrideUnit" />
+                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="OverrideUnit"></span>
+                        <p><small>By default, the entity's <em>default unit suffix</em> will be added. Enter a different unit suffix here if desired.</small></p>
+                    </div>
+                    <div class="field">
                         <label asp-for="DisplayTextOn"></label>
                         <div class="ui left icon input">
                             <i class="font icon"></i>

@@ -36,7 +36,11 @@ class StateTile extends Tile
             value = this.tile.displayTextOn;
         }
 
-        if (state.new_state.attributes["unit_of_measurement"])
+        if (this.tile.overrideUnit?.length)
+        {
+            value += this.tile.overrideUnit;
+        }
+        else if (state.new_state.attributes["unit_of_measurement"])
         {
             value += state.new_state.attributes["unit_of_measurement"].toString();
         }

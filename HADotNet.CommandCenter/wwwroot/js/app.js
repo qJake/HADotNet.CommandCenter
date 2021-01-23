@@ -529,6 +529,7 @@ class StateTile extends Tile {
         super.updateTile(t);
     }
     updateState(state) {
+        var _a;
         //console.log("State received for: " + tile.name, state);
         let label = state.new_state.attributes["friendly_name"].toString();
         if (this.tile.overrideLabel) {
@@ -542,7 +543,10 @@ class StateTile extends Tile {
         else if (this.tile.displayTextOn && value.toLowerCase() === 'on') {
             value = this.tile.displayTextOn;
         }
-        if (state.new_state.attributes["unit_of_measurement"]) {
+        if ((_a = this.tile.overrideUnit) === null || _a === void 0 ? void 0 : _a.length) {
+            value += this.tile.overrideUnit;
+        }
+        else if (state.new_state.attributes["unit_of_measurement"]) {
             value += state.new_state.attributes["unit_of_measurement"].toString();
         }
         $(`#tile-${this.tile.name}`).find('span[value-state]').text(value);

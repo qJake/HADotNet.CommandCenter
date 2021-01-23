@@ -11,6 +11,11 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
     public abstract class BaseTile
     {
         /// <summary>
+        /// How big the max tile size can go - currently 8x.
+        /// </summary>
+        private const int MAX_TILE_SIZE = 8;
+
+        /// <summary>
         /// Gets or sets the tile's admin name.
         /// </summary>
         [UniqueName(ErrorMessage = "Tile names must be unique on this page.")]
@@ -73,7 +78,7 @@ namespace HADotNet.CommandCenter.Models.Config.Tiles
             }
         }
 
-        public int GetTileSizeX(int tileSize, int padding) => Math.Min(Math.Max(SizeX, 1), 4) * tileSize + (Math.Min(Math.Max(SizeX, 1), 4) - 1) * padding;
-        public int GetTileSizeY(int tileSize, int padding) => Math.Min(Math.Max(SizeY, 1), 4) * tileSize + (Math.Min(Math.Max(SizeY, 1), 4) - 1) * padding;
+        public int GetTileSizeX(int tileSize, int padding) => Math.Min(Math.Max(SizeX, 1), MAX_TILE_SIZE) * tileSize + (Math.Min(Math.Max(SizeX, 1), MAX_TILE_SIZE) - 1) * padding;
+        public int GetTileSizeY(int tileSize, int padding) => Math.Min(Math.Max(SizeY, 1), MAX_TILE_SIZE) * tileSize + (Math.Min(Math.Max(SizeY, 1), MAX_TILE_SIZE) - 1) * padding;
     }
 }
