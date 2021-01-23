@@ -18,6 +18,8 @@ jobs:
         
     - name: Setup NPM
       uses: actions/setup-node@v1.1.0
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       
     - name: npm install
       run: cd HADotNet.CommandCenter && npm install
