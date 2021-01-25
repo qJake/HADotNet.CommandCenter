@@ -5,8 +5,8 @@
     <RuntimeIdentifiers>win10;alpine.3.10-x64;debian.10-arm</RuntimeIdentifiers>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <AssemblyVersion>1.0.24.0</AssemblyVersion>
-    <FileVersion>1.0.24.0</FileVersion>
+    <AssemblyVersion>1.0.25.0</AssemblyVersion>
+    <FileVersion>1.0.25.0</FileVersion>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Deterministic>false</Deterministic>
@@ -39,7 +39,7 @@
     <!-- Web Compiler is Windows-only. -->
     <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="BuildWebCompiler" Version="1.12.405" />
     <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="BuildBundlerMinifier" Version="3.2.449" />
-    <PackageReference Include="HADotNet.Core" Version="1.4.0" />
+    <PackageReference Include="HADotNet.Core" Version="1.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.6" />

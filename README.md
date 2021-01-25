@@ -1,6 +1,6 @@
 # Home Assistant Command Center (HACC)
 
-![release](https://img.shields.io/github/v/release/qjake/HADotNet.CommandCenter?color=%2300CC00&logo=github&sort=semver) ![ci-badge](https://github.com/qJake/HADotNet.CommandCenter/workflows/CI%20Build/badge.svg) ![maintain](https://img.shields.io/maintenance/yes/2020) ![lic](https://img.shields.io/github/license/qJake/HADotNet.CommandCenter?color=lightgray)
+![release](https://img.shields.io/github/v/release/qjake/HADotNet.CommandCenter?color=%2300CC00&logo=github&sort=semver) ![ci-badge](https://github.com/qJake/HADotNet.CommandCenter/workflows/CI%20Build/badge.svg) ![maintain](https://img.shields.io/maintenance/yes/2021) ![lic](https://img.shields.io/github/license/qJake/HADotNet.CommandCenter?color=lightgray)
 
 ![issues](https://img.shields.io/github/issues-raw/qJake/HADotNet.CommandCenter?logo=github) ![prs](https://img.shields.io/github/issues-pr-raw/qjake/HADotNet.CommandCenter?logo=github)
 
