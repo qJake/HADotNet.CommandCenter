@@ -13,7 +13,7 @@
     @Html.Raw(header)
 </h1>
 
-@if (SupervisorEnvironment.IsSupervisorAddon)
+@if (SupervisorEnvironment.IsSupervisorAddon && string.IsNullOrWhiteSpace((ViewBag.CurrentConfig as ConfigRoot)?.Settings?.OverrideAssetUri))
 {
     <div class="ui visible icon labeled warning message">
         <i class="triangle exclamation icon"></i>

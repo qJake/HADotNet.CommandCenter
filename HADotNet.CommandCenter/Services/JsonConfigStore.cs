@@ -40,6 +40,8 @@ namespace HADotNet.CommandCenter.Services
         private HaccOptions Options { get; }
         private ILogger<JsonConfigStore> Log { get; }
 
+        private static ConfigRoot CachedConfig { get; set; } = null;
+
         public JsonConfigStore(IOptions<HaccOptions> haccOptions, ILogger<JsonConfigStore> log)
         {
             Options = haccOptions.Value;
@@ -67,6 +69,11 @@ namespace HADotNet.CommandCenter.Services
 
         public async Task<ConfigRoot> GetConfigAsync()
         {
+            if (CachedConfig != null)
+            {
+                return CachedConfig;
+            }
+
             if (CheckPermissions())
             {
                 // One-time config Linux platform migration
@@ -106,6 +113,8 @@ namespace HADotNet.CommandCenter.Services
 
                 var cfg = JsonConvert.DeserializeObject<ConfigRoot>(contents, SerializerSettings);
 
+                CachedConfig = cfg;
+
                 return cfg;
             }
             else
@@ -116,6 +125,7 @@ namespace HADotNet.CommandCenter.Services
 
         public async Task SaveConfigAsync(ConfigRoot config)
         {
+            CachedConfig = null;
             if (CheckPermissions())
             {
                 await File.WriteAllTextAsync(ConfigPath, JsonConvert.SerializeObject(config, SerializerSettings));

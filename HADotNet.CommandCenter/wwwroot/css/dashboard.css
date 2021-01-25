@@ -155,6 +155,7 @@ body.dashboard .debug-window {
 }
 .tile.tile-type--calendar {
   justify-content: flex-start !important;
+  overflow-y: auto !important;
 }
 .tile.tile-type--calendar .top-label {
   display: block;

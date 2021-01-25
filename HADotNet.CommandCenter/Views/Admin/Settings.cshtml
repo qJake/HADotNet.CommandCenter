@@ -89,7 +89,10 @@
                                 <i class="globe icon"></i>
                                 <input asp-for="OverrideAssetUri" />
                             </div>
-                            <small>If your image assets are not showing up correctly, you can enter a base URL to use. This URL must start with http(s):// and be accessible from your HACC device.</small>
+                            <small>
+                                If your image assets are not showing up correctly, you can enter a base URL to use. This URL must start with http(s):// and be accessible from your HACC device.<br /><br />
+                                This is also required if you want to use a <b>calendar</b> tile, due to the way the API call is handled.
+                            </small>
                             <span class="ui up pointing small red label" asp-validation-for="OverrideAssetUri"></span>
                         </div>
                     </div>
@@ -128,7 +131,11 @@
                                 <i class="globe icon"></i>
                                 <input asp-for="OverrideAssetUri" />
                             </div>
-                            <small>If your image assets are not showing up correctly, you can enter a base URL to use. This URL must start with http(s):// and be accessible from your HACC device.</small>
+                            <small>
+                                If your image assets are not showing up correctly, you can enter a base URL to use. This URL must start with http(s):// and be accessible from your HACC device.<br /><br />
+                                This is also required if you want to use a <b>calendar</b> tile, due to the way the API call is handled.<br /><br />
+                                For non-supervised environments, this can be (and is usually) the same as your <b>Home Assistant Base URL</b>, so try that if you aren't sure.
+                            </small>
                             <span class="ui up pointing small red label" asp-validation-for="OverrideAssetUri"></span>
                         </div>
                     </div>

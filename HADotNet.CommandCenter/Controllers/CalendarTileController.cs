@@ -24,6 +24,8 @@ namespace HADotNet.CommandCenter.Controllers
         public async Task<IActionResult> Add()
         {
             ViewBag.Entities = (await EntityClient.GetEntities("calendar")).OrderBy(e => e).Select(e => new SelectListItem(e, e));
+            ViewBag.CurrentConfig = await ConfigStore.GetConfigAsync();
+
             return View();
         }
 
@@ -35,6 +37,7 @@ namespace HADotNet.CommandCenter.Controllers
             var tile = config[page].Tiles.FirstOrDefault(t => t.Name == name);
 
             ViewBag.Entities = (await EntityClient.GetEntities("calendar")).OrderBy(e => e).Select(e => new SelectListItem(e, e));
+            ViewBag.CurrentConfig = await ConfigStore.GetConfigAsync();
 
             return View("Add", tile);
         }
@@ -48,6 +51,8 @@ namespace HADotNet.CommandCenter.Controllers
             }
 
             ViewBag.Entities = (await EntityClient.GetEntities("calendar")).OrderBy(e => e).Select(e => new SelectListItem(e, e));
+            ViewBag.CurrentConfig = await ConfigStore.GetConfigAsync();
+
             return View("Add", tile);
         }
     }
