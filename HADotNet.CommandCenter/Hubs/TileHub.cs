@@ -12,15 +12,13 @@ namespace HADotNet.CommandCenter.Hubs
     {
         private StatesClient StatesClient { get; }
         public ServiceClient ServiceClient { get; }
-        public CalendarClient CalendarClient { get; }
         public IConfigStore ConfigStore { get; }
 
-        public TileHub(StatesClient statesClient, ServiceClient serviceClient, CalendarClient calendarClient, IConfigStore configStore)
+        public TileHub(StatesClient statesClient, ServiceClient serviceClient, IConfigStore configStore)
         {
             StatesClient = statesClient;
             ServiceClient = serviceClient;
             ConfigStore = configStore;
-            CalendarClient = calendarClient;
         }
 
         public async Task RequestTileState(string page, string tileName)
@@ -66,8 +64,14 @@ namespace HADotNet.CommandCenter.Hubs
             {
                 // Calendars use a special API that isn't (might not be?) exposed via the WebSocket API.
                 case CalendarTile ct:
+                    // Required because for some reason, the calendar API is not available
+                    // via the "inside" supervisor API, only the "external" fully-qualified
+                    // API endpoint.
+                    var config = await ConfigStore.GetConfigAsync();
+                    var calClient = new CalendarClient(new Uri(config.Settings.OverrideAssetUri), config.Settings.AccessToken);
+
                     var state = await StatesClient.GetState(ct.EntityId);
-                    var calItems = await CalendarClient.GetEvents(ct.EntityId);
+                    var calItems = await calClient.GetEvents(ct.EntityId);
                     await Clients.Caller.SendCalendarInfo(ct, state, calItems);
                     break;
 
