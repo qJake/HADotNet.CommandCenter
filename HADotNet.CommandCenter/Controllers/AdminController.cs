@@ -205,7 +205,7 @@ namespace HADotNet.CommandCenter.Controllers
 
             Logger.LogInformation("Exported theme settings.");
 
-            return Ok();
+            return new EmptyResult();
         }
 
         [HttpPost]
@@ -277,7 +277,7 @@ namespace HADotNet.CommandCenter.Controllers
 
             Logger.LogInformation($"Exported system configuration to downloaded file '{filename}'.");
 
-            return Ok();
+            return new EmptyResult();
         }
 
         [HttpGet]

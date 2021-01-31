@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RuntimeIdentifiers>win10;alpine.3.10-x64;debian.10-arm</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win10;alpine.3.10-x64</RuntimeIdentifiers>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <AssemblyVersion>1.0.26.0</AssemblyVersion>
-    <FileVersion>1.0.26.0</FileVersion>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Deterministic>false</Deterministic>
@@ -23,11 +23,6 @@
   <ItemGroup>
     <Content Remove="wwwroot/**/*.ts" />
     <Content Include="wwwroot/**/*.ts" CopyToPublishDirectory="Never" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="HADotNet.CommandCenter-armhf.tar" />
-    <None Remove="HADotNet.CommandCenter-armhf.tar.gz" />
   </ItemGroup>
 
   <ItemGroup>
@@ -77,13 +72,5 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VersionBuild|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(Configuration)' == 'VersionBuild'">
-    <Exec Command="powershell -nologo -noprofile -command rm -force -recurse $(TargetDir)..\*" />
-  </Target>
-
-  <Target Name="PostBuild" AfterTargets="AfterPublish" Condition="'$(Configuration)' == 'VersionBuild'">
-    <Exec Command="powershell -nologo -noprofile -command write-host 'Building .tar.gz release...'; cd $(ProjectDir); Copy-Item .\bin\Release\netcoreapp3.1\publish\wwwroot .\bin\Release\netcoreapp3.1\debian.10-arm\ -Recurse -Force; cd .\bin\Release\netcoreapp3.1\debian.10-arm\; 7z a -ttar HADotNet.CommandCenter-armhf.tar *; 7z a -tgzip HADotNet.CommandCenter-armhf.tar.gz HADotNet.CommandCenter-armhf.tar; Copy-Item HADotNet.CommandCenter-armhf.tar.gz ../../; " />
-  </Target>
 
 </Project>

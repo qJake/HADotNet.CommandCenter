@@ -13,64 +13,51 @@
     @Html.Raw(header)
 </h1>
 
-@if (SupervisorEnvironment.IsSupervisorAddon && string.IsNullOrWhiteSpace((ViewBag.CurrentConfig as ConfigRoot)?.Settings?.OverrideAssetUri))
-{
-    <div class="ui visible icon labeled warning message">
-        <i class="triangle exclamation icon"></i>
-        <div class="content">
-            <div class="ui header">Not Supported via Add-on</div>
-            <p>The Calendar tile is not supported via the Supervisor add-on interface at this time. Sorry about that. (<a href="javascript:history.back();">Back to Tile Selector</a>)</p>
-        </div>
-    </div>
-}
-else
-{
-    <form class="ui form" method="post" asp-action="Save" asp-route-page="@Context.Request.RouteValues["page"]">
-        <input type="hidden" name="originalName" value="@Model?.Name" />
-        <div class="ui grid">
-            <div class="row">
+<form class="ui form" method="post" asp-action="Save" asp-route-page="@Context.Request.RouteValues["page"]">
+    <input type="hidden" name="originalName" value="@Model?.Name" />
+    <div class="ui grid">
+        <div class="row">
 
-                <div class="six wide widescreen eight wide large screen twelve wide computer fourteen wide tablet sixteen wide mobile column">
-                    <partial name="BaseTileEditor" model="@Model" />
-                </div>
+            <div class="six wide widescreen eight wide large screen twelve wide computer fourteen wide tablet sixteen wide mobile column">
+                <partial name="BaseTileEditor" model="@Model" />
+            </div>
 
-                <div class="six wide widescreen eight wide large screen twelve wide computer fourteen wide tablet sixteen wide mobile column">
-                    <h3>Calendar Tile Details</h3>
-                    <div class="ui segment">
-                        <div class="field">
-                            <label asp-for="EntityId"></label>
-                            <select class="ui search selection dropdown" asp-for="EntityId" asp-items="ViewBag.Entities"></select>
-                            <span class="ui up pointing small red label" asp-validation-for="EntityId"></span>
+            <div class="six wide widescreen eight wide large screen twelve wide computer fourteen wide tablet sixteen wide mobile column">
+                <h3>Calendar Tile Details</h3>
+                <div class="ui segment">
+                    <div class="field">
+                        <label asp-for="EntityId"></label>
+                        <select class="ui search selection dropdown" asp-for="EntityId" asp-items="ViewBag.Entities"></select>
+                        <span class="ui up pointing small red label" asp-validation-for="EntityId"></span>
+                    </div>
+                    <div class="field">
+                        <label asp-for="RefreshRate"></label>
+                        <div class="ui left icon input">
+                            <i class="refresh icon"></i>
+                            <input asp-for="RefreshRate" />
                         </div>
-                        <div class="field">
-                            <label asp-for="RefreshRate"></label>
-                            <div class="ui left icon input">
-                                <i class="refresh icon"></i>
-                                <input asp-for="RefreshRate" />
-                            </div>
-                            <span class="ui up pointing small red label" asp-validation-for="RefreshRate"></span>
-                            <p><small>The rate, in seconds, to automatically refresh this tile.</small></p>
+                        <span class="ui up pointing small red label" asp-validation-for="RefreshRate"></span>
+                        <p><small>The rate, in seconds, to automatically refresh this tile.</small></p>
+                    </div>
+                    <div class="field">
+                        <label asp-for="OverrideLabel"></label>
+                        <div class="ui left icon input">
+                            <i class="font icon"></i>
+                            <input asp-for="OverrideLabel" />
                         </div>
-                        <div class="field">
-                            <label asp-for="OverrideLabel"></label>
-                            <div class="ui left icon input">
-                                <i class="font icon"></i>
-                                <input asp-for="OverrideLabel" />
-                            </div>
-                            <span class="ui up pointing small red label" asp-validation-for="OverrideLabel"></span>
-                            <p><small>By default, the entity's <em>friendly name</em> will be used. Enter an override if desired.</small></p>
-                        </div>
+                        <span class="ui up pointing small red label" asp-validation-for="OverrideLabel"></span>
+                        <p><small>By default, the entity's <em>friendly name</em> will be used. Enter an override if desired.</small></p>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="sixteen wide column">
-                    <button type="submit" class="ui green icon labeled button">
-                        <i class="@(Model == null ? "plus" : "save") icon"></i>
-                        @(Model == null ? "Add" : "Edit") Tile
-                    </button>
-                </div>
+        </div>
+        <div class="row">
+            <div class="sixteen wide column">
+                <button type="submit" class="ui green icon labeled button">
+                    <i class="@(Model == null ? "plus" : "save") icon"></i>
+                    @(Model == null ? "Add" : "Edit") Tile
+                </button>
             </div>
         </div>
-    </form>
-}
+    </div>
+</form>

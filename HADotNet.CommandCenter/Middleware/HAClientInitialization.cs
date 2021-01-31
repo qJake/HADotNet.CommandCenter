@@ -2,12 +2,9 @@
 using HADotNet.CommandCenter.Models.Config.Pages;
 using HADotNet.CommandCenter.Models.Config.Tiles;
 using HADotNet.CommandCenter.Services.Interfaces;
-using HADotNet.CommandCenter.Utils;
 using HADotNet.Core;
-using HADotNet.Core.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,14 +34,6 @@ namespace HADotNet.CommandCenter.Middleware
 
                 if (!ClientFactory.IsInitialized)
                 {
-                    // If we're in Hass.io mode, set the base URI and redirect to the admin homepage.
-                    if (SupervisorEnvironment.IsSupervisorAddon)
-                    {
-                        await AttemptBaseUrlDiscovery();
-
-                        InitializeOrReset(config, true);
-                    }
-
                     // If we aren't on one of the approved pages, redirect to the settings page and prompt for setup.
                     if (context.Request.Path.ToString().ToLower() != "/admin/settings" 
                         && context.Request.Path.ToString().ToLower() != "/admin/pagemigration"
@@ -62,31 +51,6 @@ namespace HADotNet.CommandCenter.Middleware
             await MigrateLegacyPagesConfig(context, config);
 
             await Next(context);
-        }
-
-        private async Task AttemptBaseUrlDiscovery()
-        {
-            // Temporary while we fetch some stuff...
-            ClientFactory.Initialize(SupervisorEnvironment.GetBaseUrl(), SupervisorEnvironment.GetSupervisorToken());
-
-            var discovery = ClientFactory.GetClient<DiscoveryClient>();
-            var discInfo = await discovery.GetDiscoveryInfo();
-
-            if (string.IsNullOrWhiteSpace(discInfo?.BaseUrl))
-            {
-                Log.LogError("Unable to read discovery info from Home Assistant. Do you have the HTTP component configured in Home Assistant with a \"base_url\" set?");
-                ClientFactory.Reset();
-            }
-            else
-            {
-                await ConfigStore.ManipulateConfig(c =>
-                {
-                    c.Settings = new SystemSettings
-                    {
-                        BaseUri = discInfo.BaseUrl
-                    };
-                });
-            }
         }
 
         private void InitializeOrReset(ConfigRoot config, bool resetFirst = false)
