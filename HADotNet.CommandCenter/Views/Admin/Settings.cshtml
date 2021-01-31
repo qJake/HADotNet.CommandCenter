@@ -23,7 +23,7 @@
 
 <partial name="Alerts" />
 
-@if (Context.Request.Query["setup"] == "1" && !SupervisorEnvironment.IsSupervisorAddon)
+@if (Context.Request.Query["setup"] == "1")
 {
     <div class="ui icon labeled info message">
         <i class="info circle icon"></i>
@@ -50,99 +50,47 @@
 
 <form class="ui form" asp-action="Settings" method="post">
 
-    @if (SupervisorEnvironment.IsSupervisorAddon)
-    {
-        <div class="ui icon labeled info message">
-            <i class="info circle icon"></i>
-            <div class="content">
-                <div class="ui large header">Supervisor Add-on</div>
-                <p>HACC is being run from the Home Assistant Supervisor.</p>
-                <p>The only thing we need from you is a <em>long-lived access token</em> to get started. (<a href="https://hacc.dev/faqs/#why-is-a-long-lived-access-token-llat-required-in-supervisor-mode" target="_blank">Why?</a></p>
-            </div>
-        </div>
-
-        <input type="hidden" asp-for="BaseUri" />
-
-        <div class="ui grid">
-            <div class="row">
-                <div class="six wide computer twelve wide tablet sixteen wide mobile column">
-                    <div class="ui segment">
-                        <div class="field">
-                            <label asp-for="BaseUri"></label>
-                            <div class="ui left icon input">
-                                <i class="globe icon"></i>
-                                <input type="text" disabled value="&lt; Set automatically via Supervisor &gt;" />
-                            </div>
+    <div class="ui grid">
+        <div class="row">
+            <div class="six wide computer twelve wide tablet sixteen wide mobile column">
+                <p>Need help getting set up? Check out our <strong><a href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Initial-System-Setup" target="_blank">installation guide</a></strong>!</p>
+                <div class="ui segment">
+                    <div class="field">
+                        <label asp-for="BaseUri"></label>
+                        <div class="ui left icon input">
+                            <i class="globe icon"></i>
+                            <input asp-for="BaseUri" />
                         </div>
-                        <div class="field">
-                            <label asp-for="AccessToken"></label>
-                            <textarea asp-for="AccessToken" rows="3" class="no-resize"></textarea>
-                            <span class="ui up pointing small red label" asp-validation-for="AccessToken"></span>
-                            <p>
-                                <a href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Initial-System-Setup" rel="nofollow" target="_blank">How do I generate an Access Token?</a>
-                            </p>
+                        <small>Enter just your base URL, including the protocol and port (e.g. http://192.168.0.42:8123 or https://my-home.net)</small>
+                        <span class="ui up pointing small red label" asp-validation-for="BaseUri"></span>
+                    </div>
+                    <div class="field">
+                        <label asp-for="AccessToken"></label>
+                        <textarea asp-for="AccessToken" rows="3" class="no-resize"></textarea>
+                        <span class="ui up pointing small red label" asp-validation-for="AccessToken"></span>
+                        <p>
+                            <a href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Initial-System-Setup" rel="nofollow" target="_blank">How do I generate an Access Token?</a>
+                        </p>
+                    </div>
+                    <div class="ui separator"></div>
+                    <div class="field">
+                        <label asp-for="OverrideAssetUri"></label>
+                        <div class="ui left icon input">
+                            <i class="globe icon"></i>
+                            <input asp-for="OverrideAssetUri" />
                         </div>
-                        <div class="ui separator"></div>
-                        <div class="field">
-                            <label asp-for="OverrideAssetUri"></label>
-                            <div class="ui left icon input">
-                                <i class="globe icon"></i>
-                                <input asp-for="OverrideAssetUri" />
-                            </div>
-                            <small>
-                                If your image assets are not showing up correctly, you can enter a base URL to use. This URL must start with http(s):// and be accessible from your HACC device.<br /><br />
-                                This is also required if you want to use a <b>calendar</b> tile, due to the way the API call is handled.
-                            </small>
-                            <span class="ui up pointing small red label" asp-validation-for="OverrideAssetUri"></span>
-                        </div>
+                        <small>
+                            If your image assets are not showing up correctly, you can enter a base URL to use. This URL must start with http(s):// and be accessible from your HACC device.<br /><br />
+                            This is also required if you want to use a <b>calendar</b> tile, due to the way the API call is handled.<br /><br />
+                            For non-supervised environments, this can be (and is usually) the same as your <b>Home Assistant Base URL</b>, so try that if you aren't sure.
+                        </small>
+                        <span class="ui up pointing small red label" asp-validation-for="OverrideAssetUri"></span>
                     </div>
                 </div>
             </div>
         </div>
-    }
-    else
-    {
-        <div class="ui grid">
-            <div class="row">
-                <div class="six wide computer twelve wide tablet sixteen wide mobile column">
-                    <p>Need help getting set up? Check out our <strong><a href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Initial-System-Setup" target="_blank">installation guide</a></strong>!</p>
-                    <div class="ui segment">
-                        <div class="field">
-                            <label asp-for="BaseUri"></label>
-                            <div class="ui left icon input">
-                                <i class="globe icon"></i>
-                                <input asp-for="BaseUri" />
-                            </div>
-                            <small>Enter just your base URL, including the protocol and port (e.g. http://192.168.0.42:8123 or https://my-home.net)</small>
-                            <span class="ui up pointing small red label" asp-validation-for="BaseUri"></span>
-                        </div>
-                        <div class="field">
-                            <label asp-for="AccessToken"></label>
-                            <textarea asp-for="AccessToken" rows="3" class="no-resize"></textarea>
-                            <span class="ui up pointing small red label" asp-validation-for="AccessToken"></span>
-                            <p>
-                                <a href="https://github.com/qJake/HADotNet.CommandCenter/wiki/Initial-System-Setup" rel="nofollow" target="_blank">How do I generate an Access Token?</a>
-                            </p>
-                        </div>
-                        <div class="ui separator"></div>
-                        <div class="field">
-                            <label asp-for="OverrideAssetUri"></label>
-                            <div class="ui left icon input">
-                                <i class="globe icon"></i>
-                                <input asp-for="OverrideAssetUri" />
-                            </div>
-                            <small>
-                                If your image assets are not showing up correctly, you can enter a base URL to use. This URL must start with http(s):// and be accessible from your HACC device.<br /><br />
-                                This is also required if you want to use a <b>calendar</b> tile, due to the way the API call is handled.<br /><br />
-                                For non-supervised environments, this can be (and is usually) the same as your <b>Home Assistant Base URL</b>, so try that if you aren't sure.
-                            </small>
-                            <span class="ui up pointing small red label" asp-validation-for="OverrideAssetUri"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
+    </div>
+
     <div class="ui basic segment">
         <button type="submit" class="ui green icon labeled button">
             <i class="check icon"></i>

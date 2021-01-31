@@ -100,6 +100,7 @@ namespace HADotNet.CommandCenter.Controllers
                 {
                     newSettings ??= new SystemSettings();
                     newSettings.BaseUri = newSettings.BaseUri?.TrimEnd('/');
+                    newSettings.AccessToken = newSettings.AccessToken?.Trim();
                     await ConfigStore.ManipulateConfig(c => c.Settings = newSettings);
 
                     ClientFactory.Reset();
@@ -205,7 +206,7 @@ namespace HADotNet.CommandCenter.Controllers
 
             Logger.LogInformation("Exported theme settings.");
 
-            return Ok();
+            return new EmptyResult();
         }
 
         [HttpPost]
@@ -277,7 +278,7 @@ namespace HADotNet.CommandCenter.Controllers
 
             Logger.LogInformation($"Exported system configuration to downloaded file '{filename}'.");
 
-            return Ok();
+            return new EmptyResult();
         }
 
         [HttpGet]

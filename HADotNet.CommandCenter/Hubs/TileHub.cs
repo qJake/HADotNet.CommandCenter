@@ -68,7 +68,7 @@ namespace HADotNet.CommandCenter.Hubs
                     // via the "inside" supervisor API, only the "external" fully-qualified
                     // API endpoint.
                     var config = await ConfigStore.GetConfigAsync();
-                    var calClient = new CalendarClient(new Uri(config.Settings.OverrideAssetUri), config.Settings.AccessToken);
+                    var calClient = new CalendarClient(new Uri(!string.IsNullOrWhiteSpace(config.Settings?.OverrideAssetUri) ? config.Settings.OverrideAssetUri : config.Settings.BaseUri), config.Settings.AccessToken);
 
                     var state = await StatesClient.GetState(ct.EntityId);
                     var calItems = await calClient.GetEvents(ct.EntityId);

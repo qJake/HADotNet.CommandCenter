@@ -5,8 +5,8 @@ namespace HADotNet.CommandCenter.Models.Config
 {
     public class SystemSettings
     {
-        [RequiredStandalone]
-        [Url(ErrorMessage = "Enter the full URL starting with http:// or https://.")]
+        [Required]
+        [Url(ErrorMessage = "Enter your Home Assistant URL starting with http:// or https://.")]
         [Display(Name = "Home Assistant Base URL")]
         public string BaseUri { get; set; }
 
