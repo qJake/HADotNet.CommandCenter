@@ -644,6 +644,8 @@ class PersonTile extends Tile {
         if (this.tile.overrideLabel) {
             label = this.tile.overrideLabel;
         }
+        // Capitalize "home"
+        location = location === 'home' ? 'Home' : location;
         let isHome = location.toLowerCase() === 'home';
         // Adjust base URL
         if (!picture.toLowerCase().startsWith('http')) {
